@@ -1,25 +1,36 @@
-import logo from './logo.svg';
+/* eslint-disable react/jsx-filename-extension */
+import React from 'react';
+import {
+  Route,
+  Switch,
+  Redirect,
+} from 'react-router-dom';
+import Login from './components/login';
+import Home from './components/home';
 import './App.css';
 
-function App() {
+export default function App() {
+  function isUserLoggedIn() {
+    return false;
+  }
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="main">
+      <Switch>
+        <Route
+          exact
+          path="/"
+          render={() => (
+            isUserLoggedIn() ? (
+              <Home />
+            ) : (
+              <Redirect to="/login" />
+            )
+          )}
+        />
+        <Route path="/login">
+          <Login />
+        </Route>
+      </Switch>
     </div>
   );
 }
-
-export default App;
