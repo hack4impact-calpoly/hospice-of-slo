@@ -5,7 +5,7 @@ const StyledButtonExample = styled.button`
   background-color: #84C0C9;
   color: white;
   width: 10%;
-  padding: 6px;
+  padding: 8px;
   border-radius: 6px;
   border: none;
 `;
