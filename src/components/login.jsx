@@ -13,6 +13,7 @@ const StyledButtonExample = styled.button`
 export default function Login() {
   return (
     <div className="m-3">
+      <div>Some text here...</div>
       Login Page
       <StyledButtonExample className="ml-3" onClick={() => console.log('Button Clicked')}>
         Log in
