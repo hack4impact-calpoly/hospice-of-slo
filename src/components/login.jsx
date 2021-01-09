@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React from 'react';
 import styled from 'styled-components';
 
@@ -16,6 +18,7 @@ export default function Login() {
       Login Page
       <StyledButtonExample className="ml-3" onClick={() => console.log('Button Clicked')}>
         Log in
+        <div>Ben</div>
       </StyledButtonExample>
     </div>
   );
