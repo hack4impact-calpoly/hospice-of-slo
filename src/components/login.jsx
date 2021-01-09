@@ -17,6 +17,7 @@ export default function Login() {
       <StyledButtonExample className="ml-3" onClick={() => console.log('Button Clicked')}>
         Log in
       </StyledButtonExample>
+      <div>Vance</div>
     </div>
   );
 }
