@@ -5,9 +5,13 @@ import {
   Switch,
   Redirect,
 } from 'react-router-dom';
-import Login from './components/login';
-import Home from './components/home';
 import './App.css';
+import Home from './components/home';
+import Login from './components/authentication/login';
+import Signup from './components/authentication/signup';
+import ForgotPassword from './components/authentication/forgotPassword';
+import ResetPassword from './components/authentication/resetPassword';
+import SuccessPage from './components/authentication/successPage';
 
 export default function App() {
   function isUserLoggedIn() {
@@ -29,6 +33,18 @@ export default function App() {
         />
         <Route path="/login">
           <Login />
+        </Route>
+        <Route path="/signup">
+          <Signup />
+        </Route>
+        <Route path="/forgot-password">
+          <ForgotPassword />
+        </Route>
+        <Route path="/reset-password">
+          <ResetPassword />
+        </Route>
+        <Route path="/success">
+          <SuccessPage />
         </Route>
       </Switch>
     </div>
