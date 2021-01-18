@@ -16,7 +16,7 @@ export default function SignUp() {
           </Row>
           <Row>
             <Col sm>
-              <input type="text" />
+              <input type="text" placeholder="Sally Smith" />
             </Col>
           </Row>
           <Row>
@@ -29,10 +29,10 @@ export default function SignUp() {
           </Row>
           <Row>
             <Col sm>
-              <input type="text" />
+              <input type="text" placeholder="sallysmith@gmail.com" />
             </Col>
             <Col sm>
-              <input type="text" />
+              <input type="text" placeholder="123-456-7890" />
             </Col>
           </Row>
           <Row>
@@ -45,10 +45,10 @@ export default function SignUp() {
           </Row>
           <Row>
             <Col sm>
-              <input type="text" />
+              <input type="password" placeholder="******" />
             </Col>
             <Col sm>
-              <input type="text" />
+              <input type="password" placeholder="******" />
             </Col>
           </Row>
           <input type="button" />
