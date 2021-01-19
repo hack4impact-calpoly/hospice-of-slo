@@ -25,6 +25,8 @@ const validatePhone = (phone) => {
 
 export default function SignUp() {
   const [password, setPassword] = useState('');
+  const [phone, setPhone] = useState('');
+  const [email, setEmail] = useState('');
 
   return (
     <div className="m-3">
@@ -40,11 +42,11 @@ export default function SignUp() {
           <Row>
             <Col sm>
               <p>Email</p>
-              <input type="text" placeholder="sallysmith@gmail.com" onBlur={(e) => validateEmail(e.target.value)} />
+              <input type="text" placeholder="sallysmith@gmail.com" onBlur={(e) => validateEmail(e.target.value)} onChange={(x) => setEmail(email.replace(email, x.target.value))} />
             </Col>
             <Col sm>
               <p>Phone Number</p>
-              <input type="text" placeholder="123-456-7890" onBlur={(e) => validatePhone(e.target.value)} />
+              <input type="text" placeholder="123-456-7890" onBlur={(e) => validatePhone(e.target.value)} onChange={(x) => setPhone(phone.replace(phone, x.target.value))} />
             </Col>
           </Row>
           <Row>
@@ -57,7 +59,11 @@ export default function SignUp() {
               <input type="password" placeholder="******" onBlur={(e) => validatePass(password, e.target.value)} />
             </Col>
           </Row>
-          <input type="button" />
+          <Row>
+            <Col>
+              <input type="submit" value="Create Account" />
+            </Col>
+          </Row>
         </form>
       </Container>
     </div>
