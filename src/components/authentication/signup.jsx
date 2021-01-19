@@ -9,6 +9,20 @@ const validatePass = (pass, rePass) => {
   }
 };
 
+const validateEmail = (email) => {
+  const emailFormat = /\S+@\S+\.\S+/;
+  if (!emailFormat.test(email)) {
+    window.alert('Please enter a valid email address');
+  }
+};
+
+const validatePhone = (phone) => {
+  const phoneFormat = /[0-9]{3}-[0-9]{3}-[0-9]{4}/;
+  if (!phoneFormat.test(phone)) {
+    window.alert('Please enter a valid phone number');
+  }
+};
+
 export default function SignUp() {
   const [password, setPassword] = useState('');
 
@@ -26,11 +40,11 @@ export default function SignUp() {
           <Row>
             <Col sm>
               <p>Email</p>
-              <input type="text" placeholder="sallysmith@gmail.com" />
+              <input type="text" placeholder="sallysmith@gmail.com" onBlur={(e) => validateEmail(e.target.value)} />
             </Col>
             <Col sm>
               <p>Phone Number</p>
-              <input type="text" placeholder="123-456-7890" />
+              <input type="text" placeholder="123-456-7890" onBlur={(e) => validatePhone(e.target.value)} />
             </Col>
           </Row>
           <Row>
