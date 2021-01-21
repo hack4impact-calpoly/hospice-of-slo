@@ -12,7 +12,7 @@ import {
 const SpacedDiv = styled.div`
   display: flex;
   align-items: center;
-  padding: 8px 0;
+  padding: 16px 0;
 `;
 const LinkLabel = styled.span`
   font-size: 26px;

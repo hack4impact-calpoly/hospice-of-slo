@@ -25,7 +25,8 @@
 
 /* Color/shape of close button cross */
 .bm-cross {
-  background: #bdc3c7;
+  background: black;
+  height: 24px !important;
 }
 
 /*
