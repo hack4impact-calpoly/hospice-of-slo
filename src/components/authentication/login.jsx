@@ -15,7 +15,6 @@ const SContainer = styled(Container)`
   text-align:center;
   justify-content: center;
   box-sizing: border-box;
-//  border: 1px solid green;
   height: 100vh;
   padding: 20vh 0;
 
@@ -32,11 +31,9 @@ const StyledRow = styled(Row)`
   box-sizing: border-box;
   text-align: center;
   justify-content: center;
-//  border:1px solid red;
 `;
 
 const SCol = styled(Col)`
-//  border: 1px solid blue;
   background-color: white;
 
   @media only screen and (min-width: 800px) {
