@@ -16,8 +16,6 @@ const SubmitButton = styled.input`
 `;
 
 const StyledInput = styled.input`
-  display: flex;
-  flex-direction: column;
   width: 200px;
   border-radius: 5px;
   border-color: #DCDCDC;
@@ -42,6 +40,8 @@ const StyledContainer = styled(Container)`
   transform: translateY(-50%);
 `;
 
+// eventually will need to be chnaged from alerts
+
 const validatePass = (pass, rePass) => {
   if (pass !== rePass) {
     window.alert('Passwords must match');
@@ -62,19 +62,34 @@ const validatePhone = (phone) => {
   }
 };
 
+const validateAll = (email, phone, pass, rePass) => {
+  validateEmail(email);
+  validatePhone(phone);
+  validatePass(pass, rePass);
+};
+
+const togglePassState = (showPass) => {
+  if (showPass === 'password') {
+    return 'text';
+  }
+  return 'password';
+};
+
 export default function SignUp() {
   const [password, setPassword] = useState('');
+  const [rePassword, setRePassword] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
+  const [showPass, togglePass] = useState('password');
 
   return (
     <div className="m-3">
       <StyledContainer fluid>
-        <StyledCol lg={{ span: 6, offset: 3 }}>
+        <StyledCol sm={{ span: 6, offset: 3 }}>
           <h2>Create an account</h2>
           <form>
             <StyledRow>
-              <StyledCol lg={6}>
+              <StyledCol sm={6}>
                 <p>Name</p>
                 <StyledInput type="text" placeholder="Sally Smith" required />
               </StyledCol>
@@ -92,14 +107,16 @@ export default function SignUp() {
             <StyledRow>
               <StyledCol>
                 <p>Password</p>
-                <StyledInput type="password" placeholder="******" onChange={(e) => setPassword(password.replace(password, e.target.value))} required />
+                <StyledInput type={showPass} placeholder="******" onChange={(e) => setPassword(password.replace(password, e.target.value))} onBlur={(x) => validatePass(rePassword, x.target.value)} required />
               </StyledCol>
               <StyledCol>
                 <p>Re-enter Password</p>
-                <StyledInput type="password" placeholder="******" onBlur={(e) => validatePass(password, e.target.value)} required />
+                <StyledInput type={showPass} placeholder="******" onChange={(e) => setRePassword(rePassword.replace(rePassword, e.target.value))} onBlur={(x) => validatePass(password, x.target.value)} required />
               </StyledCol>
             </StyledRow>
-            <SubmitButton type="submit" value="Create Account" />
+            <input type="checkbox" onChange={() => togglePass(showPass.replace(showPass, togglePassState(showPass)))} />
+            <p>Show Password</p>
+            <SubmitButton type="submit" value="Create Account" onClick={() => validateAll(email, phone, password, rePassword)} />
           </form>
         </StyledCol>
       </StyledContainer>
