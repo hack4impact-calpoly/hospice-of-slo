@@ -4,7 +4,7 @@ import styled from 'styled-components';
 const SendButton = styled.button`
   background-color: #84C0C9;
   color: #FFFFFF;
-  width: 10%;
+  width: 100%;
   padding: 8px;
   justify-self: center;
   border-radius: 6px;
@@ -18,6 +18,11 @@ const StyledInput = styled.input`
 `;
 
 const Grid = styled.div`
+  container;
+  spacing={0};
+  direction="column";
+  alignItems="center";
+  justify="center";
 `;
 
 const Row = styled.div`
@@ -41,6 +46,7 @@ export default function ForgotPassword() {
     <div className="m-3">
       <h1 style={{ fontSize: 20 }}>Forgot Password</h1>
       <Grid>
+        <Row style={{ fontSize: 14 }}>A reset link will be sent to your email</Row>
         <Row style={{ fontSize: 13 }}>Email</Row>
         <Row><StyledInput type="text" placeholder="sallysmith@gmail.com" onBlur={() => validateEmail(email)} onChange={(x) => setEmail(email.replace(email, x.target.value))} required /></Row>
         <Row><SendButton type="submit" value="Send" onClick={() => validateEmail(email)} /></Row>
