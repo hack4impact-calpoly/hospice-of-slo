@@ -18,7 +18,7 @@ const SContainer = styled(Container)`
   height: 100vh;
   padding: 20vh 0;
 
-  @media only screen and (min-width: 800px) {
+  @media only screen and (min-width: 820px) {
     background-color: #ECECEC;
     padding: 10vh 10vw;
   }
@@ -36,11 +36,16 @@ const StyledRow = styled(Row)`
 const SCol = styled(Col)`
   background-color: white;
 
-  @media only screen and (min-width: 800px) {
+  @media only screen and (min-width: 820px) {
     padding: 50px 6vw 80px 6vw;
     border-radius: 6px;
   }
 
+`;
+
+const StyledImage = styled(Image)`
+  height: 100%;
+  width: 100%;
 `;
 
 /* changes width of input fields */
@@ -104,7 +109,7 @@ export default function Login() {
       <StyledRow>
         <SCol md={7}>
           <Row>
-            <Image src={logoImage} fluid />
+            <StyledImage src={logoImage} fluid />
           </Row>
           <StyledRow>
             <Credentials>
