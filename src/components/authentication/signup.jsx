@@ -7,37 +7,39 @@ import styled from 'styled-components';
 const SubmitButton = styled.input`
   background-color: #84C0C9;
   color: white;
-  width: 25%;
-  margin: 0 auto;
+  text-align: center;
+  width: 100%;
+  justify-self: center;
   padding: 5px;
   border: #84C0C9;
   border-radius: 5px;
 `;
 
-const MainStyle = styled.div`
-  background-color: black;
-`;
-
-const InnerStyle = styled.div`
-  background-color: white;
-  border: solid black 2px;
-  height: 100vh;
+const StyledInput = styled.input`
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
-
-const StyledInput = styled.input`
   width: 200px;
   border-radius: 5px;
   border-color: #DCDCDC;
 `;
 
-const ColumnDiv = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+const StyledCol = styled(Col)`
+  background-color: white;
+  border-radius: 5px;
+  
+`;
+
+const StyledRow = styled(Row)`
+  padding: 10px;
+`;
+
+const StyledContainer = styled(Container)`
+  background-color: #DCDCDC;
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
 `;
 
 const validatePass = (pass, rePass) => {
@@ -66,43 +68,41 @@ export default function SignUp() {
   const [email, setEmail] = useState('');
 
   return (
-    <MainStyle className="m-3">
-      <InnerStyle>
-        <h1>Create an account</h1>
-        <Container>
+    <div className="m-3">
+      <StyledContainer fluid>
+        <StyledCol lg={{ span: 6, offset: 3 }}>
+          <h2>Create an account</h2>
           <form>
-            <Row>
-              <Col sm>
-                <ColumnDiv>
-                  <p>Name</p>
-                  <StyledInput type="text" placeholder="Sally Smith" required />
-                </ColumnDiv>
-              </Col>
-            </Row>
-            <Row>
-              <Col sm>
+            <StyledRow>
+              <StyledCol lg={6}>
+                <p>Name</p>
+                <StyledInput type="text" placeholder="Sally Smith" required />
+              </StyledCol>
+            </StyledRow>
+            <StyledRow>
+              <StyledCol>
                 <p>Email</p>
                 <StyledInput type="text" placeholder="sallysmith@gmail.com" onBlur={() => validateEmail(email)} onChange={(x) => setEmail(email.replace(email, x.target.value))} required />
-              </Col>
-              <Col sm>
+              </StyledCol>
+              <StyledCol>
                 <p>Phone Number</p>
                 <StyledInput type="text" placeholder="123-456-7890" onBlur={() => validatePhone(phone)} onChange={(x) => setPhone(phone.replace(phone, x.target.value))} required />
-              </Col>
-            </Row>
-            <Row>
-              <Col sm>
+              </StyledCol>
+            </StyledRow>
+            <StyledRow>
+              <StyledCol>
                 <p>Password</p>
                 <StyledInput type="password" placeholder="******" onChange={(e) => setPassword(password.replace(password, e.target.value))} required />
-              </Col>
-              <Col sm>
+              </StyledCol>
+              <StyledCol>
                 <p>Re-enter Password</p>
                 <StyledInput type="password" placeholder="******" onBlur={(e) => validatePass(password, e.target.value)} required />
-              </Col>
-            </Row>
+              </StyledCol>
+            </StyledRow>
             <SubmitButton type="submit" value="Create Account" />
           </form>
-        </Container>
-      </InnerStyle>
-    </MainStyle>
+        </StyledCol>
+      </StyledContainer>
+    </div>
   );
 }
