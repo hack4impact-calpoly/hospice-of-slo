@@ -109,7 +109,7 @@ export default function Login() {
       <StyledRow>
         <SCol md={7}>
           <Row>
-            <StyledImage src={logoImage} fluid />
+            <StyledImage src={logoImage} />
           </Row>
           <StyledRow>
             <Credentials>
