@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React, { useState } from 'react';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -11,24 +12,26 @@ const SubmitButton = styled.input`
   width: 100%;
   justify-self: center;
   padding: 5px;
-  border: #84C0C9;
+  margin-bottom: 10px;
+  border: solid #84C0C9;
   border-radius: 5px;
 `;
 
 const StyledInput = styled.input`
   width: 200px;
+  border: solid #C4C4C4;
   border-radius: 5px;
-  border-color: #DCDCDC;
 `;
 
 const StyledCol = styled(Col)`
   background-color: white;
-  border-radius: 5px;
-  
+  padding: 10px;
+  padding-left: 20px;
 `;
 
 const StyledRow = styled(Row)`
-  padding: 10px;
+  padding: 15px;
+  padding-top: 5px;
 `;
 
 const StyledContainer = styled(Container)`
@@ -38,6 +41,7 @@ const StyledContainer = styled(Container)`
   top: 50%;
   -ms-transform: translateY(-50%);
   transform: translateY(-50%);
+  padding: 10px;
 `;
 
 // eventually will need to be chnaged from alerts
@@ -85,7 +89,7 @@ export default function SignUp() {
   return (
     <div className="m-3">
       <StyledContainer fluid>
-        <StyledCol sm={{ span: 6, offset: 3 }}>
+        <StyledCol xs={{ span: 10, offset: 1 }} sm={{ span: 8, offset: 2 }} lg={{ span: 6, offset: 3 }}>
           <h2>Create an account</h2>
           <form>
             <StyledRow>
@@ -95,21 +99,21 @@ export default function SignUp() {
               </StyledCol>
             </StyledRow>
             <StyledRow>
-              <StyledCol>
+              <StyledCol xs={12} md={6}>
                 <p>Email</p>
                 <StyledInput type="text" placeholder="sallysmith@gmail.com" onBlur={() => validateEmail(email)} onChange={(x) => setEmail(email.replace(email, x.target.value))} required />
               </StyledCol>
-              <StyledCol>
+              <StyledCol xs={12} md={6}>
                 <p>Phone Number</p>
                 <StyledInput type="text" placeholder="123-456-7890" onBlur={() => validatePhone(phone)} onChange={(x) => setPhone(phone.replace(phone, x.target.value))} required />
               </StyledCol>
             </StyledRow>
             <StyledRow>
-              <StyledCol>
+              <StyledCol xs={12} md={6}>
                 <p>Password</p>
                 <StyledInput type={showPass} placeholder="******" onChange={(e) => setPassword(password.replace(password, e.target.value))} onBlur={(x) => validatePass(rePassword, x.target.value)} required />
               </StyledCol>
-              <StyledCol>
+              <StyledCol xs={12} md={6}>
                 <p>Re-enter Password</p>
                 <StyledInput type={showPass} placeholder="******" onChange={(e) => setRePassword(rePassword.replace(rePassword, e.target.value))} onBlur={(x) => validatePass(password, x.target.value)} required />
               </StyledCol>
