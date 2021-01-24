@@ -1,49 +1,56 @@
-/* eslint-disable */
+/* eslint-disable no-unused-vars */ // TODO: Remove this in [DEV-6.5]
 import React from 'react';
 import firebase from 'firebase';
-import styled from 'styled-components';
-
+import 'firebase/firestore';
 
 export default function SignUp() {
-  const [name, setName] = React.useState('Cole');
-  const [email, setEmail] = React.useState('cperry10@calpoly.edu');
-  const [password, setPassword] = React.useState('Cp1037702');
-  const [validName, setValidName] = React.useState(true);
-  const [validEmail, setValidEmail] = React.useState(true);
-  const [validPassword, setValidPassword] = React.useState(true);
+  /* // These are mandatory vars useful when connecting DEV-6.5
+  const [name, setName] = React.useState('');
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
+  const [phone, setPhone] = React.useState('');
+  const [isAdmin, setIsAdmin] = React.useState(false);
+  */
 
   function signupPress() {
-    firebase.auth().createUserWithEmailAndPassword(email, password)
-    .then((userCredential) => {
-      // Signed in 
-      var user = userCredential.user;
-      console.log(user);
-      // ...
-    })
-    .catch((error) => {
-      var errorCode = error.code;
-      var errorMessage = error.message;
-      console.log('errorCode: ', errorCode);
-      console.log('errorMessage: ', errorMessage);
-      // ..
-    });
-  }
+    if (name.length > 1) {
+      firebase.auth().createUserWithEmailAndPassword(email, password)
+        .then((user) => {
+          console.log(user);
+          user.user.updateProfile({
+            displayName: name,
+            // Function below will be needed once a users collection is added in firebase,
+            // This function should make a user document in a user collection that stores
+            // bonus features like phone, isAdmin, and name
+          /* )}.then(() => { /
+            const db = firebase.firestore();
+            const userData = {
+              email: user.email,
+              name: user.displayName,
+              phone: '',
+              isAdmin: isAdmin,
+            };
 
-  const StyledButtonExample = styled.button`
-  background-color: #84C0C9;
-  color: white;
-  width: 10%;
-  padding: 8px;
-  border-radius: 6px;
-  border: none;
-`;
+            const userRef = db.collection('users').doc(user.uid);
+            userRef.set(userData);
+            }); */
+          }).catch((error) => {
+            console.log('Display name not set.'); // feedback should be put on frontend
+            console.log(error);
+          });
+        })
+        .catch((error) => {
+          const errorMessage = error.message;
+          console.log('Error:', errorMessage); // feedback should be put on frontend
+        });
+    } else {
+      alert('Please enter your name.');
+    }
+  }
 
   return (
     <div className="m-3">
       Sign Up Page
-      <StyledButtonExample className="ml-3" onClick={signupPress}>
-        Log in
-      </StyledButtonExample>
     </div>
   );
 }
