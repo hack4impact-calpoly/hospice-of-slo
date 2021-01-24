@@ -17,6 +17,7 @@ import Discussion from './components/pages/Discussion';
 import PastShifts from './components/pages/PastShifts';
 import Contacts from './components/pages/Contacts';
 import History from './components/pages/History';
+import PrivateRoute from './components/authentication/PrivateRoute';
 
 export default function App() {
   function isUserLoggedIn() {
@@ -51,11 +52,11 @@ export default function App() {
         <Route path="/success">
           <SuccessPage />
         </Route>
-        <Route path="/schedule"><Schedule /></Route>
-        <Route path="/discussion"><Discussion /></Route>
-        <Route path="/past-shifts"><PastShifts /></Route>
-        <Route path="/contacts"><Contacts /></Route>
-        <Route path="/history"><History /></Route>
+        <PrivateRoute isLoggedIn={isUserLoggedIn()} path="/schedule"><Schedule /></PrivateRoute>
+        <PrivateRoute isLoggedIn={isUserLoggedIn()} path="/discussion"><Discussion /></PrivateRoute>
+        <PrivateRoute isLoggedIn={isUserLoggedIn()} path="/past-shifts"><PastShifts /></PrivateRoute>
+        <PrivateRoute isLoggedIn={isUserLoggedIn()} path="/contacts"><Contacts /></PrivateRoute>
+        <PrivateRoute isLoggedIn={isUserLoggedIn()} path="/history"><History /></PrivateRoute>
       </Switch>
     </div>
   );
