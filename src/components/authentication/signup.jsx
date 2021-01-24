@@ -1,9 +1,10 @@
-/* eslint-disable max-len */
 import React, { useState } from 'react';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import styled from 'styled-components';
+import firebase from 'firebase';
+import 'firebase/firestore';
 
 const SubmitButton = styled.input`
   background-color: #84C0C9;
@@ -46,58 +47,99 @@ const ShowPassStyle = styled.div`
   display: flex;
 `;
 
-// eventually will need to be chnaged from alerts
-
-const validatePass = (pass, rePass) => {
-  if (pass !== rePass) {
-    window.alert('Passwords must match');
-  }
-};
-
-const validateEmail = (email) => {
-  const emailFormat = /\S+@\S+\.\S+/;
-  if (!emailFormat.test(email)) {
-    window.alert('Please enter a valid email address');
-  }
-};
-
-const validatePhone = (phone) => {
-  const phoneFormat = /[0-9]{3}-[0-9]{3}-[0-9]{4}$/;
-  if (!phoneFormat.test(phone)) {
-    window.alert('Please enter a valid phone number');
-  }
-};
-
-const validateAll = (email, phone, pass, rePass) => {
-  validateEmail(email);
-  validatePhone(phone);
-  validatePass(pass, rePass);
-};
-
-const togglePassState = (showPass) => {
-  if (showPass === 'password') {
-    return 'text';
-  }
-  return 'password';
-};
-
 export default function SignUp() {
+  const [name, setName] = React.useState('');
   const [password, setPassword] = useState('');
   const [rePassword, setRePassword] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
   const [showPass, togglePass] = useState('password');
+  /* eslint-disable no-unused-vars */
+  const [isAdmin, setIsAdmin] = React.useState(false);
+
+  // eventually will need to be chnaged from alerts
+
+  const validatePass = () => {
+    if (password !== rePassword) {
+      window.alert('Passwords must match');
+    }
+  };
+
+  const validateEmail = () => {
+    const emailFormat = /\S+@\S+\.\S+/;
+    if (!emailFormat.test(email)) {
+      window.alert('Please enter a valid email address');
+    }
+  };
+
+  const validatePhone = () => {
+    const phoneFormat = /[0-9]{3}-[0-9]{3}-[0-9]{4}$/;
+    if (!phoneFormat.test(phone)) {
+      window.alert('Please enter a valid phone number');
+    }
+  };
+
+  const togglePassState = () => {
+    if (showPass === 'password') {
+      return 'text';
+    }
+    return 'password';
+  };
+
+  async function signupPress() {
+    console.log('HERE');
+    if (name.length > 1) {
+      await firebase.auth().createUserWithEmailAndPassword(email, password)
+        .then((user) => {
+          console.log(user);
+          user.user.updateProfile({
+            displayName: name,
+            // Function below will be needed once a users collection is added in firebase,
+            // This function should make a user document in a user collection that stores
+            // bonus features like phone, isAdmin, and name
+            /* )}.then(() => { /
+            const db = firebase.firestore();
+            const userData = {
+              email: user.email,
+              name: user.displayName,
+              phone: '',
+              isAdmin: isAdmin,
+            };
+
+            const userRef = db.collection('users').doc(user.uid);
+            userRef.set(userData);
+          }); */
+          }).catch((error) => {
+            console.log('Display name not set.'); // feedback should be put on frontend
+            console.log(error);
+          });
+        })
+        .catch((error) => {
+          const errorMessage = error.message;
+          console.log('Error:', errorMessage); // feedback should be put on frontend
+        });
+    } else {
+      alert('Please enter your name.');
+    }
+  }
+
+  const validateAll = () => {
+    validateEmail();
+    validatePhone();
+    validatePass();
+    signupPress();
+  };
 
   return (
     <div className="m-3">
       <StyledContainer fluid>
         <StyledCol xs={{ span: 10, offset: 1 }} sm={{ span: 8, offset: 2 }} lg={{ span: 6, offset: 3 }}>
-          <form>
+          <form onSubmit={(e) => e.preventDefault()}>
             <StyledRow>
               <StyledCol xs={12} md={6}>
                 <h2>Create an account</h2>
                 <p>Name</p>
-                <StyledInput type="text" placeholder="Sally Smith" required />
+                <StyledInput type="text" placeholder="Sally Smith" onChange={(x) => setName(name.replace(name, x.target.value))} required />
               </StyledCol>
             </StyledRow>
             <StyledRow>
@@ -124,7 +166,7 @@ export default function SignUp() {
                   <input type="checkbox" onChange={() => togglePass(showPass.replace(showPass, togglePassState(showPass)))} />
                   <p>Show Password</p>
                 </ShowPassStyle>
-                <SubmitButton type="submit" value="Create Account" onClick={() => validateAll(email, phone, password, rePassword)} />
+                <SubmitButton type="submit" value="Create Account" onClick={validateAll} />
               </StyledCol>
             </StyledRow>
           </form>
