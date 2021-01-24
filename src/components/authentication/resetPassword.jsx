@@ -12,6 +12,12 @@ const StyledButton = styled(Button)`
 
 `;
 
+const StyledRow = styled(Row)`
+   padding-top: 10px;
+   padding-left: 10px;
+
+`;
+
 const StyledCol = styled(Col)`
 
    @media only screen and (min-width: 820px) {  
@@ -48,11 +54,9 @@ export default function ResetPassword() {
     <div className="m-5">
       <Container>
         <StyledCol md={{ span: 6, offset: 3 }}>
-          <Row>
-            <Col>
-              <Link to="/login"><BackArrowLogo /></Link>
-            </Col>
-          </Row>
+          <StyledRow>
+            <Link to="/login"><BackArrowLogo /></Link>
+          </StyledRow>
           <Row>
             <Col lg={{ span: 6, offset: 3 }}>
               <Form>
