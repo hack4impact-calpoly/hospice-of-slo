@@ -2,3 +2,7 @@
 .main {
   font-family: Poppins;
 }
+
+a, a:hover {
+  color: inherit;
+}
