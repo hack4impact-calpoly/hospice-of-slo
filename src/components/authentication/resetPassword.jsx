@@ -125,7 +125,7 @@ export default function ResetPassword() {
                     )
                     : (
                       <SubmitButton type="submit" onClick={confirmPassword}>
-                        Create Account
+                        Confirm
                       </SubmitButton>
                     )}
                 </Col>

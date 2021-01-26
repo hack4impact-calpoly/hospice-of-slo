@@ -33,7 +33,7 @@ const StyledCol = styled(Col)`
   @media only screen and (min-width: 768px) {
     border: 2px solid #C4C4C4;
     border-radius: 5px;
-    padding: 5% 10%
+    padding: 5% 9%
   }
 `;
 
