@@ -14,6 +14,7 @@ const SpacedDiv = styled.div`
   align-items: center;
   padding: 16px 0;
 `;
+
 const LinkLabel = styled.span`
   font-size: 26px;
   padding-left: 10px;
@@ -37,16 +38,26 @@ NavLink.propTypes = {
   children: PropTypes.string.isRequired,
 };
 
-export default function Navbar() {
+export default function Navbar(props) {
+  const { isAd } = props;
+
   return (
     <Menu>
       <NavLink to="/" Icon={BiUser}>Name</NavLink>
       <NavLink to="/schedule" Icon={BiCalendarAlt}>Schedule</NavLink>
       <NavLink to="/discussion" Icon={BiChat}>Discussion</NavLink>
       <NavLink to="/past-shifts" Icon={BiClipboard}>Past Shifts</NavLink>
-      <NavLink to="/contacts" Icon={BiPhone}>Contacts</NavLink>
-      <NavLink to="/history" Icon={BiTime}>History</NavLink>
-      <NavLink to="/" Icon={BiLogOut}>SignOut</NavLink>
+      { isAd === true
+        ? <NavLink to="/contacts" Icon={BiPhone}>Contacts</NavLink>
+        : null}
+      { isAd === true
+        ? <NavLink to="/history" Icon={BiTime}>History</NavLink>
+        : null}
+      <NavLink to="/" Icon={BiLogOut}>Sign Out</NavLink>
     </Menu>
   );
 }
+
+Navbar.propTypes = {
+  isAd: PropTypes.bool.isRequired,
+};

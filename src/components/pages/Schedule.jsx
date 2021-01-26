@@ -1,10 +1,16 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import HeaderWithNav from './header';
 
-export default function Schedule() {
+export default function Schedule(props) {
+  const { isAd } = props;
   return (
     <div>
-      <HeaderWithNav>Schedule</HeaderWithNav>
+      <HeaderWithNav isAdmin={isAd}>Schedule</HeaderWithNav>
     </div>
   );
 }
+
+Schedule.propTypes = {
+  isAd: PropTypes.bool.isRequired,
+};

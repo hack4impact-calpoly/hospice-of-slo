@@ -9,13 +9,17 @@ const StyledHeading = styled.h2`
 `;
 
 export default function HeaderWithNav(props) {
-  const { children } = props;
+  const { isAdmin, children } = props;
+
   return (
     <div>
-      <Navbar />
+      <Navbar isAd={isAdmin} />
       <StyledHeading>{children}</StyledHeading>
     </div>
   );
 }
 
-HeaderWithNav.propTypes = { children: PropTypes.string.isRequired };
+HeaderWithNav.propTypes = {
+  children: PropTypes.string.isRequired,
+  isAdmin: PropTypes.bool.isRequired,
+};
