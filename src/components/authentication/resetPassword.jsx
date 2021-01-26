@@ -1,82 +1,139 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
+import {
+  Container, Row, Col, Form,
+} from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { BiArrowBack } from 'react-icons/bi';
 
-const StyledButton = styled(Button)`
-   background-color: #84C0C9;
+const StyledDiv = styled.div`
+  height: 100vh;
+  background-color: #E2E2E2;
+`;
 
+const StyledContainer = styled(Container)`
+  width: 100%;
+  height: 100vh;
+  @media only screen and (min-width: 768px) {
+    height: 100vh;  
+    padding: 20vh 0;
+  }
 `;
 
 const StyledRow = styled(Row)`
-   padding-top: 10px;
-   padding-left: 10px;
-
+  width: 100vw;
+  height: 100%;
+  text-align: left;
+  justify-content: center;
 `;
 
 const StyledCol = styled(Col)`
-
-   @media only screen and (min-width: 820px) {  
-    background-color: #ECECEC;
-    padding-bottom: 4%
+  background-color: #FFFFFF;
+  padding: 10%;
+  @media only screen and (min-width: 768px) {
+    border: 2px solid #C4C4C4;
+    border-radius: 5px;
+    padding: 5% 10%
   }
-
-  ${'' /* If the width is greater than or equal to 820px, apply this styling */}
-
-
 `;
-const BackArrowLogo = () => (
-  <div>
-    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M27 16H5" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M14 7L5 16L14 25" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  </div>
-);
+
+const SubmitButton = styled.button`
+  color: white;
+  background-color: #84C0C9;
+  border: 2px solid #FFFFFF; 
+  border-radius: 5px;
+  padding: 6px 0px; 
+  width: 100%;
+  font-size: 14px;
+  fontFamily: Roboto;
+
+  &:hover{
+    color: white;
+    background-color: #558E97;
+  }
+`;
+
+const StyledError = styled.div`
+  color: red;
+`;
 
 export default function ResetPassword() {
   const [password, setPassword] = useState('');
-  const [reenterPassword, setReenterPassword] = useState('');
+  const [rePassword, setRePassword] = useState('');
+  const [showErr, setShowErr] = useState(false);
+  const [errMessage, setErrMessage] = useState('');
 
-  function checkPasswords() {
-    if (password === reenterPassword) {
-      window.alert('Success, password has been reset.');
+  const validatePass = () => {
+    if (password !== rePassword) {
+      setShowErr(true);
+      setErrMessage('Passwords must match');
+    } else if (password.length < 6) {
+      setShowErr(true);
+      setErrMessage('Password must be at least 6 letters');
     } else {
-      window.alert('Password reset failed, passwords do not match.');
+      setShowErr(false);
+    }
+  };
+  function confirmPassword() {
+    if (!showErr) {
+      console.log('Reset password here');
+    } else {
+      setShowErr(true);
     }
   }
-
   return (
-    <div className="m-5">
-      <Container>
-        <StyledCol md={{ span: 6, offset: 3 }}>
-          <StyledRow>
-            <Link to="/login"><BackArrowLogo /></Link>
-          </StyledRow>
-          <Row>
-            <Col lg={{ span: 6, offset: 3 }}>
-              <Form>
-                <Form.Label>Reset Password</Form.Label>
-                <Form.Group controlId="newPassword">
-                  <Form.Label>New Password</Form.Label>
-                  <Form.Control type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
-                </Form.Group>
-                <Form.Group controlId="reenterNewPassword">
-                  <Form.Label>Re-enter new Password</Form.Label>
-                  <Form.Control type="password" placeholder="Password" onChange={(e) => setReenterPassword(e.target.value)} />
-                </Form.Group>
-                <StyledButton onClick={checkPasswords} variant="primary" type="submit" block>
-                  Confirm
-                </StyledButton>
-              </Form>
-            </Col>
-          </Row>
-        </StyledCol>
-      </Container>
-    </div>
+    <StyledDiv>
+      <StyledContainer fluid>
+        <StyledRow>
+          <StyledCol sm={12} md={8} lg={6} xl={5}>
+            <Link to="/login">
+              <BiArrowBack size="32" className="mb-4" />
+            </Link>
+            <Form onSubmit={(e) => e.preventDefault()}>
+              <Row>
+                <Col md={12}>
+                  <h3>Reset Password</h3>
+                  <Form.Group className="mt-4">
+                    <Form.Label>New password</Form.Label>
+                    <Form.Control
+                      type="password"
+                      placeholder="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                    />
+                  </Form.Group>
+                  <Form.Group className="mt-2">
+                    <Form.Label>Re-enter new password</Form.Label>
+                    <Form.Control
+                      type="password"
+                      placeholder="password"
+                      value={rePassword}
+                      onChange={(e) => setRePassword(e.target.value)}
+                      onBlur={(e) => validatePass(password, e.target.value)}
+                      required
+                    />
+                  </Form.Group>
+                  {showErr
+                    ? (
+                      <StyledError>
+                        {errMessage}
+                        <SubmitButton type="submit" onClick={confirmPassword}>
+                          Create Account
+                        </SubmitButton>
+                      </StyledError>
+                    )
+                    : (
+                      <SubmitButton type="submit" onClick={confirmPassword}>
+                        Create Account
+                      </SubmitButton>
+                    )}
+                </Col>
+              </Row>
+            </Form>
+          </StyledCol>
+        </StyledRow>
+      </StyledContainer>
+    </StyledDiv>
   );
 }
