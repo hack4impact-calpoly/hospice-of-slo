@@ -19,11 +19,12 @@ const LinkLabel = styled.span`
   padding-left: 10px;
 `;
 
-function NavLink(props) {
-  const { to, Icon, children } = props;
+function NavLink({
+  to, Icon, children, handleClick,
+}) {
   return (
     <Link to={to}>
-      <SpacedDiv>
+      <SpacedDiv onClick={handleClick}>
         <Icon size={32} />
         <LinkLabel>{children}</LinkLabel>
       </SpacedDiv>
@@ -33,8 +34,13 @@ function NavLink(props) {
 
 NavLink.propTypes = {
   to: PropTypes.string.isRequired,
-  Icon: PropTypes.element.isRequired,
+  Icon: PropTypes.func.isRequired,
   children: PropTypes.string.isRequired,
+  handleClick: PropTypes.func,
+};
+
+NavLink.defaultProps = {
+  handleClick: () => {},
 };
 
 export default function Navbar() {
@@ -46,7 +52,7 @@ export default function Navbar() {
       <NavLink to="/past-shifts" Icon={BiClipboard}>Past Shifts</NavLink>
       <NavLink to="/contacts" Icon={BiPhone}>Contacts</NavLink>
       <NavLink to="/history" Icon={BiTime}>History</NavLink>
-      <NavLink to="/" Icon={BiLogOut}>SignOut</NavLink>
+      <NavLink to="/" handleClick={() => console.log('fixed!')} Icon={BiLogOut}>SignOut</NavLink>
     </Menu>
   );
 }
