@@ -7,6 +7,8 @@ import { Link } from 'react-router-dom';
 import {
   BiUser, BiCalendarAlt, BiChat, BiClipboard, BiPhone, BiTime, BiLogOut,
 } from 'react-icons/bi';
+import firebase from 'firebase/app';
+import 'firebase/auth';
 
 /* Styled Components */
 const SpacedDiv = styled.div`
@@ -44,6 +46,14 @@ NavLink.defaultProps = {
 };
 
 export default function Navbar() {
+  function signOut() {
+    try {
+      firebase.auth().signOut();
+    } catch (err) {
+      alert(`Whoops, log out did not work:\n${err}`);
+    }
+  }
+
   return (
     <Menu>
       <NavLink to="/" Icon={BiUser}>Name</NavLink>
@@ -52,7 +62,7 @@ export default function Navbar() {
       <NavLink to="/past-shifts" Icon={BiClipboard}>Past Shifts</NavLink>
       <NavLink to="/contacts" Icon={BiPhone}>Contacts</NavLink>
       <NavLink to="/history" Icon={BiTime}>History</NavLink>
-      <NavLink to="/" handleClick={() => console.log('fixed!')} Icon={BiLogOut}>SignOut</NavLink>
+      <NavLink to="/login" handleClick={signOut} Icon={BiLogOut}>SignOut</NavLink>
     </Menu>
   );
 }
