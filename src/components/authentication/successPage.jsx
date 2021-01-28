@@ -1,13 +1,45 @@
-/* eslint-disable */
 import React from 'react';
 import styled from 'styled-components';
-import Container from 'react-bootstrap/Container';
-import confirmationIcon from '../../images/ConfirmationIcon.PNG'
-import Image from 'react-bootstrap/Image';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
+import {
+  Container, Row, Col, Image,
+} from 'react-bootstrap';
+import PropTypes from 'prop-types';
+import successImage from '../../images/Success.png';
 
-/* Sign In Button*/
+const StyledDiv = styled.div`
+  height: 100vh;
+  background-color: #E2E2E2;
+`;
+
+const StyledContainer = styled(Container)`
+  width: 100%;
+  height: 100vh;
+  @media only screen and (min-width: 768px) {
+    height: 100vh;
+    padding: 20vh 0;
+  }
+`;
+
+const StyledRow = styled(Row)`
+  width: 100vw;
+  height: 100%;
+  text-align: center;
+  justify-content: center;
+`;
+
+const StyledCol = styled(Col)`
+  background-color: #FFFFFF;
+  padding: 10%;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  @media only screen and (min-width: 768px) {
+    border: 2px solid #C4C4C4;
+    border-radius: 5px;
+    padding: 5% 10%
+  }
+`;
+
 const SignInButton = styled.button`
   background-color: #84C0C9;
   color: white;
@@ -17,85 +49,53 @@ const SignInButton = styled.button`
   border: none;
 `;
 
-/* Successful Heading*/
-const SuccessfulTitle = styled.h3`
-width: 100%;
-height: 20%;
-font-family: Poppins;
-font-style: normal;
-line-height: 36px;
-color: #5B5A5A;
-`;
-
-/* Confirmation Text*/
-const ConfirmationText = styled.p`
-width: 100%;
-font-family: Poppins;
-font-style: normal;
-line-height: 24px;
-color: #000000;
-`;
-
-/* Content Container*/
-const StyledContainer = styled(Container)`
-  display: flex;
-  height: 100vh;
-  text-align:center;
-  justify-content: center;
-  box-sizing: border-box;
-  @media only screen and (min-width: 700px) {
-    background-color: #E5E5E5;
-    padding: 15vh 15vw;
-  }
-`;
-
-/* Styling for Rows*/
-const StyledRow = styled(Row)`
-  box-sizing: border-box;
-  display: flex;
-  text-align: center;
-  justify-content: center;
-`;
-
-/* Styling for Columns*/
-const StyledColumn = styled(Col)`
-  background-color: #FFFFFF;
-  @media only screen and (min-width: 850px) {
-    padding: 60px 5vw 70px 5vw;
-  }
-`;
-
-/* Image Styling */
 const StyledImage = styled(Image)`
-  width:100%;
-  height:100%;
-  padding-top: 30%
-  padding-bottom: 60%
-
+  width: 15%;
 `;
 
-export default function SuccessPage(props) {
+const SuccessfulTitle = styled.h3`
+  color: #5B5A5A;
+`;
 
-    return (
-        <div className="successPage">
-            <StyledContainer fluid>
-                <StyledRow>
-                    <StyledColumn md={8}>
-                        <Row>
-                            <StyledImage src={confirmationIcon} fluid />
-                        </Row>
-                         <Row>
-                            <SuccessfulTitle>Successful</SuccessfulTitle>
-                        </Row>
-                        <Row>
-                            <ConfirmationText> {props.confirmationText} </ConfirmationText>
-                        </Row>
-                        <Row>
-                            <SignInButton onClick={() => { window.location.href = 'login'; }}>Sign In </SignInButton>
-                        </Row> 
-                    </StyledColumn>
-                </StyledRow>
-            </StyledContainer>
-        </div>
-    );
+export default function Success(props) {
+  const { // Bool: true if came from Create Account, false if came from reset password
+    cameFromAccount,
+  } = props;
+  // you would call this function from app.js like:
+  // <SuccessPage cameFromAccount={false}/>
+
+  return (
+    <StyledDiv>
+      <StyledContainer fluid>
+        <StyledRow>
+          <StyledCol sm={12} md={8} lg={6}>
+            <StyledImage src={successImage} className="mt-4" />
+            <SuccessfulTitle className="mt-3">
+              Successful
+            </SuccessfulTitle>
+            {cameFromAccount
+              ? (
+                <p className="mt-3">
+                  You have successfully registered. Click the button below to sign in!
+                </p>
+              )
+              : (
+                <p className="mt-3">
+                  You have successfully reset your password. An email confirmation has been sent!
+                </p>
+              )}
+            <SignInButton onClick={() => { window.location.href = 'login'; }}>Sign In </SignInButton>
+          </StyledCol>
+        </StyledRow>
+      </StyledContainer>
+    </StyledDiv>
+  );
 }
+
+Success.propTypes = {
+  cameFromAccount: PropTypes.bool,
+};
+
+Success.defaultProps = {
+  cameFromAccount: false,
+};
