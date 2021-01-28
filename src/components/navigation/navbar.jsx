@@ -7,6 +7,8 @@ import { Link } from 'react-router-dom';
 import {
   BiUser, BiCalendarAlt, BiChat, BiClipboard, BiPhone, BiTime, BiLogOut,
 } from 'react-icons/bi';
+import firebase from 'firebase/app';
+import 'firebase/auth';
 
 /* Styled Components */
 const SpacedDiv = styled.div`
@@ -19,11 +21,12 @@ const LinkLabel = styled.span`
   padding-left: 10px;
 `;
 
-function NavLink(props) {
-  const { to, Icon, children } = props;
+function NavLink({
+  to, Icon, children, handleClick,
+}) {
   return (
     <Link to={to}>
-      <SpacedDiv>
+      <SpacedDiv onClick={handleClick}>
         <Icon size={32} />
         <LinkLabel>{children}</LinkLabel>
       </SpacedDiv>
@@ -33,11 +36,24 @@ function NavLink(props) {
 
 NavLink.propTypes = {
   to: PropTypes.string.isRequired,
-  Icon: PropTypes.element.isRequired,
+  Icon: PropTypes.func.isRequired,
   children: PropTypes.string.isRequired,
+  handleClick: PropTypes.func,
+};
+
+NavLink.defaultProps = {
+  handleClick: () => {},
 };
 
 export default function Navbar() {
+  function signOut() {
+    try {
+      firebase.auth().signOut();
+    } catch (err) {
+      alert(`Whoops, log out did not work:\n${err}`);
+    }
+  }
+
   return (
     <Menu>
       <NavLink to="/" Icon={BiUser}>Name</NavLink>
@@ -46,7 +62,7 @@ export default function Navbar() {
       <NavLink to="/past-shifts" Icon={BiClipboard}>Past Shifts</NavLink>
       <NavLink to="/contacts" Icon={BiPhone}>Contacts</NavLink>
       <NavLink to="/history" Icon={BiTime}>History</NavLink>
-      <NavLink to="/" Icon={BiLogOut}>SignOut</NavLink>
+      <NavLink to="/login" handleClick={signOut} Icon={BiLogOut}>SignOut</NavLink>
     </Menu>
   );
 }
