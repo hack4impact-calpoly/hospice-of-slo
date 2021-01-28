@@ -1,3 +1,5 @@
+/*eslint-disable */
+
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import {
@@ -5,6 +7,7 @@ import {
 } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { BiArrowBack } from 'react-icons/bi';
+import firebase from 'firebase';
 
 const StyledDiv = styled.div`
   height: 100vh;

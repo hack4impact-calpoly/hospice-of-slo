@@ -1,3 +1,5 @@
+/*eslint-disable */
+
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import {
@@ -5,6 +7,7 @@ import {
 } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { BiArrowBack } from 'react-icons/bi';
+import firebase from 'firebase';
 
 const StyledDiv = styled.div`
   height: 100vh;
@@ -55,9 +58,17 @@ const SubmitButton = styled.button`
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState('');
+  
   const forgotPassword = () => {
-    console.log('Hi');
+    var auth = firebase.auth();
+    auth.sendPasswordResetEmail(email).then(function() {
+       console.log(`EMAIL SENT TO ${email}`);
+    }).catch(function(error) {
+       console.log(error);
+       //More error cathching in to do
+    })
   };
+
   return (
     <StyledDiv>
       <StyledContainer fluid>
@@ -82,7 +93,7 @@ export default function ForgotPassword() {
                     />
                   </Form.Group>
                   <SubmitButton className="mt-2" type="submit" onClick={forgotPassword}>
-                    Create Account
+                    Reset Password
                   </SubmitButton>
                 </Col>
               </Row>
