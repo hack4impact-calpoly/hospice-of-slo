@@ -35,9 +35,10 @@ firebase.initializeApp(firebaseConfig);
 firebase.analytics();
 
 export default function App() {
-  function isUserLoggedIn() {
-    return false;
-  }
+  const [isLoggedIn, setIsLoggedIn] = React.useState(true);
+  const toggleLoggedIn = () => {
+    setIsLoggedIn(!isLoggedIn);
+  };
   return (
     <div className="main">
       <Switch>
@@ -45,7 +46,7 @@ export default function App() {
           exact
           path="/"
           render={() => (
-            isUserLoggedIn() ? (
+            isLoggedIn ? (
               <Home />
             ) : (
               <Redirect to="/login" />
@@ -53,7 +54,7 @@ export default function App() {
           )}
         />
         <Route path="/login">
-          <Login />
+          <Login toggleLoggedIn={toggleLoggedIn} />
         </Route>
         <Route path="/signup">
           <Signup />
@@ -67,11 +68,11 @@ export default function App() {
         <Route path="/success">
           <SuccessPage />
         </Route>
-        <PrivateRoute isLoggedIn={isUserLoggedIn()} path="/schedule"><Schedule /></PrivateRoute>
-        <PrivateRoute isLoggedIn={isUserLoggedIn()} path="/discussion"><Discussion /></PrivateRoute>
-        <PrivateRoute isLoggedIn={isUserLoggedIn()} path="/past-shifts"><PastShifts /></PrivateRoute>
-        <PrivateRoute isLoggedIn={isUserLoggedIn()} path="/contacts"><Contacts /></PrivateRoute>
-        <PrivateRoute isLoggedIn={isUserLoggedIn()} path="/history"><History /></PrivateRoute>
+        <PrivateRoute isLoggedIn={isLoggedIn} path="/schedule"><Schedule /></PrivateRoute>
+        <PrivateRoute isLoggedIn={isLoggedIn} path="/discussion"><Discussion /></PrivateRoute>
+        <PrivateRoute isLoggedIn={isLoggedIn} path="/past-shifts"><PastShifts /></PrivateRoute>
+        <PrivateRoute isLoggedIn={isLoggedIn} path="/contacts"><Contacts /></PrivateRoute>
+        <PrivateRoute isLoggedIn={isLoggedIn} path="/history"><History /></PrivateRoute>
       </Switch>
     </div>
   );
