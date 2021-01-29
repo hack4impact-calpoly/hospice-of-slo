@@ -37,7 +37,7 @@ firebase.analytics();
 
 export default function App() {
   function isUserLoggedIn() {
-    return false;
+    return true;
 }
 // toggle for different navbar
 const isAdmin = true; 
@@ -50,7 +50,7 @@ const isAdmin = true;
           path="/"
           render={() => (
             isUserLoggedIn() ? (
-              <Home isAd={isAdmin} />
+              <Home {...{isAdmin}} />
             ) : (
               <Redirect to="/login" />
             )
@@ -72,19 +72,19 @@ const isAdmin = true;
           <SuccessPage />
         </Route>
         <PrivateRoute isLoggedIn={isUserLoggedIn()} path="/schedule">
-          <Schedule isAd={isAdmin} />
+          <Schedule {...{isAdmin}} />
         </PrivateRoute>
         <PrivateRoute isLoggedIn={isUserLoggedIn()} path="/discussion">
-          <Discussion isAd={isAdmin} />
+          <Discussion {...{isAdmin}} />
         </PrivateRoute>
         <PrivateRoute isLoggedIn={isUserLoggedIn()} path="/past-shifts">
-          <PastShifts isAd={isAdmin} />
+          <PastShifts {...{isAdmin}} />
         </PrivateRoute>
-        <PrivateRoute isLoggedIn={isUserLoggedIn()} path="/contacts">
-          <Contacts isAd={isAdmin} />
+        <PrivateRoute isLoggedIn={isAdmin} path="/contacts">
+          <Contacts {...{isAdmin}} />
         </PrivateRoute>
-        <PrivateRoute isLoggedIn={isUserLoggedIn()} path="/history">
-          <History isAd={isAdmin} />
+        <PrivateRoute isLoggedIn={isAdmin} path="/history">
+          <History {...{isAdmin}} />
         </PrivateRoute>
       </Switch>
     </div>

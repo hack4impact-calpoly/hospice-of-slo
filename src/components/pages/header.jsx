@@ -13,7 +13,7 @@ export default function HeaderWithNav(props) {
 
   return (
     <div>
-      <Navbar isAd={isAdmin} />
+      <Navbar {...{ isAdmin }} />
       <StyledHeading>{children}</StyledHeading>
     </div>
   );

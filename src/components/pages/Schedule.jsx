@@ -3,14 +3,14 @@ import PropTypes from 'prop-types';
 import HeaderWithNav from './header';
 
 export default function Schedule(props) {
-  const { isAd } = props;
+  const { isAdmin } = props;
   return (
     <div>
-      <HeaderWithNav isAdmin={isAd}>Schedule</HeaderWithNav>
+      <HeaderWithNav {...{ isAdmin }}>Schedule</HeaderWithNav>
     </div>
   );
 }
 
 Schedule.propTypes = {
-  isAd: PropTypes.bool.isRequired,
+  isAdmin: PropTypes.bool.isRequired,
 };

@@ -3,14 +3,14 @@ import PropTypes from 'prop-types';
 import HeaderWithNav from './header';
 
 export default function Discussion(props) {
-  const { isAd } = props;
+  const { isAdmin } = props;
   return (
     <div>
-      <HeaderWithNav isAdmin={isAd}>Discussion</HeaderWithNav>
+      <HeaderWithNav {...{ isAdmin }}>Discussion</HeaderWithNav>
     </div>
   );
 }
 
 Discussion.propTypes = {
-  isAd: PropTypes.bool.isRequired,
+  isAdmin: PropTypes.bool.isRequired,
 };

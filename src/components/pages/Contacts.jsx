@@ -3,15 +3,15 @@ import PropTypes from 'prop-types';
 import HeaderWithNav from './header';
 
 export default function Contacts(props) {
-  const { isAd } = props;
+  const { isAdmin } = props;
 
   return (
     <div>
-      <HeaderWithNav isAdmin={isAd}>Contacts</HeaderWithNav>
+      <HeaderWithNav {...{ isAdmin }}>Contacts</HeaderWithNav>
     </div>
   );
 }
 
 Contacts.propTypes = {
-  isAd: PropTypes.bool.isRequired,
+  isAdmin: PropTypes.bool.isRequired,
 };

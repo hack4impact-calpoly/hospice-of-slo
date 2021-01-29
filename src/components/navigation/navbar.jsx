@@ -39,7 +39,7 @@ NavLink.propTypes = {
 };
 
 export default function Navbar(props) {
-  const { isAd } = props;
+  const { isAdmin } = props;
 
   return (
     <Menu>
@@ -47,10 +47,10 @@ export default function Navbar(props) {
       <NavLink to="/schedule" Icon={BiCalendarAlt}>Schedule</NavLink>
       <NavLink to="/discussion" Icon={BiChat}>Discussion</NavLink>
       <NavLink to="/past-shifts" Icon={BiClipboard}>Past Shifts</NavLink>
-      { isAd === true
+      { isAdmin === true
         ? <NavLink to="/contacts" Icon={BiPhone}>Contacts</NavLink>
         : null}
-      { isAd === true
+      { isAdmin === true
         ? <NavLink to="/history" Icon={BiTime}>History</NavLink>
         : null}
       <NavLink to="/" Icon={BiLogOut}>Sign Out</NavLink>
@@ -59,5 +59,5 @@ export default function Navbar(props) {
 }
 
 Navbar.propTypes = {
-  isAd: PropTypes.bool.isRequired,
+  isAdmin: PropTypes.bool.isRequired,
 };

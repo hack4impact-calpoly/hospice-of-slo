@@ -3,14 +3,14 @@ import PropTypes from 'prop-types';
 import HeaderWithNav from './header';
 
 export default function PastShifts(props) {
-  const { isAd } = props;
+  const { isAdmin } = props;
   return (
     <div>
-      <HeaderWithNav isAdmin={isAd}>Past Shifts</HeaderWithNav>
+      <HeaderWithNav {...{ isAdmin }}>Past Shifts</HeaderWithNav>
     </div>
   );
 }
 
 PastShifts.propTypes = {
-  isAd: PropTypes.bool.isRequired,
+  isAdmin: PropTypes.bool.isRequired,
 };

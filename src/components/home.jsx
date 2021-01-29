@@ -3,14 +3,14 @@ import React from 'react';
 import HeaderWithNav from './pages/header';
 
 export default function Home(props) {
-  const { isAd } = props;
+  const { isAdmin } = props;
   return (
     <div>
-      <HeaderWithNav isAdmin={isAd}>Home</HeaderWithNav>
+      <HeaderWithNav {...{ isAdmin }}>Home</HeaderWithNav>
     </div>
   );
 }
 
 Home.propTypes = {
-  isAd: PropTypes.bool.isRequired,
+  isAdmin: PropTypes.bool.isRequired,
 };
