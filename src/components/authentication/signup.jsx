@@ -1,3 +1,4 @@
+/* eslint-disable object-shorthand */
 import React, { useState } from 'react';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -86,33 +87,32 @@ export default function SignUp() {
     return 'password';
   };
 
+  const logUserData = async (user) => {
+    const db = firebase.firestore();
+    const userRef = db.collection('users').doc(user.uid);
+    const userData = {
+      email: email,
+      name: name,
+      phone: phone,
+      isAdmin: isAdmin,
+    };
+    userRef.set(userData);
+  };
+
   async function signupPress() {
     console.log('HERE');
     if (name.length > 1) {
       await firebase.auth().createUserWithEmailAndPassword(email, password)
         .then((user) => {
-          console.log(user);
           user.user.updateProfile({
             displayName: name,
-            // Function below will be needed once a users collection is added in firebase,
-            // This function should make a user document in a user collection that stores
-            // bonus features like phone, isAdmin, and name
-            /* )}.then(() => { /
-            const db = firebase.firestore();
-            const userData = {
-              email: user.email,
-              name: user.displayName,
-              phone: '',
-              isAdmin: isAdmin,
-            };
-
-            const userRef = db.collection('users').doc(user.uid);
-            userRef.set(userData);
-          }); */
-          }).catch((error) => {
-            console.log('Display name not set.'); // feedback should be put on frontend
-            console.log(error);
-          });
+          }).then(() => {
+            logUserData(user.user); // creates a document for user with corresponding ID
+          })
+            .catch((error) => {
+              console.log('Display name not set.'); // feedback should be put on frontend
+              console.log(error);
+            });
         })
         .catch((error) => {
           const errorMessage = error.message;
