@@ -65,11 +65,9 @@ export default function ForgotPassword() {
   const forgotPassword = () => {
     const auth = firebase.auth();
     auth.sendPasswordResetEmail(email).then(() => {
-      console.log(`EMAIL SENT TO ${email}`);
       setShowStatus(true);
     }).catch((error) => {
-      console.log(error);
-      // More error cathching in to do
+      alert(error);
     });
   };
 

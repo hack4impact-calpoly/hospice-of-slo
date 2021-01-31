@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import {
   Container, Row, Col, Form,
 } from 'react-bootstrap';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useHistory } from 'react-router-dom';
 import { BiArrowBack } from 'react-icons/bi';
 import firebase from 'firebase';
 
@@ -63,6 +63,7 @@ export default function ResetPassword() {
   const [rePassword, setRePassword] = useState('');
   const [showErr, setShowErr] = useState(false);
   const [errMessage, setErrMessage] = useState('');
+  const history = useHistory();
 
   // A custom hook that builds on useLocation to parse
   // the query string for you.
@@ -93,7 +94,8 @@ export default function ResetPassword() {
         .catch((error) => {
           console.log(`error: ${error}`);
         });
-      console.log('Reset password success!');
+      alert('Your password has been successfully changed!');
+      history.push('/');
     } else {
       setShowErr(true);
     }
