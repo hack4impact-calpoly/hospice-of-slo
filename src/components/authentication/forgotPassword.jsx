@@ -5,6 +5,7 @@ import {
 } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { BiArrowBack } from 'react-icons/bi';
+import firebase from 'firebase';
 
 const StyledDiv = styled.div`
   height: 100vh;
@@ -53,11 +54,23 @@ const SubmitButton = styled.button`
   }
 `;
 
+const StyledError = styled.div`
+  color: red;
+`;
+
 export default function ForgotPassword() {
   const [email, setEmail] = useState('');
+  const [showStatus, setShowStatus] = useState(false);
+
   const forgotPassword = () => {
-    console.log('Hi');
+    const auth = firebase.auth();
+    auth.sendPasswordResetEmail(email).then(() => {
+      setShowStatus(true);
+    }).catch((error) => {
+      alert(error);
+    });
   };
+
   return (
     <StyledDiv>
       <StyledContainer fluid>
@@ -81,9 +94,23 @@ export default function ForgotPassword() {
                       required
                     />
                   </Form.Group>
-                  <SubmitButton className="mt-2" type="submit" onClick={forgotPassword}>
-                    Create Account
-                  </SubmitButton>
+                  {showStatus
+                    ? (
+                      <StyledError>
+                        <p className="mt-4">
+                          {`Reset link sent to ${email}`}
+                        </p>
+                        <SubmitButton type="submit" onClick={forgotPassword}>
+                          Reset Password
+                        </SubmitButton>
+                      </StyledError>
+                    )
+                    : (
+
+                      <SubmitButton type="submit" onClick={forgotPassword}>
+                        Reset Password
+                      </SubmitButton>
+                    )}
                 </Col>
               </Row>
             </Form>
