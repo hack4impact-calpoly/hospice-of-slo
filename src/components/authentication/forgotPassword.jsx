@@ -1,5 +1,3 @@
-/*eslint-disable */
-
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import {
@@ -56,17 +54,23 @@ const SubmitButton = styled.button`
   }
 `;
 
+const StyledError = styled.div`
+  color: red;
+`;
+
 export default function ForgotPassword() {
   const [email, setEmail] = useState('');
-  
+  const [showStatus, setShowStatus] = useState(false);
+
   const forgotPassword = () => {
-    var auth = firebase.auth();
-    auth.sendPasswordResetEmail(email).then(function() {
-       console.log(`EMAIL SENT TO ${email}`);
-    }).catch(function(error) {
-       console.log(error);
-       //More error cathching in to do
-    })
+    const auth = firebase.auth();
+    auth.sendPasswordResetEmail(email).then(() => {
+      console.log(`EMAIL SENT TO ${email}`);
+      setShowStatus(true);
+    }).catch((error) => {
+      console.log(error);
+      // More error cathching in to do
+    });
   };
 
   return (
@@ -92,9 +96,23 @@ export default function ForgotPassword() {
                       required
                     />
                   </Form.Group>
-                  <SubmitButton className="mt-2" type="submit" onClick={forgotPassword}>
-                    Reset Password
-                  </SubmitButton>
+                  {showStatus
+                    ? (
+                      <StyledError>
+                        <p className="mt-4">
+                          {`Reset link sent to ${email}`}
+                        </p>
+                        <SubmitButton type="submit" onClick={forgotPassword}>
+                          Reset Password
+                        </SubmitButton>
+                      </StyledError>
+                    )
+                    : (
+
+                      <SubmitButton type="submit" onClick={forgotPassword}>
+                        Reset Password
+                      </SubmitButton>
+                    )}
                 </Col>
               </Row>
             </Form>

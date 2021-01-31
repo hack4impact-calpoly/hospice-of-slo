@@ -1,11 +1,9 @@
-/*eslint-disable */
-
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import {
   Container, Row, Col, Form,
 } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { BiArrowBack } from 'react-icons/bi';
 import firebase from 'firebase';
 
@@ -66,6 +64,16 @@ export default function ResetPassword() {
   const [showErr, setShowErr] = useState(false);
   const [errMessage, setErrMessage] = useState('');
 
+  // A custom hook that builds on useLocation to parse
+  // the query string for you.
+  function useQuery() {
+    return new URLSearchParams(useLocation().search);
+  }
+
+  const query = useQuery();
+
+  const oobCode = query.get('oobCode');
+
   const validatePass = () => {
     if (password !== rePassword) {
       setShowErr(true);
@@ -77,9 +85,15 @@ export default function ResetPassword() {
       setShowErr(false);
     }
   };
+
   function confirmPassword() {
+    const auth = firebase.auth();
     if (!showErr) {
-      console.log('Reset password here');
+      auth.confirmPasswordReset(oobCode, password)
+        .catch((error) => {
+          console.log(`error: ${error}`);
+        });
+      console.log('Reset password success!');
     } else {
       setShowErr(true);
     }
