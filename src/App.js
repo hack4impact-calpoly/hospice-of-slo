@@ -35,9 +35,11 @@ firebase.initializeApp(firebaseConfig);
 firebase.analytics();
 
 export default function App() {
-  function isUserLoggedIn() {
-    return false;
-  }
+  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+  const [isAdmin] = React.useState(true);
+  const toggleLoggedIn = () => {
+    setIsLoggedIn(!isLoggedIn);
+  };
   return (
     <div className="main">
       <Switch>
@@ -45,18 +47,18 @@ export default function App() {
           exact
           path="/"
           render={() => (
-            isUserLoggedIn() ? (
-              <Home />
+            isLoggedIn ? (
+              <Home {...{ isAdmin }} />
             ) : (
               <Redirect to="/login" />
             )
           )}
         />
         <Route path="/login">
-          <Login />
+          <Login toggleLoggedIn={toggleLoggedIn} />
         </Route>
         <Route path="/signup">
-          <Signup />
+          <Signup toggleLoggedIn={toggleLoggedIn} />
         </Route>
         <Route path="/forgot-password">
           <ForgotPassword />
@@ -67,11 +69,21 @@ export default function App() {
         <Route path="/success">
           <SuccessPage />
         </Route>
-        <PrivateRoute isLoggedIn={isUserLoggedIn()} path="/schedule"><Schedule /></PrivateRoute>
-        <PrivateRoute isLoggedIn={isUserLoggedIn()} path="/discussion"><Discussion /></PrivateRoute>
-        <PrivateRoute isLoggedIn={isUserLoggedIn()} path="/past-shifts"><PastShifts /></PrivateRoute>
-        <PrivateRoute isLoggedIn={isUserLoggedIn()} path="/contacts"><Contacts /></PrivateRoute>
-        <PrivateRoute isLoggedIn={isUserLoggedIn()} path="/history"><History /></PrivateRoute>
+        <PrivateRoute isLoggedIn={isLoggedIn} path="/schedule">
+          <Schedule {...{ isAdmin }} />
+        </PrivateRoute>
+        <PrivateRoute isLoggedIn={isLoggedIn} path="/discussion">
+          <Discussion {...{ isAdmin }} />
+        </PrivateRoute>
+        <PrivateRoute isLoggedIn={isLoggedIn} path="/past-shifts">
+          <PastShifts {...{ isAdmin }} />
+        </PrivateRoute>
+        <PrivateRoute isLoggedIn={isAdmin} path="/contacts">
+          <Contacts {...{ isAdmin }} />
+        </PrivateRoute>
+        <PrivateRoute isLoggedIn={isAdmin} path="/history">
+          <History {...{ isAdmin }} />
+        </PrivateRoute>
       </Switch>
     </div>
   );

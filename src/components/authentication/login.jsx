@@ -1,9 +1,10 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import {
   Container, Row, Col, Form, Image,
 } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import logoImage from '../../images/HospiceLogo.png';
 
 const StyledDiv = styled.div`
@@ -88,13 +89,20 @@ const FLink = styled(Link)`
   }
 `;
 
-export default function Login() {
+export default function Login(props) {
+  const {
+    toggleLoggedIn,
+  } = props;
+  const history = useHistory();
+
   const [email, setEmail] = React.useState('');
+  /* eslint-disable-next-line */
   const [password, setPassword] = React.useState('');
 
   const loginPress = () => {
     console.log(email);
-    console.log(password);
+    toggleLoggedIn();
+    history.push('/');
   };
 
   return (
@@ -134,3 +142,7 @@ export default function Login() {
     </StyledDiv>
   );
 }
+
+Login.propTypes = {
+  toggleLoggedIn: PropTypes.func.isRequired,
+};

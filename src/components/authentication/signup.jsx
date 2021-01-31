@@ -1,8 +1,10 @@
+/* eslint-disable object-shorthand */
 import React, { useState } from 'react';
 import {
   Container, Row, Col, Form,
 } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import firebase from 'firebase';
 import 'firebase/firestore';
@@ -64,7 +66,10 @@ const StyledError = styled.div`
   color: red;
 `;
 
-export default function SignUp() {
+export default function SignUp(props) {
+  const {
+    toggleLoggedIn,
+  } = props;
   const [name, setName] = React.useState('');
   const [password, setPassword] = useState('');
   const [rePassword, setRePassword] = useState('');
@@ -74,6 +79,7 @@ export default function SignUp() {
   const [errMessage, setErrMessage] = useState('');
   /* eslint-disable no-unused-vars */
   const [isAdmin, setIsAdmin] = React.useState(false);
+  const history = useHistory();
 
   const validatePass = () => {
     if (password !== rePassword) {
@@ -107,38 +113,39 @@ export default function SignUp() {
     }
   };
 
-  async function signupPress() {
-    await firebase.auth().createUserWithEmailAndPassword(email, password)
-      .then((user) => {
-        console.log(user);
-        user.user.updateProfile({
-          displayName: name,
-          // Function below will be needed once a users collection is added in firebase,
-          // This function should make a user document in a user collection that stores
-          // bonus features like phone, isAdmin, and name
-          /* )}.then(() => { /
-          const db = firebase.firestore();
-          const userData = {
-            email: user.email,
-            name: user.displayName,
-            phone: '',
-            isAdmin: isAdmin,
-          };
+  const logUserData = async (user) => {
+    const db = firebase.firestore();
+    const userRef = db.collection('users').doc(user.uid);
+    const userData = {
+      email: email,
+      name: name,
+      phone: phone,
+      isAdmin: isAdmin,
+    };
+    userRef.set(userData);
+  };
 
-          const userRef = db.collection('users').doc(user.uid);
-          userRef.set(userData);
-        }); */
-        }).catch((error) => {
-          console.log('Display name not set.'); // feedback should be put on frontend
-          console.log(error);
+  async function signupPress() {
+    if (name.length > 1) {
+      await firebase.auth().createUserWithEmailAndPassword(email, password)
+        .then((user) => {
+          user.user.updateProfile({
+            displayName: name,
+          }).then(() => {
+            logUserData(user.user); // creates a document for user with corresponding ID
+            toggleLoggedIn();
+            history.push('/');
+          })
+            .catch((error) => {
+              console.log('Display name not set.'); // feedback should be put on frontend
+              console.log(error);
+            });
+        })
+        .catch((error) => {
+          const errorMessage = error.message;
+          console.log('Error:', errorMessage); // feedback should be put on frontend
         });
-      })
-      .catch((error) => {
-        const errorMessage = error.message;
-        console.log('Error:', errorMessage); // feedback should be put on frontend
-        setErrMessage(errorMessage);
-        setShowErr(true);
-      });
+    }
   }
 
   const validateAll = () => {
@@ -252,3 +259,7 @@ export default function SignUp() {
     </StyledDiv>
   );
 }
+
+SignUp.propTypes = {
+  toggleLoggedIn: PropTypes.func.isRequired,
+};

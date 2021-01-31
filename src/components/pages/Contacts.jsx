@@ -1,10 +1,17 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import HeaderWithNav from './header';
 
-export default function Contacts() {
+export default function Contacts(props) {
+  const { isAdmin } = props;
+
   return (
     <div>
-      <HeaderWithNav>Contacts</HeaderWithNav>
+      <HeaderWithNav {...{ isAdmin }}>Contacts</HeaderWithNav>
     </div>
   );
 }
+
+Contacts.propTypes = {
+  isAdmin: PropTypes.bool.isRequired,
+};
