@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Redirect, Route } from 'react-router-dom';
-import { propTypes } from 'react-bootstrap/esm/Image';
 
 export default function PrivateRoute({
   children, isLoggedIn, path, exact,
@@ -19,7 +18,7 @@ PrivateRoute.propTypes = {
   children: PropTypes.element.isRequired,
   isLoggedIn: PropTypes.bool.isRequired,
   path: PropTypes.string.isRequired,
-  exact: propTypes.bool,
+  exact: PropTypes.bool,
 };
 
 PrivateRoute.defaultProps = {

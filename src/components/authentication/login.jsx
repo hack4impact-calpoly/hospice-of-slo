@@ -1,66 +1,57 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
-
-import { Link } from 'react-router-dom';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Image from 'react-bootstrap/Image';
-import Form from 'react-bootstrap/Form';
-
+import {
+  Container, Row, Col, Form, Image,
+} from 'react-bootstrap';
+import { Link, useHistory } from 'react-router-dom';
 import logoImage from '../../images/HospiceLogo.png';
 
-const SContainer = styled(Container)`
-  display: flex;
-  text-align:center;
-  justify-content: center;
-  box-sizing: border-box;
+const StyledDiv = styled.div`
   height: 100vh;
-  padding: 20vh 0;
+  background-color: #E2E2E2;
+`;
 
-  @media only screen and (min-width: 820px) {
-    background-color: #ECECEC;
-    padding: 10vh 10vw;
+const StyledContainer = styled(Container)`
+  width: 100%;
+  height: 100vh;
+  @media only screen and (min-width: 768px) {
+    height: 100vh;  
+    padding: 10vh 0;
   }
 `;
 
 const StyledRow = styled(Row)`
-  display: flex;
-  margin:0;
-  padding:0;
-  box-sizing: border-box;
-  text-align: center;
+  width: 100vw;
+  height: 100%;
+  text-align:center;
   justify-content: center;
 `;
 
-const SCol = styled(Col)`
-  background-color: white;
-
-  @media only screen and (min-width: 820px) {
-    padding: 50px 6vw 80px 6vw;
-    border-radius: 6px;
+const StyledCol = styled(Col)`
+  background-color: #FFFFFF;
+  padding: 10%;
+  @media only screen and (min-width: 768px) {
+    border: 2px solid #C4C4C4;
+    border-radius: 5px;
+    padding: 5% 9%
   }
-
 `;
 
 const StyledImage = styled(Image)`
-  height: 100%;
-  width: 100%;
-`;
-
-/* changes width of input fields */
-const Credentials = styled(Form)`
+  position: relative;
   width: 100%;
 `;
 
 const SignIn = styled.button`
+  color: white;
+  background-color: #84C0C9;
+  border: 2px solid #FFFFFF; 
   border-radius: 5px;
   padding: 6px 0px; 
-  width: 48%;
-  font-family: Roboto;
-  background-color: #84C0C9;
-  color: white;
-  border:none;
+  width: 100%;
+  font-size: 14px;
+  fontFamily: Roboto;
 
   &:hover{
     color: white;
@@ -68,16 +59,16 @@ const SignIn = styled.button`
   }
 `;
 
-/* Create account */
-const CreatLink = styled(Link)`
-  text-decoration: none;
+// Create account
+const CreatLink = styled.button`
   color: #558E97;
   background-color: white;
   border: 2px solid #558E97; 
   border-radius: 5px;
   padding: 6px 0px; 
-  width: 48%;
-  font-family: Roboto;
+  width: 100%;
+  font-size: 14px;
+  fontFamily: Roboto;
 
   &:hover{
     text-decoration:none;
@@ -86,16 +77,11 @@ const CreatLink = styled(Link)`
   }
 `;
 
-const Buttons = styled(StyledRow)`
-  justify-content: space-between;
-`;
-
-/* Forgot password */
 const FLink = styled(Link)`
-  display: flex;
-  font-family: Roboto;
-  margin-left: auto; 
-  text-decoration: none;
+  position: relative;
+  float: right;
+  font-size: 14px;
+  fontFamily: Roboto;
   color: #6C6B6B;
   &:hover{
     text-decoration: none;
@@ -103,33 +89,60 @@ const FLink = styled(Link)`
   }
 `;
 
-export default function Login() {
+export default function Login(props) {
+  const {
+    toggleLoggedIn,
+  } = props;
+  const history = useHistory();
+
+  const [email, setEmail] = React.useState('');
+  /* eslint-disable-next-line */
+  const [password, setPassword] = React.useState('');
+
+  const loginPress = () => {
+    console.log(email);
+    toggleLoggedIn();
+    history.push('/');
+  };
+
   return (
-    <SContainer fluid>
-      <StyledRow>
-        <SCol md={7}>
-          <Row>
-            <StyledImage src={logoImage} />
-          </Row>
-          <StyledRow>
-            <Credentials>
-              <Form.Group controlId="formBasicEmail">
-                <Form.Control type="email" placeholder="email" />
-              </Form.Group>
-              <Form.Group controlId="formBasicPassword">
-                <Form.Control type="password" placeholder="password" />
-              </Form.Group>
-            </Credentials>
-          </StyledRow>
-          <Buttons>
-            <CreatLink to="/signup">Create Account</CreatLink>
-            <SignIn>Sign In</SignIn>
-          </Buttons>
-          <StyledRow>
-            <FLink to="/forgot-password">Forgot Password?</FLink>
-          </StyledRow>
-        </SCol>
-      </StyledRow>
-    </SContainer>
+    <StyledDiv>
+      <StyledContainer fluid>
+        <StyledRow>
+          <StyledCol sm={12} md={8} lg={6} xl={5}>
+            <StyledImage src={logoImage} className="mt-4" />
+            <Form.Control
+              className="mt-3"
+              type="email"
+              placeholder="email"
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <Form.Control
+              className="mt-3 mb-3"
+              type="password"
+              placeholder="password"
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <Row>
+              <Col>
+                <Link to="/signup">
+                  <CreatLink>Create Account</CreatLink>
+                </Link>
+              </Col>
+              <Col>
+                <SignIn onClick={loginPress}>
+                  Sign In
+                </SignIn>
+              </Col>
+            </Row>
+            <FLink className="mt-2" to="/forgot-password">Forgot Password?</FLink>
+          </StyledCol>
+        </StyledRow>
+      </StyledContainer>
+    </StyledDiv>
   );
 }
+
+Login.propTypes = {
+  toggleLoggedIn: PropTypes.func.isRequired,
+};
