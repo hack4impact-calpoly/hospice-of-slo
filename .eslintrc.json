@@ -20,6 +20,8 @@
     "rules": {
       "no-console": "off",
       "linebreak-style": 0,
-      "max-len": 0
+      "max-len": 0,
+      "react/jsx-filename-extension": 0,
+      "no-alert": 0
     }
 }
