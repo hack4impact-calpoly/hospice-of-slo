@@ -36,6 +36,7 @@ firebase.analytics();
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+  const [isAdmin] = React.useState(true);
   const toggleLoggedIn = () => {
     setIsLoggedIn(!isLoggedIn);
   };
@@ -47,7 +48,7 @@ export default function App() {
           path="/"
           render={() => (
             isLoggedIn ? (
-              <Home />
+              <Home {...{ isAdmin }} />
             ) : (
               <Redirect to="/login" />
             )
@@ -57,7 +58,7 @@ export default function App() {
           <Login toggleLoggedIn={toggleLoggedIn} />
         </Route>
         <Route path="/signup">
-          <Signup />
+          <Signup toggleLoggedIn={toggleLoggedIn} />
         </Route>
         <Route path="/forgot-password">
           <ForgotPassword />
@@ -68,11 +69,21 @@ export default function App() {
         <Route path="/success">
           <SuccessPage />
         </Route>
-        <PrivateRoute isLoggedIn={isLoggedIn} path="/schedule"><Schedule /></PrivateRoute>
-        <PrivateRoute isLoggedIn={isLoggedIn} path="/discussion"><Discussion /></PrivateRoute>
-        <PrivateRoute isLoggedIn={isLoggedIn} path="/past-shifts"><PastShifts /></PrivateRoute>
-        <PrivateRoute isLoggedIn={isLoggedIn} path="/contacts"><Contacts /></PrivateRoute>
-        <PrivateRoute isLoggedIn={isLoggedIn} path="/history"><History /></PrivateRoute>
+        <PrivateRoute isLoggedIn={isLoggedIn} path="/schedule">
+          <Schedule {...{ isAdmin }} />
+        </PrivateRoute>
+        <PrivateRoute isLoggedIn={isLoggedIn} path="/discussion">
+          <Discussion {...{ isAdmin }} />
+        </PrivateRoute>
+        <PrivateRoute isLoggedIn={isLoggedIn} path="/past-shifts">
+          <PastShifts {...{ isAdmin }} />
+        </PrivateRoute>
+        <PrivateRoute isLoggedIn={isAdmin} path="/contacts">
+          <Contacts {...{ isAdmin }} />
+        </PrivateRoute>
+        <PrivateRoute isLoggedIn={isAdmin} path="/history">
+          <History {...{ isAdmin }} />
+        </PrivateRoute>
       </Switch>
     </div>
   );

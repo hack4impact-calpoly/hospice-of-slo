@@ -16,6 +16,7 @@ const SpacedDiv = styled.div`
   align-items: center;
   padding: 16px 0;
 `;
+
 const LinkLabel = styled.span`
   font-size: 26px;
   padding-left: 10px;
@@ -45,7 +46,8 @@ NavLink.defaultProps = {
   handleClick: () => {},
 };
 
-export default function Navbar() {
+export default function Navbar(props) {
+  const { isAdmin } = props;
   function signOut() {
     try {
       firebase.auth().signOut();
@@ -60,9 +62,17 @@ export default function Navbar() {
       <NavLink to="/schedule" Icon={BiCalendarAlt}>Schedule</NavLink>
       <NavLink to="/discussion" Icon={BiChat}>Discussion</NavLink>
       <NavLink to="/past-shifts" Icon={BiClipboard}>Past Shifts</NavLink>
-      <NavLink to="/contacts" Icon={BiPhone}>Contacts</NavLink>
-      <NavLink to="/history" Icon={BiTime}>History</NavLink>
-      <NavLink to="/login" handleClick={signOut} Icon={BiLogOut}>SignOut</NavLink>
+      { isAdmin
+        ? <NavLink to="/contacts" Icon={BiPhone}>Contacts</NavLink>
+        : null}
+      { isAdmin
+        ? <NavLink to="/history" Icon={BiTime}>History</NavLink>
+        : null}
+      <NavLink to="/login" handleClick={signOut} Icon={BiLogOut}>Sign Out</NavLink>
     </Menu>
   );
 }
+
+Navbar.propTypes = {
+  isAdmin: PropTypes.bool.isRequired,
+};
