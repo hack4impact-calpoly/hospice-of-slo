@@ -1,16 +1,9 @@
-import styled from 'styled-components';
 import React from 'react';
 import PropTypes from 'prop-types';
-import Navbar from '../navigation/navbar';
+import Navbar from './navbar';
+import StyledHeading from './styled-heading';
 
-const StyledHeading = styled.h2`
-  text-align: center;
-  padding-top: 32px;
-`;
-
-export default function HeaderWithNav(props) {
-  const { isAdmin, children } = props;
-
+export default function HeaderWithNav({ isAdmin, children }) {
   return (
     <div>
       <Navbar {...{ isAdmin }} />
