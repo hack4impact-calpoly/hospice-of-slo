@@ -1,9 +1,16 @@
+import PropTypes from 'prop-types';
 import React from 'react';
+import HeaderWithNav from './pages/header';
 
-export default function Home() {
+export default function Home(props) {
+  const { isAdmin } = props;
   return (
     <div>
-      Home
+      <HeaderWithNav {...{ isAdmin }}>Home</HeaderWithNav>
     </div>
   );
 }
+
+Home.propTypes = {
+  isAdmin: PropTypes.bool.isRequired,
+};

@@ -1,9 +1,265 @@
-import React from 'react';
+/* eslint-disable object-shorthand */
+import React, { useState } from 'react';
+import {
+  Container, Row, Col, Form,
+} from 'react-bootstrap';
+import { Link, useHistory } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import firebase from 'firebase';
+import 'firebase/firestore';
+import { BiArrowBack } from 'react-icons/bi';
 
-export default function SignUp() {
+const StyledDiv = styled.div`
+  height: 100vh;
+  background-color: #E2E2E2;
+`;
+
+const StyledContainer = styled(Container)`
+  width: 100%;
+  height: 100vh;
+  @media only screen and (min-width: 768px) {
+    height: 100vh;  
+    padding: 10vh 0;
+  }
+`;
+
+const StyledRow = styled(Row)`
+  width: 100vw;
+  height: 100%;
+  text-align: left;
+  justify-content: center;
+`;
+
+const StyledCol = styled(Col)`
+  background-color: #FFFFFF;
+  padding: 10%;
+  @media only screen and (min-width: 768px) {
+    border: 2px solid #C4C4C4;
+    border-radius: 5px;
+    padding: 5% 10%
+  }
+`;
+
+const SubmitButton = styled.button`
+  color: white;
+  background-color: #84C0C9;
+  border: 2px solid #FFFFFF; 
+  border-radius: 5px;
+  padding: 6px 0px; 
+  width: 100%;
+  font-size: 14px;
+  fontFamily: Roboto;
+
+  &:hover{
+    color: white;
+    background-color: #558E97;
+  }
+  
+  &:disabled{
+    color: darkgrey;
+    background-color: lightgrey;
+  }
+`;
+
+const StyledError = styled.div`
+  color: red;
+`;
+
+export default function SignUp(props) {
+  const {
+    toggleLoggedIn,
+  } = props;
+  const [name, setName] = React.useState('');
+  const [password, setPassword] = useState('');
+  const [rePassword, setRePassword] = useState('');
+  const [phone, setPhone] = useState('');
+  const [email, setEmail] = useState('');
+  const [showErr, setShowErr] = useState(false);
+  const [errMessage, setErrMessage] = useState('');
+  /* eslint-disable no-unused-vars */
+  const [isAdmin, setIsAdmin] = React.useState(false);
+  const history = useHistory();
+
+  const validatePass = () => {
+    if (password !== rePassword) {
+      setShowErr(true);
+      setErrMessage('Passwords must match');
+    } else if (password.length < 6) {
+      setShowErr(true);
+      setErrMessage('Password must be at least 6 letters');
+    } else {
+      setShowErr(false);
+    }
+  };
+
+  const validateEmail = () => {
+    const emailFormat = /\S+@\S+\.\S+/;
+    if (!emailFormat.test(email)) {
+      setShowErr(true);
+      setErrMessage('Please enter a valid email address');
+    } else {
+      setShowErr(false);
+    }
+  };
+
+  const validatePhone = () => {
+    const myStr = phone.replace(/\D/g, ''); // strip all non numbers from phone number
+    if (myStr.length < 7 || myStr.length >= 13) { // checks if phone has at least 7 nums
+      setShowErr(true);
+      setErrMessage('Please enter a valid phone number');
+    } else {
+      setShowErr(false);
+    }
+  };
+
+  const logUserData = async (user) => {
+    const db = firebase.firestore();
+    const userRef = db.collection('users').doc(user.uid);
+    const userData = {
+      email: email,
+      name: name,
+      phone: phone,
+      isAdmin: isAdmin,
+    };
+    userRef.set(userData);
+  };
+
+  async function signupPress() {
+    if (name.length > 1) {
+      await firebase.auth().createUserWithEmailAndPassword(email, password)
+        .then((user) => {
+          user.user.updateProfile({
+            displayName: name,
+          }).then(() => {
+            logUserData(user.user); // creates a document for user with corresponding ID
+            toggleLoggedIn();
+            history.push('/');
+          })
+            .catch((error) => {
+              console.log('Display name not set.'); // feedback should be put on frontend
+              console.log(error);
+            });
+        })
+        .catch((error) => {
+          const errorMessage = error.message;
+          console.log('Error:', errorMessage); // feedback should be put on frontend
+        });
+    }
+  }
+
+  const validateAll = () => {
+    validateEmail();
+    validatePhone();
+    validatePass();
+    signupPress();
+  };
+
   return (
-    <div className="m-3">
-      Sign Up Page
-    </div>
+    <StyledDiv>
+      <StyledContainer fluid>
+        <StyledRow>
+          <StyledCol sm={12} md={10} lg={8}>
+            <Link to="/login">
+              <BiArrowBack size="32" className="mb-4" />
+            </Link>
+            <Form onSubmit={(e) => e.preventDefault()}>
+              <Row>
+                <Col md={12}>
+                  <h3>Create an Account</h3>
+                </Col>
+                <Col xs={12} md={6}>
+                  <Form.Group className="mt-2">
+                    <Form.Label>Name</Form.Label>
+                    <Form.Control
+                      type="text"
+                      placeholder="name"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      required
+                    />
+                  </Form.Group>
+                </Col>
+              </Row>
+              <Row>
+                <Col xs={12} md={6}>
+                  <Form.Group className="mt-2">
+                    <Form.Label>Email</Form.Label>
+                    <Form.Control
+                      type="text"
+                      placeholder="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      onBlur={() => validateEmail(email)}
+                      required
+                    />
+                  </Form.Group>
+                </Col>
+                <Col xs={12} md={6}>
+                  <Form.Group className="mt-2">
+                    <Form.Label>Phone</Form.Label>
+                    <Form.Control
+                      type="text"
+                      placeholder="phone"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      onBlur={() => validatePhone(phone)}
+                      required
+                    />
+                  </Form.Group>
+                </Col>
+              </Row>
+              <Row>
+                <Col xs={12} md={6}>
+                  <Form.Group className="mt-2">
+                    <Form.Label>Password</Form.Label>
+                    <Form.Control
+                      type="password"
+                      placeholder="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                    />
+                  </Form.Group>
+                </Col>
+                <Col xs={12} md={6}>
+                  <Form.Group className="mt-2 mb-4">
+                    <Form.Label>Re-enter Password</Form.Label>
+                    <Form.Control
+                      type="password"
+                      placeholder="password"
+                      value={rePassword}
+                      onChange={(e) => setRePassword(e.target.value)}
+                      onBlur={(e) => validatePass(password, e.target.value)}
+                      required
+                    />
+                  </Form.Group>
+                </Col>
+                <Col>
+                  {showErr
+                    ? (
+                      <StyledError>
+                        {errMessage}
+                        <SubmitButton type="submit" disabled onClick={validateAll}>
+                          Create Account
+                        </SubmitButton>
+                      </StyledError>
+                    )
+                    : (
+                      <SubmitButton type="submit" onClick={validateAll}>
+                        Create Account
+                      </SubmitButton>
+                    )}
+                </Col>
+              </Row>
+            </Form>
+          </StyledCol>
+        </StyledRow>
+      </StyledContainer>
+    </StyledDiv>
   );
 }
+
+SignUp.propTypes = {
+  toggleLoggedIn: PropTypes.func.isRequired,
+};

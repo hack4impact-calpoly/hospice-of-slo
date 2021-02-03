@@ -1,56 +1,122 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import {
+  Container, Row, Col, Form,
+} from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+import { BiArrowBack } from 'react-icons/bi';
+import firebase from 'firebase';
 
-const SendButton = styled.button`
-  background-color: #84C0C9;
-  color: #FFFFFF;
+const StyledDiv = styled.div`
+  height: 100vh;
+  background-color: #E2E2E2;
+`;
+
+const StyledContainer = styled(Container)`
   width: 100%;
-  padding: 8px;
-  justify-self: center;
-  border-radius: 6px;
-  border: none;
-`;
-
-const StyledInput = styled.input`
-  border: 1px solid #C4C4C4;
-  box-sizing: border-box;
-  border-radius: 6px;
-`;
-
-const Grid = styled.div`
-  container;
-  spacing={0};
-  direction="column";
-  alignItems="center";
-  justify="center";
-`;
-
-const Row = styled.div`
-  display: flex;
-`;
-
-// const Col = styled.div`
-//   flex: ${(props) => props.size};
-// `;
-
-const validateEmail = (email) => {
-  const emailFormat = /\S+@\S+\.\S+/;
-  if (!emailFormat.test(email)) { // eslint-disable-next-line
-    window.alert('Valid email required.');
+  height: 100vh;
+  @media only screen and (min-width: 768px) {
+    height: 100vh;
+    padding: 20vh 0;
   }
-};
+`;
+
+const StyledRow = styled(Row)`
+  width: 100vw;
+  height: 100%;
+  text-align: left;
+  justify-content: center;
+`;
+
+const StyledCol = styled(Col)`
+  background-color: #FFFFFF;
+  padding: 10%;
+  @media only screen and (min-width: 768px) {
+    border: 2px solid #C4C4C4;
+    border-radius: 5px;
+    padding: 5% 10%
+  }
+`;
+
+const SubmitButton = styled.button`
+  color: white;
+  background-color: #84C0C9;
+  border: 2px solid #FFFFFF;
+  border-radius: 5px;
+  padding: 6px 0px;
+  width: 100%;
+  font-size: 14px;
+  fontFamily: Roboto;
+
+  &:hover{
+    color: white;
+    background-color: #558E97;
+  }
+`;
+
+const StyledError = styled.div`
+  color: red;
+`;
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState('');
+  const [showStatus, setShowStatus] = useState(false);
+
+  const forgotPassword = () => {
+    const auth = firebase.auth();
+    auth.sendPasswordResetEmail(email).then(() => {
+      setShowStatus(true);
+    }).catch((error) => {
+      alert(error);
+    });
+  };
+
   return (
-    <div className="m-3">
-      <h1 style={{ fontSize: 20 }}>Forgot Password</h1>
-      <Grid>
-        <Row style={{ fontSize: 14 }}>A reset link will be sent to your email</Row>
-        <Row style={{ fontSize: 13 }}>Email</Row>
-        <Row><StyledInput type="text" placeholder="sallysmith@gmail.com" onBlur={() => validateEmail(email)} onChange={(x) => setEmail(email.replace(email, x.target.value))} required /></Row>
-        <Row><SendButton type="submit" value="Send" onClick={() => validateEmail(email)} /></Row>
-      </Grid>
-    </div>
+    <StyledDiv>
+      <StyledContainer fluid>
+        <StyledRow>
+          <StyledCol sm={12} md={8} lg={6} xl={5}>
+            <Link to="/login">
+              <BiArrowBack size="32" className="mb-4" />
+            </Link>
+            <Form onSubmit={(e) => e.preventDefault()}>
+              <Row>
+                <Col md={12}>
+                  <h3>Forgot Password</h3>
+                  <p className="mt-4"> A reset link will be sent to your email </p>
+                  <Form.Group className="mt-4">
+                    <Form.Label>Email</Form.Label>
+                    <Form.Control
+                      type="text"
+                      placeholder="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                    />
+                  </Form.Group>
+                  {showStatus
+                    ? (
+                      <StyledError>
+                        <p className="mt-4">
+                          {`Reset link sent to ${email}`}
+                        </p>
+                        <SubmitButton type="submit" onClick={forgotPassword}>
+                          Reset Password
+                        </SubmitButton>
+                      </StyledError>
+                    )
+                    : (
+
+                      <SubmitButton type="submit" onClick={forgotPassword}>
+                        Reset Password
+                      </SubmitButton>
+                    )}
+                </Col>
+              </Row>
+            </Form>
+          </StyledCol>
+        </StyledRow>
+      </StyledContainer>
+    </StyledDiv>
   );
 }
