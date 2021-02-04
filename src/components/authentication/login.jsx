@@ -1,3 +1,4 @@
+/* eslint-disable*/
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
@@ -6,7 +7,7 @@ import {
 } from 'react-bootstrap';
 import { Link, useHistory } from 'react-router-dom';
 import logoImage from '../../images/HospiceLogo.png';
-
+import firebase from 'firebase'
 const StyledDiv = styled.div`
   height: 100vh;
   background-color: #E2E2E2;
@@ -100,9 +101,39 @@ export default function Login(props) {
   const [password, setPassword] = React.useState('');
 
   const loginPress = () => {
-    console.log(email);
-    toggleLoggedIn();
-    history.push('/');
+      toggleLoggedIn();
+      // sign in to firebase with email and password
+      firebase.auth().signInWithEmailAndPassword(email, password)
+          .then((userCredential) => {
+              // signed in
+              const currentUser = firebase.auth().currentUser.uid;
+              const db = firebase.firestore();
+              const userRef = db.collection("users").doc(currentUser);
+
+              userRef.get().then((user) => {
+                  if (user.exists) {
+                      // check if user is admin and reroute to proper location
+                      if (user.data().isAdmin == true) {
+                          history.push('/adminHome');
+                      }
+                      else {
+                          history.push('/');
+                      }
+                  } else {
+                      // user.data() will be undefined in this case
+                      console.log("user does not exist");
+                  }
+              }).catch((error) => {
+                  console.log("Error getting user", error);
+              });
+
+          })
+          .catch((error) => {
+              // unable to sign in
+              console.log("Account does not exist")
+              var errorCode = error.code;
+              var errorMessage = error.message;
+          });
   };
 
   return (

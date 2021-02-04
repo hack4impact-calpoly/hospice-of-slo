@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from 'react';
 import {
   Route,
@@ -7,6 +8,7 @@ import {
 import './App.css';
 import firebase from 'firebase';
 import Home from './components/home';
+import AdminHome from './components/admin/adminHome';
 import Login from './components/authentication/login';
 import Signup from './components/authentication/signup';
 import ForgotPassword from './components/authentication/forgotPassword';
@@ -68,7 +70,10 @@ export default function App() {
         </Route>
         <Route path="/success">
           <SuccessPage />
-        </Route>
+              </Route>
+        <Route path="/adminHome">
+          <AdminHome />
+         </Route>
         <PrivateRoute isLoggedIn={isLoggedIn} path="/schedule">
           <Schedule {...{ isAdmin }} />
         </PrivateRoute>
