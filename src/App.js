@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React from 'react';
 import {
   Route,
@@ -8,7 +7,6 @@ import {
 import './App.css';
 import firebase from 'firebase';
 import Home from './components/home';
-import AdminHome from './components/admin/adminHome';
 import Login from './components/authentication/login';
 import Signup from './components/authentication/signup';
 import ForgotPassword from './components/authentication/forgotPassword';
@@ -34,11 +32,10 @@ const firebaseConfig = {
 };
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
-firebase.analytics();
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
-  const [isAdmin] = React.useState(true);
+  const [isAdmin, setIsAdmin] = React.useState(false);
   const toggleLoggedIn = () => {
     setIsLoggedIn(!isLoggedIn);
   };
@@ -57,7 +54,7 @@ export default function App() {
           )}
         />
         <Route path="/login">
-          <Login toggleLoggedIn={toggleLoggedIn} />
+          <Login toggleLoggedIn={toggleLoggedIn} setIsAdmin={setIsAdmin} />
         </Route>
         <Route path="/signup">
           <Signup toggleLoggedIn={toggleLoggedIn} />
@@ -70,10 +67,7 @@ export default function App() {
         </Route>
         <Route path="/success">
           <SuccessPage />
-              </Route>
-        <Route path="/adminHome">
-          <AdminHome />
-         </Route>
+        </Route>
         <PrivateRoute isLoggedIn={isLoggedIn} path="/schedule">
           <Schedule {...{ isAdmin }} />
         </PrivateRoute>
