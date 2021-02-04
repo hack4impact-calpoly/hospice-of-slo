@@ -32,11 +32,10 @@ const firebaseConfig = {
 };
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
-firebase.analytics();
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
-  const [isAdmin] = React.useState(true);
+  const [isAdmin, setIsAdmin] = React.useState(false);
   const toggleLoggedIn = () => {
     setIsLoggedIn(!isLoggedIn);
   };
@@ -55,7 +54,7 @@ export default function App() {
           )}
         />
         <Route path="/login">
-          <Login toggleLoggedIn={toggleLoggedIn} />
+          <Login toggleLoggedIn={toggleLoggedIn} setIsAdmin={setIsAdmin} />
         </Route>
         <Route path="/signup">
           <Signup toggleLoggedIn={toggleLoggedIn} />
