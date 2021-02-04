@@ -39,9 +39,9 @@ export default function Schedule(props) {
     </div>
 
       <Button variant="primary" size="sm" onClick={handleShow}>Primary</Button>
-      <Modal show={show} onEscapeKeyDown={handleClose} onHide={handleClose} centered>
+      <Modal size='lg' show={show} onEscapeKeyDown={handleClose} onHide={handleClose} centered>
         <Modal.Header closeButton>Shift Details</Modal.Header>
-        <ShiftDetails></ShiftDetails>
+        <ShiftDetails address="100 Apple Drive" date="Tuesday 02/02/2021" time="8:00 AM to 12:00 PM" notes="lorem impsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum"></ShiftDetails>
         <Modal.Footer>
           <StyledButton onClick={handleClose}>Sign Up</StyledButton>
         </Modal.Footer>
