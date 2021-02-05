@@ -1,14 +1,10 @@
-/* eslint-disable */
-
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import HeaderWithNav from './header';
 import Modal from 'react-bootstrap/Modal';
-import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
-import ShiftDetails from '../shiftDetails';
 import styled from 'styled-components';
-
+import ShiftDetails from '../shiftDetails';
+import HeaderWithNav from './header';
 
 const StyledButton = styled.button`
   color: white;
@@ -34,25 +30,19 @@ export default function Schedule(props) {
 
   return (
     <>
-    <div>
-      <HeaderWithNav {...{ isAdmin }}>Schedule</HeaderWithNav>
-    </div>
+      <div>
+        <HeaderWithNav {...{ isAdmin }}>Schedule</HeaderWithNav>
+      </div>
 
       <Button variant="primary" size="sm" onClick={handleShow}>Primary</Button>
-      <Modal size='lg' show={show} onEscapeKeyDown={handleClose} onHide={handleClose} centered>
+      <Modal show={show} onEscapeKeyDown={handleClose} onHide={handleClose} centered>
         <Modal.Header closeButton>Shift Details</Modal.Header>
-        <ShiftDetails address="100 Apple Drive" date="Tuesday 02/02/2021" time="8:00 AM to 12:00 PM" notes="lorem impsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum"></ShiftDetails>
+        <ShiftDetails isAdmin={isAdmin} address="100 Apple Drive" date="Tuesday 02/02/2021" time="8:00 AM to 12:00 PM" notes="lorem impsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum" />
         <Modal.Footer>
-          <StyledButton onClick={handleClose}>Sign Up</StyledButton>
+          <StyledButton onClick={() => window.alert('Successful sign up!')}>Sign Up</StyledButton>
         </Modal.Footer>
       </Modal>
-
-    
-
     </>
-
-
-    
   );
 }
 
