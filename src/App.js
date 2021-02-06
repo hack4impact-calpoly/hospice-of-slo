@@ -70,9 +70,9 @@ export default function App() {
         <Route path="/success">
           <SuccessPage />
         </Route>
-        <Route path="/shift-signup">
-          <ShiftSignUp toggleLoggedIn={toggleLoggedIn} />
-        </Route>
+        <PrivateRoute isLoggedIn={isLoggedIn} path="/shift-signup">
+          <ShiftSignUp />
+        </PrivateRoute>
         <PrivateRoute isLoggedIn={isLoggedIn} path="/schedule">
           <Schedule {...{ isAdmin }} />
         </PrivateRoute>

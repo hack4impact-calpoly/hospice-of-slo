@@ -1,13 +1,10 @@
 /* eslint-disable object-shorthand */
-/* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
 import {
   Container, Row, Col, Form,
 } from 'react-bootstrap';
-import { Link, useHistory } from 'react-router-dom';
-import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import firebase from 'firebase';
 import 'firebase/firestore';
 import { BiArrowBack } from 'react-icons/bi';
 import Select from 'react-select';
@@ -76,9 +73,7 @@ const StyledMidCol = styled(Col)`
   font-weight: bold;
 `;
 
-export default function ShiftSignUp(props) {
-  const { toggleLoggedIn } = props;
-  const [isAdmin, setIsAdmin] = React.useState(false);
+export default function ShiftSignUp() {
   const [name, setName] = React.useState('');
   const [phone, setPhone] = useState('');
   const [startTime, setStart] = useState('');
@@ -178,7 +173,3 @@ export default function ShiftSignUp(props) {
     </StyledDiv>
   );
 }
-
-ShiftSignUp.propTypes = {
-  toggleLoggedIn: PropTypes.func.isRequired,
-};
