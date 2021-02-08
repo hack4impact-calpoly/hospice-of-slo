@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import HeaderWithNav from './pages/header';
+import HeaderWithNav from './navigation/nav-header';
 
 export default function Home(props) {
   const { isAdmin } = props;

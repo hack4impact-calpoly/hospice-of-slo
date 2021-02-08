@@ -18,6 +18,7 @@ import PastShifts from './components/pages/PastShifts';
 import Contacts from './components/pages/Contacts';
 import History from './components/pages/History';
 import PrivateRoute from './components/authentication/PrivateRoute';
+import CreateShift from './components/schedule/CreateShift';
 import ShiftSignUp from './components/pages/ShiftSignUp';
 
 // Your web app's Firebase configuration
@@ -69,6 +70,9 @@ export default function App() {
         <Route path="/success">
           <SuccessPage />
         </Route>
+        <PrivateRoute isLoggedIn={isLoggedIn} path="/schedule/create-shift">
+          <CreateShift />
+        </PrivateRoute>
         <PrivateRoute isLoggedIn={isLoggedIn} path="/shift-signup">
           <ShiftSignUp />
         </PrivateRoute>

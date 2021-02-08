@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import styled from 'styled-components';
+import HeaderWithNav from '../navigation/nav-header';
 import ShiftDetails from '../shiftDetails';
-import HeaderWithNav from './header';
 
 const StyledButton = styled.button`
   color: white;
@@ -29,12 +30,13 @@ export default function Schedule(props) {
   const handleShow = () => setShow(true);
 
   return (
-    <>
-      <div>
-        <HeaderWithNav {...{ isAdmin }}>Schedule</HeaderWithNav>
-      </div>
+    <div>
+      <HeaderWithNav {...{ isAdmin }}>Schedule</HeaderWithNav>
+      <button type="button">
+        <Link to="schedule/create-shift">Create Shift</Link>
+      </button>
 
-      <Button variant="primary" size="sm" onClick={handleShow}>Primary</Button>
+      <Button variant="primary" size="sm" onClick={handleShow}>Shift Details</Button>
       <Modal show={show} onEscapeKeyDown={handleClose} onHide={handleClose} centered>
         <Modal.Header closeButton>Shift Details</Modal.Header>
         <ShiftDetails isAdmin={isAdmin} address="100 Apple Drive" date="Tuesday 02/02/2021" time="8:00 AM to 12:00 PM" notes="lorem impsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum" />
@@ -42,7 +44,7 @@ export default function Schedule(props) {
           <StyledButton onClick={() => window.alert('Successful sign up!')}>Sign Up</StyledButton>
         </Modal.Footer>
       </Modal>
-    </>
+    </div>
   );
 }
 

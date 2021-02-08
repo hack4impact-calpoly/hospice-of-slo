@@ -112,9 +112,9 @@ export default function Login(props) {
           if (user.exists) {
             // check if user is admin and reroute to proper location
             if (user.data().isAdmin === true) {
-              toggleLoggedIn();
               setIsAdmin(true);
             }
+            toggleLoggedIn();
             history.push('/');
           } else {
             // user.data() will be undefined in this case
