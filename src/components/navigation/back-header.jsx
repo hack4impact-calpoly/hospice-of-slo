@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { BiArrowBack } from 'react-icons/bi';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
-import StyledHeading from './styled-heading';
+import StyledHeading from '../../styled-components/styled-heading';
 
 const BackButton = styled(BiArrowBack)`
   position: fixed;
