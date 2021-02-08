@@ -19,6 +19,7 @@ import Contacts from './components/pages/Contacts';
 import History from './components/pages/History';
 import PrivateRoute from './components/authentication/PrivateRoute';
 import CreateShift from './components/schedule/CreateShift';
+import ShiftSignUp from './components/pages/ShiftSignUp';
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -33,11 +34,10 @@ const firebaseConfig = {
 };
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
-firebase.analytics();
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
-  const [isAdmin] = React.useState(true);
+  const [isAdmin, setIsAdmin] = React.useState(false);
   const toggleLoggedIn = () => {
     setIsLoggedIn(!isLoggedIn);
   };
@@ -56,7 +56,7 @@ export default function App() {
           )}
         />
         <Route path="/login">
-          <Login toggleLoggedIn={toggleLoggedIn} />
+          <Login toggleLoggedIn={toggleLoggedIn} setIsAdmin={setIsAdmin} />
         </Route>
         <Route path="/signup">
           <Signup toggleLoggedIn={toggleLoggedIn} />
@@ -72,6 +72,9 @@ export default function App() {
         </Route>
         <PrivateRoute isLoggedIn={isLoggedIn} path="/schedule/create-shift">
           <CreateShift />
+        </PrivateRoute>
+        <PrivateRoute isLoggedIn={isLoggedIn} path="/shift-signup">
+          <ShiftSignUp />
         </PrivateRoute>
         <PrivateRoute isLoggedIn={isLoggedIn} path="/schedule">
           <Schedule {...{ isAdmin }} />
