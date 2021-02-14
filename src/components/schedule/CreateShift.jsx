@@ -71,7 +71,10 @@ class CreateShift extends React.Component {
         <Form onSubmit={this.handleSubmit}>
           <Form.Group>
             <Form.Label>Location</Form.Label>
-            <Form.Control name="address" value={address} onChange={this.handleChange} />
+            <Form.Control as="select" name="address" value={address} onChange={this.handleChange}>
+              <option value="100 Apple Drive">100 Apple Drive</option>
+              <option value="200 Kiwi Lane">200 Kiwi Lane</option>
+            </Form.Control>
           </Form.Group>
 
           <Form.Group>
