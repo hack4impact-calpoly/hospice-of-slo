@@ -6,6 +6,7 @@ import Button from 'react-bootstrap/Button';
 import styled from 'styled-components';
 import HeaderWithNav from '../navigation/nav-header';
 import ShiftDetails from '../shiftDetails';
+import Calendar from '../schedule/mobileCalendar';
 
 const StyledButton = styled.button`
   color: white;
@@ -36,14 +37,32 @@ export default function Schedule(props) {
         <Link to="schedule/create-shift">Create Shift</Link>
       </button>
 
-      <Button variant="primary" size="sm" onClick={handleShow}>Shift Details</Button>
-      <Modal show={show} onEscapeKeyDown={handleClose} onHide={handleClose} centered>
+      <Button
+        variant="primary"
+        size="sm"
+        onClick={handleShow}
+      >
+        Shift Details
+      </Button>
+      <Modal
+        show={show}
+        onEscapeKeyDown={handleClose}
+        onHide={handleClose}
+        centered
+      >
         <Modal.Header closeButton>Shift Details</Modal.Header>
-        <ShiftDetails isAdmin={isAdmin} address="100 Apple Drive" date="Tuesday 02/02/2021" time="8:00 AM to 12:00 PM" notes="lorem impsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum" />
+        <ShiftDetails
+          isAdmin={isAdmin}
+          address="100 Apple Drive"
+          date="Tuesday 02/02/2021"
+          time="8:00 AM to 12:00 PM"
+          notes="lorem impsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum"
+        />
         <Modal.Footer>
           <StyledButton onClick={() => window.alert('Successful sign up!')}>Sign Up</StyledButton>
         </Modal.Footer>
       </Modal>
+      <Calendar />
     </div>
   );
 }
