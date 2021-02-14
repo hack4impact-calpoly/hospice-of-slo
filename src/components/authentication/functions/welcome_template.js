@@ -1,4 +1,4 @@
-const Welcome = (data, name) => {
+const Welcome = data => {
 
     return `
       <!DOCTYPE html>
@@ -6,7 +6,7 @@ const Welcome = (data, name) => {
         <body style="margin: 0; padding: 0;">
             <br />
             <br />
-            <div>Hello ${name}</div>
+            <div>Congratulations! You account has been created, you can now log in.</div>
             <br />
             <br />
         </body>

@@ -2,6 +2,7 @@ const mailer = require("nodemailer")
 const { Welcome } = require("./welcome_template")
 
 const getEmailData = (to, name, template) => {
+    // just in case we need ${name} for later
     let data = null
     
     switch (template) {
@@ -10,7 +11,7 @@ const getEmailData = (to, name, template) => {
                 from: 'Hospice SLO <hospice-slo@gmail.com>',
                 to,
                 subject: "Your Hospice SLO account has been created!",
-                html: Welcome(name)
+                html: Welcome()
             }
             break
         // can have more cases to send email
