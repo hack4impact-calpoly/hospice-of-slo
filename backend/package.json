@@ -11,7 +11,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1"
+    "axios": "^0.21.1",
+    "express": "^4.17.1",
+    "http-proxy-middleware": "^1.0.6"
   },
   "devDependencies": {
     "nodemon": "^2.0.6"

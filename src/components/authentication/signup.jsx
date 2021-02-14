@@ -9,6 +9,7 @@ import styled from 'styled-components';
 import firebase from 'firebase';
 import 'firebase/firestore';
 import { BiArrowBack } from 'react-icons/bi';
+import axios from 'axios';
 
 const StyledDiv = styled.div`
   height: 100vh;
@@ -153,6 +154,13 @@ export default function SignUp(props) {
     validatePhone();
     validatePass();
     signupPress();
+
+    const dataToSubmit = {
+      name,
+      email,
+    };
+
+    axios.post('api/sendMail', dataToSubmit);
   };
 
   return (
