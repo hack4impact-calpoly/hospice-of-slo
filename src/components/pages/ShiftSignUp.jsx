@@ -1,5 +1,7 @@
+/* eslint-disable */
+
 /* eslint-disable object-shorthand */
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   Container, Row, Col, Form,
 } from 'react-bootstrap';
@@ -8,6 +10,7 @@ import styled from 'styled-components';
 import 'firebase/firestore';
 import { BiArrowBack } from 'react-icons/bi';
 import Select from 'react-select';
+import firebase from 'firebase';
 
 const StyledDiv = styled.div`
   height: 100vh;
@@ -96,6 +99,32 @@ export default function ShiftSignUp() {
     console.log(endTime);
   };
 
+
+    async function addShiftPress() {
+        // creates a new shift and adds it to a specific vigil
+        console.log("press");
+        const shift = new CreateShift();
+        //console.log(shift.state);
+        const currentUser = firebase.auth().currentUser.uid;
+        const db = firebase.firestore();
+        const vigilRef = db.collection("vigils").doc("kEtigasg0zFzkhYBaWGc"); // vigil ID (need to find out where to get initial vigil)
+        vigilRef.collection("shifts").doc(shift.id).set({
+            shiftStartTime: startTime,
+            shiftEndTime: endTime,
+            userID: currentUser
+        })
+            .then(() => {
+                console.log("Document successfully written!");
+            })
+            .catch((error) => {
+                console.error("Error writing document: ", error);
+            });
+        //  history.push('/'); // go back home
+
+    }
+
+
+
   return (
     <StyledDiv>
       <StyledContainer fluid>
@@ -161,7 +190,7 @@ export default function ShiftSignUp() {
               </Row>
               <Row>
                 <Col>
-                  <SubmitButton type="submit">
+                                  <SubmitButton type="submit" onClick={addShiftPress}>
                     Sign Up
                   </SubmitButton>
                 </Col>

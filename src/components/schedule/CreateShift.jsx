@@ -67,7 +67,8 @@ class CreateShift extends React.Component {
       Purple: '#d0caeb',
     };
 
-      async function createShiftPress() {
+      async function createVigil() {
+          // creates a new Vigil event
           const shift = new CreateShift();
           //console.log(shift.state);
           const db = firebase.firestore();
@@ -170,7 +171,7 @@ class CreateShift extends React.Component {
             <Form.Row>
               <Col><CancelButton onClick={() => history.push('/schedule')}>Cancel</CancelButton></Col>
               <Col xs={1} />
-                        <Col><SubmitButton type="submit" onClick={createShiftPress}>Add Shift</SubmitButton></Col>
+                        <Col><SubmitButton type="submit" onClick={createVigil}>Add Shift</SubmitButton></Col>
             </Form.Row>
           </Form.Group>
         </Form>
