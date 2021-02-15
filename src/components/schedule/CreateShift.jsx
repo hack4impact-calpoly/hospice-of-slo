@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Form, Col } from 'react-bootstrap';
@@ -6,7 +8,7 @@ import { BsFillCircleFill } from 'react-icons/bs';
 import { withRouter } from 'react-router-dom';
 import HeaderWithBackArrow from '../navigation/back-header';
 import { SubmitButton, CancelButton } from '../../styled-components/form-components';
-
+import firebase from 'firebase';
 const PaddedDiv = styled.div`
   padding: 0 5%;
 `;
@@ -22,7 +24,7 @@ class CreateShift extends React.Component {
     super(props);
     this.state = {
       address: '',
-      date: '',
+      date: [],
       startTime: '',
       endTime: '',
       startRepeatDate: '',
@@ -30,11 +32,13 @@ class CreateShift extends React.Component {
       doesNotRepeat: false,
       color: 'Blue',
       notes: '',
-    };
-
+      };
+      console.log(this.state)
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-  }
+    }
+
+
 
   handleChange(event) {
     const { target } = event;
@@ -48,7 +52,7 @@ class CreateShift extends React.Component {
     const {
       startRepeatDate, endRepeatDate, doesNotRepeat, ...shift
     } = this.state;
-    console.log(shift);
+   // console.log(shift);
     event.preventDefault();
   }
 
@@ -62,6 +66,32 @@ class CreateShift extends React.Component {
       Blue: '#7EB0B8',
       Purple: '#d0caeb',
     };
+
+      async function createShiftPress() {
+          const shift = new CreateShift();
+          //console.log(shift.state);
+          const db = firebase.firestore();
+          db.collection("vigils").doc(shift.id).set({
+              address: shift.state.address,
+              date: '',
+              startTime: '',
+              endTime: '',
+              startRepeatDate: '',
+              endRepeatDate: '',
+              doesNotRepeat: false,
+              color: 'Blue',
+              notes: ''
+          })
+              .then(() => {
+                  console.log("Document successfully written!");
+              })
+              .catch((error) => {
+                  console.error("Error writing document: ", error);
+              });
+        //  history.push('/'); // go back home
+
+      }
+
 
     const colorOptions = Object.keys(colors).map((c) => <option value={c} key={c}>{c}</option>);
 
@@ -140,7 +170,7 @@ class CreateShift extends React.Component {
             <Form.Row>
               <Col><CancelButton onClick={() => history.push('/schedule')}>Cancel</CancelButton></Col>
               <Col xs={1} />
-              <Col><SubmitButton type="submit">Add Shift</SubmitButton></Col>
+                        <Col><SubmitButton type="submit" onClick={createShiftPress}>Add Shift</SubmitButton></Col>
             </Form.Row>
           </Form.Group>
         </Form>
