@@ -36,8 +36,8 @@ export default function ShiftSignup(props) {
   // This function is just to check the values selected since it is not linked to backend yet
 
   const checkSelect = () => {
-    console.log(startTime);
-    console.log(endTime);
+    console.log('shift startTime: ', startTime);
+    console.log('shift endTime', endTime);
   };
 
   return (
@@ -79,9 +79,17 @@ export default function ShiftSignup(props) {
 }
 
 ShiftSignup.propTypes = {
-  isAdmin: PropTypes.bool.isRequired,
-  address: PropTypes.bool.isRequired,
-  date: PropTypes.bool.isRequired,
-  time: PropTypes.bool.isRequired,
-  notes: PropTypes.bool.isRequired,
+  isAdmin: PropTypes.bool,
+  address: PropTypes.string,
+  date: PropTypes.string,
+  time: PropTypes.string,
+  notes: PropTypes.string,
+};
+
+ShiftSignup.defaultProps = {
+  isAdmin: false,
+  address: '',
+  date: '',
+  time: '',
+  notes: '',
 };
