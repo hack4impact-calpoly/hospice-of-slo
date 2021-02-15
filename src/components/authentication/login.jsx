@@ -5,6 +5,7 @@ import {
   Container, Row, Col, Form, Image,
 } from 'react-bootstrap';
 import { Link, useHistory } from 'react-router-dom';
+import firebase from 'firebase';
 import logoImage from '../../images/HospiceLogo.png';
 
 const StyledDiv = styled.div`
@@ -91,7 +92,7 @@ const FLink = styled(Link)`
 
 export default function Login(props) {
   const {
-    toggleLoggedIn,
+    toggleLoggedIn, setIsAdmin,
   } = props;
   const history = useHistory();
 
@@ -100,9 +101,33 @@ export default function Login(props) {
   const [password, setPassword] = React.useState('');
 
   const loginPress = () => {
-    console.log(email);
-    toggleLoggedIn();
-    history.push('/');
+    // sign in to firebase with email and password
+    firebase.auth().signInWithEmailAndPassword(email, password)
+      .then(() => {
+        // signed in
+        const currentUser = firebase.auth().currentUser.uid;
+        const db = firebase.firestore();
+        const userRef = db.collection('users').doc(currentUser);
+        userRef.get().then((user) => {
+          if (user.exists) {
+            // check if user is admin and reroute to proper location
+            if (user.data().isAdmin === true) {
+              setIsAdmin(true);
+            }
+            toggleLoggedIn();
+            history.push('/');
+          } else {
+            // user.data() will be undefined in this case
+            console.log('user does not exist');
+          }
+        }).catch((error) => {
+          console.log('Error getting user', error);
+        });
+      })
+      .catch(() => {
+        // unable to sign in
+        alert('The email account or password is incorrect');
+      });
   };
 
   return (
@@ -145,4 +170,5 @@ export default function Login(props) {
 
 Login.propTypes = {
   toggleLoggedIn: PropTypes.func.isRequired,
+  setIsAdmin: PropTypes.func.isRequired,
 };
