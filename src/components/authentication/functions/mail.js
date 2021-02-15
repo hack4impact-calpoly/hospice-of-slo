@@ -10,7 +10,7 @@ const getEmailData = (to, name, template) => {
             data = {
                 from: 'Hospice SLO <hospice-slo@gmail.com>',
                 to,
-                subject: "Your Hospice SLO account has been created!",
+                subject: "Your Hospice of SLO account has been created!",
                 html: Welcome()
             }
             break
@@ -24,8 +24,8 @@ const sendEmail = (to, name, type) => {
     const smtpTransport = mailer.createTransport({
         service: "Gmail",
         auth: {
-            user: "73rikamyb@gmail.com",
-            pass: "ayyotestemail"
+            user: "donotreplyhospiceofslo@gmail.com",
+            pass: "teYHDnmtevpq7GAfGX52fAAW"
         }
     })
     
