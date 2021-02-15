@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import styled from 'styled-components';
 import { BiX } from 'react-icons/bi';
 import HeaderWithNav from '../navigation/nav-header';
+// import ShiftDetails from './shiftDetails';
+import Calendar from './mobileCalendar';
 import ShiftSignUp from './ShiftSignUp';
 
 const StyledButton = styled.button`
@@ -49,10 +50,6 @@ export default function Schedule(props) {
   return (
     <div>
       <HeaderWithNav {...{ isAdmin }}>Schedule</HeaderWithNav>
-      <button type="button">
-        <Link to="schedule/create-shift">Create Shift</Link>
-      </button>
-
       <Button variant="primary" size="sm" onClick={handleShow}>Shift Details</Button>
       <Modal show={show} onEscapeKeyDown={handleClose} onHide={handleClose} centered>
         <Modal.Body>
@@ -67,6 +64,7 @@ export default function Schedule(props) {
           </StyledCol>
         </Modal.Body>
       </Modal>
+      <Calendar />
     </div>
   );
 }
