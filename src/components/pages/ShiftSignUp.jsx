@@ -1,67 +1,9 @@
-/* eslint-disable */
-
-/* eslint-disable object-shorthand */
-import React, { useState, useRef } from 'react';
-import {
-  Container, Row, Col, Form,
-} from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-import styled from 'styled-components';
-import 'firebase/firestore';
-import { BiArrowBack } from 'react-icons/bi';
+import React, { useState } from 'react';
+import { Container, Row, Col } from 'react-bootstrap';
 import Select from 'react-select';
-import firebase from 'firebase';
-
-const StyledDiv = styled.div`
-  height: 100vh;
-`;
-
-const StyledContainer = styled(Container)`
-  width: 100%;
-  height: 100vh;
-  @media only screen and (min-width: 768px) {
-    height: 100vh;  
-    padding: 10vh 0;
-  }
-`;
-
-const StyledRow = styled(Row)`
-  width: 100vw;
-  height: 100%;
-  text-align: left;
-  justify-content: center;
-`;
-
-const StyledCol = styled(Col)`
-  background-color: #FFFFFF;
-  padding: 10%;
-  @media only screen and (min-width: 768px) {
-    border: 2px solid #C4C4C4;
-    border-radius: 5px;
-    padding: 5% 10%
-  }
-`;
-
-const SubmitButton = styled.button`
-  color: white;
-  background-color: #84C0C9;
-  border: 2px solid #FFFFFF; 
-  border-radius: 5px;
-  padding: 6px 0px; 
-  width: 100%;
-  font-size: 14px;
-  fontFamily: Roboto;
-
-  &:hover{
-    color: white;
-    background-color: #558E97;
-  }
-  
-  &:disabled{
-    color: darkgrey;
-    background-color: lightgrey;
-  }
-`;
+import styled from 'styled-components';
+import PropTypes from 'prop-types';
+import ShiftDetails from './shiftDetails';
 
 const StyledSelect = styled(Select)`
   fontFamily: Roboto;
@@ -76,13 +18,12 @@ const StyledMidCol = styled(Col)`
   font-weight: bold;
 `;
 
-export default function ShiftSignUp() {
-  const [name, setName] = React.useState('');
-  const [phone, setPhone] = useState('');
+export default function ShiftSignup(props) {
+  const {
+    isAdmin, address, date, time, notes,
+  } = props;
   const [startTime, setStart] = useState('');
   const [endTime, setEnd] = useState('');
-
-  // times w/ filler values. Will be easy to control and populate an array with data from backend
 
   const times = [
     { value: '8:00', label: 'This would be the start of given shift' },
@@ -95,110 +36,60 @@ export default function ShiftSignUp() {
   // This function is just to check the values selected since it is not linked to backend yet
 
   const checkSelect = () => {
-    console.log(startTime);
-    console.log(endTime);
+    console.log('shift startTime: ', startTime);
+    console.log('shift endTime', endTime);
   };
 
-
-    async function addShiftPress() {
-        // creates a new shift and adds it to a specific vigil
-        console.log("press");
-        const shift = new CreateShift();
-        //console.log(shift.state);
-        const currentUser = firebase.auth().currentUser.uid;
-        const db = firebase.firestore();
-        const vigilRef = db.collection("vigils").doc("kEtigasg0zFzkhYBaWGc"); // vigil ID (need to find out where to get initial vigil)
-        vigilRef.collection("shifts").doc(shift.id).set({
-            shiftStartTime: startTime,
-            shiftEndTime: endTime,
-            userID: currentUser
-        })
-            .then(() => {
-                console.log("Document successfully written!");
-            })
-            .catch((error) => {
-                console.error("Error writing document: ", error);
-            });
-        //  history.push('/'); // go back home
-
-    }
-
-
-
   return (
-    <StyledDiv>
-      <StyledContainer fluid>
-        <StyledRow>
-          <StyledCol sm={12} md={10} lg={8}>
-            <Link to="/shift">
-              <BiArrowBack size="32" className="mb-4" />
-            </Link>
-            <Form>
-              <Row>
-                <Col md={12}>
-                  <h3>Sign Up</h3>
-                </Col>
-              </Row>
-              <Row>
-                <Col xs={12} md={6}>
-                  <Form.Group className="mt-2">
-                    <Form.Label>Name</Form.Label>
-                    <Form.Control
-                      type="text"
-                      placeholder="name"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      required
-                    />
-                  </Form.Group>
-                </Col>
-                <Col xs={12} md={6}>
-                  <Form.Group className="mt-2">
-                    <Form.Label>Phone</Form.Label>
-                    <Form.Control
-                      type="text"
-                      placeholder="phone"
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
-                      required
-                    />
-                  </Form.Group>
-                </Col>
-              </Row>
-              <Row>
-                <Col>
-                  <StyledSelect
-                    onChange={(e) => setStart(e.value)}
-                    onBlur={checkSelect()}
-                    options={times}
-                    components={{ DropdownIndicator: () => null, IndicatorSeparator: () => null }}
-                    maxMenuHeight={250}
-                  />
-                </Col>
-                <StyledMidCol sm={1}>
-                  <p>to</p>
-                </StyledMidCol>
-                <Col>
-                  <StyledSelect
-                    onChange={(e) => setEnd(e.value)}
-                    onBlur={checkSelect()}
-                    options={times}
-                    components={{ DropdownIndicator: () => null, IndicatorSeparator: () => null }}
-                    maxMenuHeight={250}
-                  />
-                </Col>
-              </Row>
-              <Row>
-                <Col>
-                                  <SubmitButton type="submit" onClick={addShiftPress}>
-                    Sign Up
-                  </SubmitButton>
-                </Col>
-              </Row>
-            </Form>
-          </StyledCol>
-        </StyledRow>
-      </StyledContainer>
-    </StyledDiv>
+    <Container>
+      <Row className="mt-2">
+        <Col>
+          <ShiftDetails isAdmin={isAdmin} address={address} date={date} time={time} notes={notes} />
+        </Col>
+      </Row>
+      <Row className="mt-4 font-weight-bold">
+        <Col>Time</Col>
+      </Row>
+      <Row>
+        <Col>
+          <StyledSelect
+            onChange={(e) => setStart(e.value)}
+            onBlur={checkSelect()}
+            options={times}
+            components={{ DropdownIndicator: () => null, IndicatorSeparator: () => null }}
+            maxMenuHeight={250}
+          />
+        </Col>
+        <StyledMidCol sm={1}>
+          <p>to</p>
+        </StyledMidCol>
+        <Col>
+          <StyledSelect
+            onChange={(e) => setEnd(e.value)}
+            onBlur={checkSelect()}
+            options={times}
+            components={{ DropdownIndicator: () => null, IndicatorSeparator: () => null }}
+            maxMenuHeight={250}
+          />
+        </Col>
+      </Row>
+    </Container>
+
   );
 }
+
+ShiftSignup.propTypes = {
+  isAdmin: PropTypes.bool,
+  address: PropTypes.string,
+  date: PropTypes.string,
+  time: PropTypes.string,
+  notes: PropTypes.string,
+};
+
+ShiftSignup.defaultProps = {
+  isAdmin: false,
+  address: '',
+  date: '',
+  time: '',
+  notes: '',
+};
