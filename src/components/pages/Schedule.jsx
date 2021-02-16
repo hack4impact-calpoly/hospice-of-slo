@@ -10,7 +10,7 @@ import HeaderWithNav from '../navigation/nav-header';
 // import ShiftDetails from './shiftDetails';
 import Calendar from './mobileCalendar';
 import ShiftSignUp from './ShiftSignUp';
-
+import firebase from 'firebase'
 const StyledButton = styled.button`
   color: white;
   background-color: #84C0C9;
@@ -43,14 +43,17 @@ const StyledCol = styled(Col)`
 async function addShiftPress() {
     // creates a new shift and adds it to a specific vigil
     console.log("press");
-    const shift = new CreateShift();
+    //const shift = new CreateShift();
     //console.log(shift.state);
     const currentUser = firebase.auth().currentUser.uid;
     const db = firebase.firestore();
+    console.log(db.collection("vigils"));
     const vigilRef = db.collection("vigils").doc("kEtigasg0zFzkhYBaWGc"); // vigil ID (need to find out where to get initial vigil)
+    console.log(vigilRef);
+    //bug needs to be fixed here
     vigilRef.collection("shifts").set({
-        shiftStartTime: startTime,
-        shiftEndTime: endTime,
+        shiftStartTime: '',
+        shiftEndTime: '',
         userID: currentUser
     })
         .then(() => {
