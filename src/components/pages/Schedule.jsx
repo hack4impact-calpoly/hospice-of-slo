@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap/Modal';
@@ -39,7 +40,28 @@ const StyledDiv = styled.div`
 const StyledCol = styled(Col)`
   padding: 5%;
 `;
+async function addShiftPress() {
+    // creates a new shift and adds it to a specific vigil
+    console.log("press");
+    const shift = new CreateShift();
+    //console.log(shift.state);
+    const currentUser = firebase.auth().currentUser.uid;
+    const db = firebase.firestore();
+    const vigilRef = db.collection("vigils").doc("kEtigasg0zFzkhYBaWGc"); // vigil ID (need to find out where to get initial vigil)
+    vigilRef.collection("shifts").set({
+        shiftStartTime: startTime,
+        shiftEndTime: endTime,
+        userID: currentUser
+    })
+        .then(() => {
+            console.log("Document successfully written!");
+        })
+        .catch((error) => {
+            console.error("Error writing document: ", error);
+        });
+    //  history.push('/'); // go back home
 
+}
 export default function Schedule(props) {
   const { isAdmin } = props;
   const [show, setShow] = useState(false);
@@ -59,7 +81,7 @@ export default function Schedule(props) {
           <StyledCol>
             <ShiftSignUp isAdmin={isAdmin} address="100 Apple Drive" date="Tuesday 02/02/2021" time="8:00 AM to 12:00 PM" notes="lorem impsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum" />
             <Col className="mt-3">
-              <StyledButton onClick={() => window.alert('Successful sign up!')}>Sign Up</StyledButton>
+              <StyledButton onClick={addShiftPress}>Sign Up</StyledButton>
             </Col>
           </StyledCol>
         </Modal.Body>
