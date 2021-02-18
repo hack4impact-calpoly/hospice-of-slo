@@ -67,20 +67,7 @@ export default function Schedule(props) {
         </Modal>
         <DesktopCalendar />
       </PaddedDiv>
-      <Button variant="primary" size="sm" onClick={handleShow}>Shift Details</Button>
-      <Modal show={show} onEscapeKeyDown={handleClose} onHide={handleClose} centered>
-        <Modal.Body>
-          <StyledDiv onClick={handleClose}>
-            <BiX size="36" />
-          </StyledDiv>
-          <StyledCol>
-            <ShiftSignUp isAdmin={isAdmin} address="100 Apple Drive" date="Tuesday 02/02/2021" time="8:00 AM to 12:00 PM" notes="lorem impsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum" />
-            <Col className="mt-3">
-              <StyledButton onClick={() => window.alert('Successful sign up!')}>Sign Up</StyledButton>
-            </Col>
-          </StyledCol>
-        </Modal.Body>
-      </Modal>
+      <div className="mt-5"></div>
       <Calendar />
     </div>
   );
