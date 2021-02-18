@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
@@ -49,6 +49,16 @@ const StyledCol = styled(Col)`
 export default function Schedule(props) {
   const { isAdmin } = props;
   const [show, setShow] = useState(false);
+  const [isDesktop, setDesktop] = useState(window.innerWidth > 768);
+  const updateMedia = () => {
+    setDesktop(window.innerWidth > 768);
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", updateMedia);
+    return () => window.removeEventListener("resize", updateMedia);
+  });
+
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -65,10 +75,13 @@ export default function Schedule(props) {
             <StyledButton onClick={() => window.alert('Successful sign up!')}>Sign Up</StyledButton>
           </Modal.Footer>
         </Modal>
-        <DesktopCalendar />
+        {isDesktop ? 
+          <DesktopCalendar />
+          :
+          <Calendar />
+        }
       </PaddedDiv>
-      <div className="mt-5"></div>
-      <Calendar />
+
     </div>
   );
 }
