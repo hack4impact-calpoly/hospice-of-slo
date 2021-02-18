@@ -1,12 +1,13 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Form, Col } from 'react-bootstrap';
 import styled from 'styled-components';
-import { BsFillCircleFill } from 'react-icons/bs';
-import { withRouter } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
 import HeaderWithBackArrow from '../navigation/back-header';
 import { SubmitButton, CancelButton } from '../../styled-components/form-components';
+import { timeComesBefore, dateComesBefore, getDateRange } from './CreateShiftHelper';
 
+// Styled Components
 const PaddedDiv = styled.div`
   padding: 0 5%;
 `;
@@ -17,145 +18,130 @@ const CenterCol = styled(Col)`
   justify-content: center;
 `;
 
-class CreateShift extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      address: '',
-      date: '',
-      startTime: '',
-      endTime: '',
-      startRepeatDate: '',
-      endRepeatDate: '',
-      doesNotRepeat: false,
-      color: 'Blue',
-      notes: '',
-    };
+export default function CreateShift() {
+  // Form Stuff
+  const {
+    register, watch, handleSubmit, errors,
+  } = useForm();
+  const history = useHistory();
 
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  handleChange(event) {
-    const { target } = event;
-    const value = target.type === 'checkbox' ? target.checked : target.value;
-    const { name } = target;
-
-    this.setState({ [name]: value });
-  }
-
-  handleSubmit(event) {
-    const {
-      startRepeatDate, endRepeatDate, doesNotRepeat, ...shift
-    } = this.state;
-    console.log(shift);
+  function onSubmit(data, event) {
     event.preventDefault();
-  }
-
-  render() {
-    const { history } = this.props;
     const {
-      address, date, startTime, endTime, startRepeatDate, endRepeatDate, doesNotRepeat, color, notes,
-    } = this.state;
-
-    const colors = {
-      Blue: '#7EB0B8',
-      Purple: '#d0caeb',
-    };
-
-    const colorOptions = Object.keys(colors).map((c) => <option value={c} key={c}>{c}</option>);
-
-    return (
-      <PaddedDiv>
-        <HeaderWithBackArrow>Create Shift</HeaderWithBackArrow>
-        <Form onSubmit={this.handleSubmit}>
-          <Form.Group>
-            <Form.Label>Location</Form.Label>
-            <Form.Control as="select" name="address" value={address} onChange={this.handleChange}>
-              <option value="100 Apple Drive">100 Apple Drive</option>
-              <option value="200 Kiwi Lane">200 Kiwi Lane</option>
-            </Form.Control>
-          </Form.Group>
-
-          <Form.Group>
-            <Form.Label>Date</Form.Label>
-            <Form.Control type="date" name="date" value={date} onChange={this.handleChange} />
-          </Form.Group>
-
-          <Form.Group>
-            <Form.Label>Time</Form.Label>
-            <Form.Row>
-              <Col>
-                <Form.Control type="time" name="startTime" value={startTime} onChange={this.handleChange} />
-              </Col>
-
-              <CenterCol xs={2} md={1}>
-                <span>to</span>
-              </CenterCol>
-
-              <Col>
-                <Form.Control type="time" name="endTime" value={endTime} onChange={this.handleChange} />
-              </Col>
-            </Form.Row>
-          </Form.Group>
-
-          <Form.Group>
-            <Form.Label>Repeat from</Form.Label>
-            <Form.Row>
-              <Col>
-                <Form.Control type="date" name="startRepeatDate" value={startRepeatDate} onChange={this.handleChange} disabled={doesNotRepeat} />
-              </Col>
-
-              <CenterCol xs={2} md={1}>
-                <span>to</span>
-              </CenterCol>
-
-              <Col>
-                <Form.Control type="date" name="endRepeatDate" value={endRepeatDate} onChange={this.handleChange} disabled={doesNotRepeat} />
-              </Col>
-            </Form.Row>
-          </Form.Group>
-
-          <Form.Group>
-            <Form.Check label="Do Not Repeat" name="doesNotRepeat" value={doesNotRepeat} onChange={this.handleChange} />
-          </Form.Group>
-
-          <Form.Group>
-            <Form.Label>Color</Form.Label>
-            <Form.Row>
-              <Col>
-                <Form.Control as="select" name="color" value={color} onChange={this.handleChange}>
-                  {colorOptions}
-                </Form.Control>
-              </Col>
-              <CenterCol xs="auto">
-                <BsFillCircleFill color={colors[color]} size={25} />
-              </CenterCol>
-            </Form.Row>
-          </Form.Group>
-
-          <Form.Group>
-            <Form.Label>Notes</Form.Label>
-            <Form.Control as="textarea" name="notes" value={notes} onChange={this.handleChange} />
-          </Form.Group>
-
-          <Form.Group>
-            <Form.Row>
-              <Col><CancelButton onClick={() => history.push('/schedule')}>Cancel</CancelButton></Col>
-              <Col xs={1} />
-              <Col><SubmitButton type="submit">Add Shift</SubmitButton></Col>
-            </Form.Row>
-          </Form.Group>
-        </Form>
-      </PaddedDiv>
-    );
+      repeats, endRepeatDate, date, ...shift
+    } = data;
+    shift.dates = repeats ? getDateRange(date, endRepeatDate) : [date];
+    console.log(shift);
   }
+
+  // Validation Functions
+  /* Current Validation:
+      - location, date, startTime, and endTime are required
+      - endTime must come after startTime
+      - If event is repeating, endRepeatDate is required and must come after the start date
+  */
+  function isEndDateRequired(endRepeatDate) {
+    const repeats = watch('repeats', false);
+    return !repeats || !!endRepeatDate;
+  }
+
+  function endRepeatDateFollows(endRepeatDate) {
+    const startRepeatDate = watch('date');
+    return dateComesBefore(startRepeatDate, endRepeatDate);
+  }
+
+  function endTimeAfterStart(endTime) {
+    const startTime = watch('startTime');
+    return timeComesBefore(startTime, endTime);
+  }
+
+  // React Component
+  return (
+    <PaddedDiv>
+      <HeaderWithBackArrow>Create Shift</HeaderWithBackArrow>
+      <Form onSubmit={handleSubmit(onSubmit)}>
+        <Form.Group>
+          <Form.Label>Location</Form.Label>
+          <Form.Control as="select" name="address" ref={register({ required: true })} isInvalid={!!errors.address}>
+            <option value="100 Apple Drive">100 Apple Drive</option>
+            <option value="200 Kiwi Lane">200 Kiwi Lane</option>
+          </Form.Control>
+          <Form.Control.Feedback type="invalid">Please provide a location</Form.Control.Feedback>
+        </Form.Group>
+
+        <Form.Group>
+          <Form.Label>Date</Form.Label>
+          <Form.Control type="date" name="date" ref={register({ required: true })} isInvalid={!!errors.date} />
+          <Form.Control.Feedback type="invalid">Please provide a date</Form.Control.Feedback>
+        </Form.Group>
+
+        <Form.Group>
+          <Form.Label>Time</Form.Label>
+          <Form.Row>
+            <Col>
+              <Form.Control type="time" name="startTime" ref={register({ required: true })} isInvalid={!!errors.startTime} />
+              <Form.Control.Feedback type="invalid">Please provide a start time</Form.Control.Feedback>
+            </Col>
+
+            <CenterCol xs={2} md={1}>
+              <span>to</span>
+            </CenterCol>
+
+            <Col>
+              <Form.Control
+                type="time"
+                name="endTime"
+                isInvalid={!!errors.endTime}
+                ref={register({ required: true, validate: endTimeAfterStart })}
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.endTime?.type === 'required' && 'Please provide an end time'}
+                {errors.endTime?.type === 'validate' && 'This time must come after the starting time'}
+              </Form.Control.Feedback>
+            </Col>
+          </Form.Row>
+        </Form.Group>
+
+        <Form.Group>
+          <Form.Check label="Repeats Daily" name="repeats" ref={register} />
+        </Form.Group>
+
+        {watch('repeats', false) && ( // Only render this field if the repeats box is checked
+          <Form.Group>
+            <Form.Label>End Repeat On</Form.Label>
+            <Form.Control
+              type="date"
+              name="endRepeatDate"
+              isInvalid={(!!errors.endRepeatDate)}
+              ref={register(
+                {
+                  validate: {
+                    isRequired: isEndDateRequired,
+                    endRepeatDateComesAfterStart: endRepeatDateFollows,
+                  },
+                },
+              )}
+            />
+            <Form.Control.Feedback type="invalid">
+              {errors.endRepeatDate?.type === 'isRequired' && 'End date is required if the event is repeating'}
+              {errors.endRepeatDate?.type === 'endRepeatDateComesAfterStart' && 'This date should occur after your starting date'}
+            </Form.Control.Feedback>
+          </Form.Group>
+        )}
+
+        <Form.Group>
+          <Form.Label>Notes</Form.Label>
+          <Form.Control as="textarea" name="notes" ref={register} />
+        </Form.Group>
+
+        <Form.Group>
+          <Form.Row>
+            <Col><CancelButton onClick={() => history.push('/schedule')}>Cancel</CancelButton></Col>
+            <Col xs={1} />
+            <Col><SubmitButton type="submit">Add Shift</SubmitButton></Col>
+          </Form.Row>
+        </Form.Group>
+      </Form>
+    </PaddedDiv>
+  );
 }
-
-CreateShift.propTypes = {
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-  }).isRequired,
-};
-
-export default withRouter(CreateShift);
