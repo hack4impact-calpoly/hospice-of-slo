@@ -3,6 +3,8 @@ import { Form, Col } from 'react-bootstrap';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
+import firebase from 'firebase/app';
+import 'firebase/firestore';
 import HeaderWithBackArrow from '../navigation/back-header';
 import { SubmitButton, CancelButton } from '../../styled-components/form-components';
 import { timeComesBefore, dateComesBefore, getDateRange } from './CreateShiftHelper';
@@ -25,13 +27,15 @@ export default function CreateShift() {
   } = useForm();
   const history = useHistory();
 
-  function onSubmit(data, event) {
+  async function onSubmit(data, event) {
     event.preventDefault();
     const {
       repeats, endRepeatDate, date, ...shift
     } = data;
     shift.dates = repeats ? getDateRange(date, endRepeatDate) : [date];
-    console.log(shift);
+    const db = firebase.firestore();
+    await db.collection('vigils').add(shift);
+    history.push('/schedule');
   }
 
   // Validation Functions
