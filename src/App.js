@@ -18,7 +18,7 @@ import PastShifts from './components/pages/PastShifts';
 import Contacts from './components/pages/Contacts';
 import History from './components/pages/History';
 import PrivateRoute from './components/authentication/PrivateRoute';
-import CreateShift from './components/schedule/CreateShift';
+import CreateShift from './components/pages/CreateShift';
 import ShiftSignUp from './components/pages/ShiftSignUp';
 
 // Your web app's Firebase configuration

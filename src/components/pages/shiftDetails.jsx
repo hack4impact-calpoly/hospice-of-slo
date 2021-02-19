@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from 'react';
 import Card from 'react-bootstrap/Card';
 import { BiTrash, BiPencil } from 'react-icons/bi';
@@ -5,8 +6,10 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
 const StyledCard = styled(Card)`
-  @media only screen and (min-width: 768px) {
+  border: none;
+  @media only screen and (max-width: 768px) {
     background-color: #F1F1F1;
+    padding: 5%;
   }
 `;
 
@@ -24,7 +27,6 @@ export default function ShiftDetails(props) {
 
   return (
     <StyledCard>
-      <Card.Body>
         { isAdmin
           ? (
             <StyledDiv>
@@ -38,7 +40,6 @@ export default function ShiftDetails(props) {
         <Card.Text>{time}</Card.Text>
         <Card.Subtitle>Notes</Card.Subtitle>
         <Card.Text>{notes}</Card.Text>
-      </Card.Body>
     </StyledCard>
   );
 }
