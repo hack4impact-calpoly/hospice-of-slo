@@ -66,10 +66,7 @@ export default function CreateShift() {
       <Form onSubmit={handleSubmit(onSubmit)}>
         <Form.Group>
           <Form.Label>Location</Form.Label>
-          <Form.Control as="select" name="address" ref={register({ required: true })} isInvalid={!!errors.address}>
-            <option value="100 Apple Drive">100 Apple Drive</option>
-            <option value="200 Kiwi Lane">200 Kiwi Lane</option>
-          </Form.Control>
+          <Form.Control name="address" ref={register({ required: true })} isInvalid={!!errors.address} />
           <Form.Control.Feedback type="invalid">Please provide a location</Form.Control.Feedback>
         </Form.Group>
 
