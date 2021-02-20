@@ -11,7 +11,7 @@ export default function Calendar(props) {
   const { isAdmin } = props;
 
   const [addEventText, setAddEventText] = useState('Add Event');
-  const [headerText, setHeaderText] = useState('today,prev,next,addEventButton');
+  const [headerText, setHeaderText] = useState('');
 
   const calendarRef = React.createRef();
   // For Reactiveness
@@ -23,12 +23,12 @@ export default function Calendar(props) {
     } else {
       calendarRef.current.getApi().changeView('timeGridDay');
       setAddEventText('+');
-      setHeaderText('today,prev,next,addEventButton');
+      setHeaderText('prev,next,addEventButton');
     }
   };
 
   useEffect(() => {
-    calendarRef.current.getApi().changeView((window.innerWidth > 768) ? 'timeGridWeek' : 'timeGridDay');
+    updateMedia();
     window.addEventListener('resize', updateMedia);
     return () => window.removeEventListener('resize', updateMedia);
   });
