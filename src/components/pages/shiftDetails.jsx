@@ -7,10 +7,6 @@ import PropTypes from 'prop-types';
 
 const StyledCard = styled(Card)`
   border: none;
-  @media only screen and (max-width: 768px) {
-    background-color: #F1F1F1;
-    padding: 5%;
-  }
 `;
 
 const StyledDiv = styled.div`
