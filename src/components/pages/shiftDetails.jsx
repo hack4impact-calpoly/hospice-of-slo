@@ -9,10 +9,6 @@ import 'firebase/firestore';
 
 const StyledCard = styled(Card)`
   border: none;
-  @media only screen and (max-width: 768px) {
-    background-color: #F1F1F1;
-    padding: 5%;
-  }
 `;
 
 const StyledButton = styled.button`
@@ -60,8 +56,8 @@ export default function ShiftDetails(props) {
       { isAdmin
         ? (
           <StyledDiv>
-            <BiPencil size="32" onClick={() => console.log('Pencil Icon works')} className="mb-4" />
-            <BiTrash size="32" onClick={() => setShow(true)} className="mb-4" />
+            <BiPencil style={{ cursor: 'pointer' }} size="32" onClick={() => console.log('Pencil Icon works')} className="mb-4" />
+            <BiTrash style={{ cursor: 'pointer' }} size="32" onClick={() => setShow(true)} className="mb-4" />
           </StyledDiv>
         )
         : null}

@@ -3,12 +3,10 @@ import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import styled from 'styled-components';
-import firebase from 'firebase/app';
+import firebase from 'firebase';
 import HeaderWithNav from '../navigation/nav-header';
 import ShiftDetails from './shiftDetails';
-import DesktopCalendar from './DesktopCalendar';
-import Calendar from './mobileCalendar';
-import 'firebase/firestore';
+import Calendar from './Calendar';
 
 const StyledButton = styled.button`
   color: white;
@@ -32,14 +30,10 @@ const PaddedDiv = styled.div`
 export default function Schedule(props) {
   const { isAdmin } = props;
   const [show, setShow] = useState(false);
-  const [isDesktop, setDesktop] = useState(window.innerWidth > 768);
   const [vigils, setVigils] = useState([]);
   const [selectVigil, setSelectVigil] = useState({
     id: '', address: '', dates: [], endTime: '', startTime: '', notes: '',
   });
-  const updateMedia = () => {
-    setDesktop(window.innerWidth > 768);
-  };
 
   const fetchData = async () => {
     const vigilRef = firebase.firestore().collection('vigils');
@@ -58,14 +52,6 @@ export default function Schedule(props) {
   useEffect(() => {
     fetchData();
   }, []); // This useEffect block gets whole collection of vigil documents upon rendering of this component
-
-  useEffect(() => {
-    window.addEventListener('resize', updateMedia);
-    return () => window.removeEventListener('resize', updateMedia);
-  });
-
-  //   const handleClose = () => setShow(false);
-  //   const handleShow = () => setShow(true);
 
   function handleClose() {
     setShow(false);
@@ -96,25 +82,24 @@ export default function Schedule(props) {
         ))}
         <Modal show={show} size="lg" onEscapeKeyDown={handleClose} onHide={handleClose} centered>
           <Modal.Header closeButton>Shift Details</Modal.Header>
-          <ShiftDetails
-            isAdmin={isAdmin}
-            func={handleClose}
-            id={selectVigil.id}
-            address={selectVigil.address}
-            dates={selectVigil.dates}
-            startTime={selectVigil.startTime}
-            endTime={selectVigil.endTime}
-            notes={selectVigil.notes}
-          />
+          <Modal.Body>
+            <ShiftDetails
+              isAdmin={isAdmin}
+              func={handleClose}
+              id={selectVigil.id}
+              address={selectVigil.address}
+              dates={selectVigil.dates}
+              startTime={selectVigil.startTime}
+              endTime={selectVigil.endTime}
+              notes={selectVigil.notes}
+            />
+          </Modal.Body>
           <Modal.Footer>
             <StyledButton onClick={() => window.alert('Successful sign up!')}>Sign Up</StyledButton>
           </Modal.Footer>
         </Modal>
-        {isDesktop
-          ? <DesktopCalendar />
-          : <Calendar />}
+        <Calendar isAdmin={isAdmin} />
       </PaddedDiv>
-
     </div>
   );
 }
