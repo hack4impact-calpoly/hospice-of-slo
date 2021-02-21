@@ -45,7 +45,7 @@ export default function Calendar(props) {
   const volunteerCalendarHeader = {
     start: 'title',
     center: '',
-    end: 'today prev,next',
+    end: 'today,prev,next',
   };
 
   const addEventButton = {
