@@ -1,7 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 export const colors = {
-  Blue: '#7EB0B8',
-  Purple: '#d0caeb',
+  Blue: '#8FCBD4',
+  Purple: '#D0CAEB',
 };
 
 // Dummy Data for Dates, eventually should be removed
