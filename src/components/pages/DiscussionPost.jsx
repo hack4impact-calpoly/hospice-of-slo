@@ -8,12 +8,20 @@ const Author = styled.span`
   padding-right: 30px;
   color: #424242;
   font-weight: bold;
+
+  @media screen and (max-width: 768px) {
+    font-size: 16px;  
+  }
 `;
 
 const Date = styled.span`
   font-size: 16px;
   color: #6C6B6B;
   display: inline-block;
+
+  @media screen and (max-width: 768px) {
+    font-size: 12px;  
+  }
 `;
 
 const Message = styled.p`
