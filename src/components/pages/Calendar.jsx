@@ -1,9 +1,12 @@
+/* eslint-disable */
 import React, { useState, useEffect } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
+import Modal from 'react-bootstrap/Modal';
+import Button from 'react-bootstrap/Button';
 
 import * as constants from '../../constants';
 
@@ -35,6 +38,7 @@ export default function Calendar(props) {
 
   const [events] = useState([constants.event1, constants.event2, constants.event3]);
   const history = useHistory();
+  const [showModal, setShowModal] = useState(false);
 
   const adminCalendarHeader = {
     start: 'title',
@@ -54,8 +58,11 @@ export default function Calendar(props) {
   };
 
   const handleEventClick = (info) => {
-    window.alert(`${info.event.title} \n${info.event.start}\n${info.event.end}`);
+    // window.alert(`${info.event.title} \n${info.event.start}\n${info.event.end}`);
+    setShowModal(true);
   };
+
+  const handleCloseClick = () => setShowModal(false);
 
   return (
     <div>
@@ -87,6 +94,16 @@ export default function Calendar(props) {
             allDaySlot={false}
           />
         )}
+      <Modal show={showModal} size="lg" onEscapeKeyDown={handleCloseClick} onHide={handleCloseClick} centered>
+        <Modal.Header closeButton>Vigil Details</Modal.Header>
+        <Modal.Body>
+          bruh momento
+        </Modal.Body>
+        {/* <Modal.Footer>
+          <Button variant="secondary">Close</Button>
+          <Button variant="primary">Save changes</Button>
+        </Modal.Footer> */}
+      </Modal>
     </div>
   );
 }
