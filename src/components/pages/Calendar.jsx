@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React, { useState, useEffect } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import timeGridPlugin from '@fullcalendar/timegrid';
@@ -6,7 +5,6 @@ import interactionPlugin from '@fullcalendar/interaction';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import Modal from 'react-bootstrap/Modal';
-import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import styled from 'styled-components';
 import * as constants from '../../constants';
@@ -44,8 +42,7 @@ export default function Calendar(props) {
   const [events] = useState([constants.event1, constants.event2, constants.event3]);
   const history = useHistory();
   const [showModal, setShowModal] = useState(false);
-  const [clickedInfo, setClickedInfo] = useState({
-    title: '', startTime: '', endTime: ''});
+  const [clickedInfo, setClickedInfo] = useState({ title: '', startTime: '', endTime: '' });
 
   const adminCalendarHeader = {
     start: 'title',
@@ -65,11 +62,7 @@ export default function Calendar(props) {
   };
 
   const handleEventClick = (info) => {
-    // window.alert(`${info.event.title} \n${info.event.start}\n${info.event.end}`);
-    setClickedInfo({title: info.event.title, startTime: info.event.startStr, endTime: info.event.endStr});
-    console.log(info);
-    console.log('_________');
-    console.log(clickedInfo);
+    setClickedInfo({ title: info.event.title, startTime: info.event.startStr, endTime: info.event.endStr });
     setShowModal(true);
   };
 
@@ -114,10 +107,12 @@ export default function Calendar(props) {
                 {clickedInfo.title}
               </Card.Title>
               <Card.Text>
-                Start time: {clickedInfo.startTime}
+                Start time:
+                {clickedInfo.startTime}
               </Card.Text>
               <Card.Text>
-                End time: {clickedInfo.endTime}
+                End time:
+                {clickedInfo.endTime}
               </Card.Text>
             </Card.Body>
           </StyledCard>
