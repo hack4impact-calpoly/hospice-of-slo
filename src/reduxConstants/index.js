@@ -1,0 +1,3 @@
+// Vigils
+export const INITIALIZE_VIGILS = 'INITIALIZE_VIGILS';
+export const INITIALIZE_USERS = 'INITIALIZE_USERS';
