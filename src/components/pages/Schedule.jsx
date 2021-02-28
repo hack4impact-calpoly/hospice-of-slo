@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import styled from 'styled-components';
-import firebase from 'firebase';
+import { useSelector } from 'react-redux';
 import HeaderWithNav from '../navigation/nav-header';
 import ShiftDetails from './shiftDetails';
 import Calendar from './Calendar';
@@ -35,18 +35,12 @@ export default function Schedule(props) {
     id: '', address: '', dates: [], endTime: '', startTime: '', notes: '',
   });
 
+  // Gets Vigil Data from redux store
+  const storeVigils = useSelector((state) => state.vigils.vigils);
+  console.log(storeVigils);
+
   const fetchData = async () => {
-    const vigilRef = firebase.firestore().collection('vigils');
-    const snapshot = await vigilRef.get();
-    //  setVigils(snapshot.docs.map(doc => doc.data()));  // Can not do this because we also need to save the doc id, instantly mapping doc.data loses doc id.
-    const items = [];
-    snapshot.forEach((doc) => {
-      items.push({
-        id: doc.id,
-        data: doc.data(),
-      });
-    });
-    setVigils(items);
+    setVigils(storeVigils);
   };
 
   useEffect(() => {
@@ -63,11 +57,11 @@ export default function Schedule(props) {
     setSelectVigil((prevState) => ({
       ...prevState,
       id: vigil.id,
-      address: vigil.data.address,
-      dates: vigil.data.dates,
-      startTime: vigil.data.startTime,
-      endTime: vigil.data.endTime,
-      notes: vigil.data.notes,
+      address: vigil.address,
+      dates: vigil.dates,
+      startTime: vigil.startTime,
+      endTime: vigil.endTime,
+      notes: vigil.notes,
     }));
   }
 
@@ -77,7 +71,7 @@ export default function Schedule(props) {
       <PaddedDiv>
         {vigils.map((vigil) => (
           <div key={vigil.id}>
-            <Button variant="primary" size="sm" onClick={() => handleShow(vigil)}>{vigil.data.address}</Button>
+            <Button variant="primary" size="sm" onClick={() => handleShow(vigil)}>{vigil.address}</Button>
           </div>
         ))}
         <Modal show={show} size="lg" onEscapeKeyDown={handleClose} onHide={handleClose} centered>

@@ -76,7 +76,7 @@ export default function CreateThread() {
     Grey: '#C4C4C4',
   };
 
-  const colorOptions = Object.keys(colors).map((c) => <option>{c}</option>);
+  const colorOptions = Object.keys(colors).map((c) => <option key={c}>{c}</option>);
 
   const handleColor = (e) => {
     setColor(e.target.value);
