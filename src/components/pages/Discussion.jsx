@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Row from 'react-bootstrap/Row';
 import Container from 'react-bootstrap/Container';
+import { Link } from 'react-router-dom';
 import HeaderWithNav from '../navigation/nav-header';
 import CreateThread from './createThread';
 import * as constants from '../../constants';
@@ -24,6 +25,7 @@ export default function Discussion(props) {
   return (
     <div>
       <HeaderWithNav {...{ isAdmin }}>Discussions</HeaderWithNav>
+      <Link to="/discussion/PiIorC3YwcjdcKLhROCb">View Thread</Link>
       {value ? <CreateThread /> : null}
       <Container fluid>
         {forums}
