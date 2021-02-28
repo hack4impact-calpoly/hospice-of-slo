@@ -12,7 +12,7 @@ export default function Discussion(props) {
   return (
     <div>
       <HeaderWithNav {...{ isAdmin }}>Discussion</HeaderWithNav>
-      <Link to="/discussion/thread">View Thread</Link>
+      <Link to="/discussion/PiIorC3YwcjdcKLhROCb">View Thread</Link>
       <Col>
         {value ? <CreateThread /> : null}
       </Col>

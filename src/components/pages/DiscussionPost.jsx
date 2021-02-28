@@ -14,7 +14,7 @@ const Author = styled.span`
   }
 `;
 
-const Date = styled.span`
+const Time = styled.span`
   font-size: 16px;
   color: #6C6B6B;
   display: inline-block;
@@ -30,13 +30,17 @@ const Message = styled.p`
 
 export default function DiscussionPost({
   author,
-  date,
+  timeSent,
   message,
 }) {
+  const dateOptions = { month: 'short', day: 'numeric' };
+  const timeOptions = { hour: 'numeric', minute: 'numeric', hour12: true };
+  const sentAt = `${timeSent.toLocaleDateString(undefined, dateOptions)} at ${timeSent.toLocaleTimeString(undefined, timeOptions)}`;
+
   return (
     <GreyDiv>
       <Author>{author}</Author>
-      <Date>{date}</Date>
+      <Time>{sentAt}</Time>
       <Message>{message}</Message>
     </GreyDiv>
   );
@@ -44,6 +48,6 @@ export default function DiscussionPost({
 
 DiscussionPost.propTypes = {
   author: PropTypes.string.isRequired,
-  date: PropTypes.string.isRequired,
+  timeSent: PropTypes.instanceOf(Date).isRequired,
   message: PropTypes.string.isRequired,
 };

@@ -80,7 +80,7 @@ export default function App() {
         <PrivateRoute isLoggedIn={isLoggedIn} path="/schedule">
           <Schedule {...{ isAdmin }} />
         </PrivateRoute>
-        <PrivateRoute isLoggedIn={isLoggedIn} path="/discussion/thread">
+        <PrivateRoute isLoggedIn={isLoggedIn} path="/discussion/:id">
           <DiscussionThread />
         </PrivateRoute>
         <PrivateRoute isLoggedIn={isLoggedIn} path="/discussion">
