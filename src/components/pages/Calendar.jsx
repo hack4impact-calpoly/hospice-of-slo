@@ -5,13 +5,8 @@ import interactionPlugin from '@fullcalendar/interaction';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import Modal from 'react-bootstrap/Modal';
-import Card from 'react-bootstrap/Card';
-import styled from 'styled-components';
 import * as constants from '../../constants';
-
-const StyledCard = styled(Card)`
-  border: none;
-`;
+import ShiftDetails from './shiftDetails';
 
 export default function Calendar(props) {
   const { isAdmin } = props;
@@ -41,8 +36,11 @@ export default function Calendar(props) {
 
   const [events] = useState([constants.event1, constants.event2, constants.event3]);
   const history = useHistory();
+
   const [showModal, setShowModal] = useState(false);
-  const [clickedInfo, setClickedInfo] = useState({ title: '', startTime: '', endTime: '' });
+  const [clickedInfo, setClickedInfo] = useState({
+    id: '', address: '', dates: [], endTime: '', startTime: '', notes: '',
+  });
 
   const adminCalendarHeader = {
     start: 'title',
@@ -62,7 +60,9 @@ export default function Calendar(props) {
   };
 
   const handleEventClick = (info) => {
-    setClickedInfo({ title: info.event.title, startTime: info.event.startStr, endTime: info.event.endStr });
+    setClickedInfo({
+      id: info.event.id, address: info.event.title, dates: info.event.dates, endTime: info.event.endStr, startTime: info.event.startStr, notes: info.event.notes,
+    });
     setShowModal(true);
   };
 
@@ -101,21 +101,16 @@ export default function Calendar(props) {
       <Modal show={showModal} size="lg" onEscapeKeyDown={handleCloseClick} onHide={handleCloseClick} centered>
         <Modal.Header closeButton>Vigil Details</Modal.Header>
         <Modal.Body>
-          <StyledCard>
-            <Card.Body>
-              <Card.Title>
-                {clickedInfo.title}
-              </Card.Title>
-              <Card.Text>
-                Start time:
-                {clickedInfo.startTime}
-              </Card.Text>
-              <Card.Text>
-                End time:
-                {clickedInfo.endTime}
-              </Card.Text>
-            </Card.Body>
-          </StyledCard>
+          <ShiftDetails
+            id={clickedInfo.id}
+            address={clickedInfo.address}
+            dates={clickedInfo.dates}
+            startTime={clickedInfo.startTime}
+            endTime={clickedInfo.endTime}
+            notes={clickedInfo.notes}
+            isAdmin={isAdmin}
+            func={handleCloseClick}
+          />
         </Modal.Body>
       </Modal>
     </div>
