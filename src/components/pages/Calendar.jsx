@@ -4,8 +4,9 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
-
+import Modal from 'react-bootstrap/Modal';
 import * as constants from '../../constants';
+import ShiftDetails from './shiftDetails';
 
 export default function Calendar(props) {
   const { isAdmin } = props;
@@ -36,6 +37,11 @@ export default function Calendar(props) {
   const [events] = useState([constants.event1, constants.event2, constants.event3]);
   const history = useHistory();
 
+  const [showModal, setShowModal] = useState(false);
+  const [clickedInfo, setClickedInfo] = useState({
+    id: '', address: '', dates: [], endTime: '', startTime: '', notes: '',
+  });
+
   const adminCalendarHeader = {
     start: 'title',
     center: '',
@@ -54,8 +60,13 @@ export default function Calendar(props) {
   };
 
   const handleEventClick = (info) => {
-    window.alert(`${info.event.title} \n${info.event.start}\n${info.event.end}`);
+    setClickedInfo({
+      id: info.event.id, address: info.event.title, dates: info.event.dates, endTime: info.event.endStr, startTime: info.event.startStr, notes: info.event.notes,
+    });
+    setShowModal(true);
   };
+
+  const handleCloseClick = () => setShowModal(false);
 
   return (
     <div>
@@ -87,6 +98,21 @@ export default function Calendar(props) {
             allDaySlot={false}
           />
         )}
+      <Modal show={showModal} size="lg" onEscapeKeyDown={handleCloseClick} onHide={handleCloseClick} centered>
+        <Modal.Header closeButton>Vigil Details</Modal.Header>
+        <Modal.Body>
+          <ShiftDetails
+            id={clickedInfo.id}
+            address={clickedInfo.address}
+            dates={clickedInfo.dates}
+            startTime={clickedInfo.startTime}
+            endTime={clickedInfo.endTime}
+            notes={clickedInfo.notes}
+            isAdmin={isAdmin}
+            func={handleCloseClick}
+          />
+        </Modal.Body>
+      </Modal>
     </div>
   );
 }
