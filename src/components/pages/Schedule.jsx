@@ -11,7 +11,6 @@ import HeaderWithNav from '../navigation/nav-header';
 import Calendar from './mobileCalendar';
 import ShiftSignUp from './ShiftSignUp';
 import firebase from 'firebase'
-//const firebase = require("nativescript-plugin-firebase/app");
 
 const StyledButton = styled.button`
   color: white;
@@ -46,11 +45,12 @@ async function addShiftPress() {
     // creates a new shift and adds it to a specific vigil
     console.log("press");
     const currentUser = firebase.auth().currentUser.uid;
+    const vigil = "kEtigasg0zFzkhYBaWGc";
     const db = firebase.firestore();
-    const vigilRef = db.collection("vigils").doc("kEtigasg0zFzkhYBaWGc"); 
+    const vigilRef = db.collection("vigils").doc(vigil); 
     vigilRef.collection("shift").add({
-        shiftStartTime: 'start time',
-        shiftEndTime: 'end time',
+        shiftStartTime: 'starttime',
+        shiftEndTime:'endtime',
         userID: currentUser
     })
         .then(() => {
