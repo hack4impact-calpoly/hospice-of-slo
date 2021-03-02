@@ -11,6 +11,8 @@ import HeaderWithNav from '../navigation/nav-header';
 import Calendar from './mobileCalendar';
 import ShiftSignUp from './ShiftSignUp';
 import firebase from 'firebase'
+//const firebase = require("nativescript-plugin-firebase/app");
+
 const StyledButton = styled.button`
   color: white;
   background-color: #84C0C9;
@@ -43,17 +45,12 @@ const StyledCol = styled(Col)`
 async function addShiftPress() {
     // creates a new shift and adds it to a specific vigil
     console.log("press");
-    //const shift = new CreateShift();
-    //console.log(shift.state);
     const currentUser = firebase.auth().currentUser.uid;
     const db = firebase.firestore();
-    console.log(db.collection("vigils"));
-    const vigilRef = db.collection("vigils").doc("kEtigasg0zFzkhYBaWGc"); // vigil ID (need to find out where to get initial vigil)
-    console.log(vigilRef);
-    //bug needs to be fixed here
-    vigilRef.collection("shifts").set({
-        shiftStartTime: '',
-        shiftEndTime: '',
+    const vigilRef = db.collection("vigils").doc("kEtigasg0zFzkhYBaWGc"); 
+    vigilRef.collection("shift").add({
+        shiftStartTime: 'start time',
+        shiftEndTime: 'end time',
         userID: currentUser
     })
         .then(() => {
@@ -62,8 +59,6 @@ async function addShiftPress() {
         .catch((error) => {
             console.error("Error writing document: ", error);
         });
-    //  history.push('/'); // go back home
-
 }
 export default function Schedule(props) {
   const { isAdmin } = props;
