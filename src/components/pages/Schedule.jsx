@@ -1,17 +1,14 @@
 /* eslint-disable */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
-import Col from 'react-bootstrap/Col';
 import styled from 'styled-components';
-import { BiX } from 'react-icons/bi';
+import { useSelector } from 'react-redux';
 import HeaderWithNav from '../navigation/nav-header';
-// import ShiftDetails from './shiftDetails';
-import Calendar from './mobileCalendar';
-import ShiftSignUp from './ShiftSignUp';
+import ShiftDetails from './shiftDetails';
+import Calendar from './Calendar';
 import firebase from 'firebase'
-
 const StyledButton = styled.button`
   color: white;
   background-color: #84C0C9;
@@ -22,35 +19,25 @@ const StyledButton = styled.button`
   font-size: 14px;
   fontFamily: Roboto;
   
-
   &:hover{
     color: white;
     background-color: #558E97;
   }
 `;
-
-const StyledDiv = styled.div`
-   position: relative;
-   top: 0;
-   left: 90%;
-   width: 36px;
-   cursor: pointer;
-   padding: 1% 1%;
-`;
-
-const StyledCol = styled(Col)`
-  padding: 5%;
+const PaddedDiv = styled.div`
+  padding: 0 2%;
 `;
 async function addShiftPress() {
     // creates a new shift and adds it to a specific vigil
+
     console.log("press");
     const currentUser = firebase.auth().currentUser.uid;
-    const vigil = "kEtigasg0zFzkhYBaWGc";
+  //  console.log("ID " + vigil.id);
     const db = firebase.firestore();
-    const vigilRef = db.collection("vigils").doc(vigil); 
+    const vigilRef = db.collection("vigils").doc("kEtigasg0zFzkhYBaWGc");
     vigilRef.collection("shift").add({
-        shiftStartTime: 'starttime',
-        shiftEndTime:'endtime',
+        shiftStartTime: 'start',//vigil.startTime,
+        shiftEndTime:'end', //vigil.endTime,
         userID: currentUser
     })
         .then(() => {
@@ -61,34 +48,76 @@ async function addShiftPress() {
         });
 }
 export default function Schedule(props) {
-  const { isAdmin } = props;
-  const [show, setShow] = useState(false);
+    const { isAdmin } = props;
+    const [show, setShow] = useState(false);
+    const [vigils, setVigils] = useState([]);
+    const [selectVigil, setSelectVigil] = useState({
+        id: 'id', address: '', dates: [], endTime: '', startTime: '', notes: '',
+    });
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+    // Gets Vigil Data from redux store
+    const storeVigils = useSelector((state) => state.vigils.vigils);
+    console.log(storeVigils);
 
-  return (
-    <div>
-      <HeaderWithNav {...{ isAdmin }}>Schedule</HeaderWithNav>
-      <Button variant="primary" size="sm" onClick={handleShow}>Shift Details</Button>
-      <Modal show={show} onEscapeKeyDown={handleClose} onHide={handleClose} centered>
-        <Modal.Body>
-          <StyledDiv onClick={handleClose}>
-            <BiX size="36" />
-          </StyledDiv>
-          <StyledCol>
-            <ShiftSignUp isAdmin={isAdmin} address="100 Apple Drive" date="Tuesday 02/02/2021" time="8:00 AM to 12:00 PM" notes="lorem impsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum" />
-            <Col className="mt-3">
-              <StyledButton onClick={addShiftPress}>Sign Up</StyledButton>
-            </Col>
-          </StyledCol>
-        </Modal.Body>
-      </Modal>
-      <Calendar />
-    </div>
-  );
+    const fetchData = async () => {
+        setVigils(storeVigils);
+    };
+
+    useEffect(() => {
+        fetchData();
+    }, []); // This useEffect block gets whole collection of vigil documents upon rendering of this component
+
+    function handleClose() {
+        setShow(false);
+        fetchData(); // After delete, we now want to refetch the newly updated document collection, this function is passed down as prop to shiftDetails
+    }
+
+    function handleShow(vigil) {
+        setShow(true);
+        setSelectVigil((prevState) => ({
+            ...prevState,
+            id: vigil.id,
+            address: vigil.address,
+            dates: vigil.dates,
+            startTime: vigil.startTime,
+            endTime: vigil.endTime,
+            notes: vigil.notes,
+        }));
+    }
+
+    return (
+        <div>
+            <HeaderWithNav {...{ isAdmin }}>Schedule</HeaderWithNav>
+            <PaddedDiv>
+                {vigils.map((vigil) => (
+                    <div key={vigil.id}>
+                        <Button variant="primary" size="sm" onClick={() => handleShow(vigil)}>{vigil.address}</Button>
+                    </div>
+                ))}
+                <Modal show={show} size="lg" onEscapeKeyDown={handleClose} onHide={handleClose} centered>
+                    <Modal.Header closeButton>Shift Details</Modal.Header>
+                    <Modal.Body>
+                        <ShiftDetails
+                            isAdmin={isAdmin}
+                            func={handleClose}
+                            id={selectVigil.id}
+                            address={selectVigil.address}
+                            dates={selectVigil.dates}
+                            startTime={selectVigil.startTime}
+                            endTime={selectVigil.endTime}
+                            notes={selectVigil.notes}
+                        />
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <StyledButton onClick={addShiftPress}>Sign Up</StyledButton>
+                    </Modal.Footer>
+                </Modal>
+                <Calendar isAdmin={isAdmin} />
+            </PaddedDiv>
+        </div>
+    );
 }
 
 Schedule.propTypes = {
-  isAdmin: PropTypes.bool.isRequired,
+    isAdmin: PropTypes.bool.isRequired,
 };

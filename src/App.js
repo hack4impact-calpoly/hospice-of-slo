@@ -20,6 +20,7 @@ import History from './components/pages/History';
 import PrivateRoute from './components/authentication/PrivateRoute';
 import CreateShift from './components/pages/CreateShift';
 import ShiftSignUp from './components/pages/ShiftSignUp';
+import DiscussionThread from './components/pages/DiscussionThread';
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -78,6 +79,9 @@ export default function App() {
         </PrivateRoute>
         <PrivateRoute isLoggedIn={isLoggedIn} path="/schedule">
           <Schedule {...{ isAdmin }} />
+        </PrivateRoute>
+        <PrivateRoute isLoggedIn={isLoggedIn} path="/discussion/:id">
+          <DiscussionThread />
         </PrivateRoute>
         <PrivateRoute isLoggedIn={isLoggedIn} path="/discussion">
           <Discussion {...{ isAdmin }} />
