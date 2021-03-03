@@ -1,4 +1,3 @@
-/* eslint-disable */
 /* eslint-disable object-shorthand */
 import React, { useState } from 'react';
 import {
@@ -79,8 +78,8 @@ export default function SignUp(props) {
   const [showErr, setShowErr] = useState(false);
   const [errMessage, setErrMessage] = useState('');
   /* eslint-disable no-unused-vars */
-    const [isAdmin, setIsAdmin] = React.useState(false);
-    const [prevShifts, setprevShifts] = React.useState([]);
+  const [isAdmin, setIsAdmin] = React.useState(false);
+  const [prevShifts, setprevShifts] = React.useState([]);
 
   const history = useHistory();
 
@@ -124,7 +123,7 @@ export default function SignUp(props) {
       name: name,
       phone: phone,
       isAdmin: isAdmin,
-      prevShifts: prevShifts
+      prevShifts: prevShifts,
     };
     userRef.set(userData);
   };

@@ -18,7 +18,6 @@
         "react"
     ],
     "rules": {
-	"import/no-unresolved": "off",
       "no-console": "off",
       "linebreak-style": 0,
       "max-len": 0,
