@@ -15,7 +15,7 @@ import SuccessPage from './components/authentication/successPage';
 import Schedule from './components/pages/Schedule';
 import Discussion from './components/pages/Discussion';
 import PastShifts from './components/pages/PastShifts';
-import Contacts from './components/pages/Contacts';
+import Contacts from './components/pages/contacts/Contacts';
 import History from './components/pages/History';
 import PrivateRoute from './components/authentication/PrivateRoute';
 import CreateShift from './components/pages/CreateShift';
