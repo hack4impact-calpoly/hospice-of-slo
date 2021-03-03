@@ -12,15 +12,14 @@ import Signup from './components/authentication/signup';
 import ForgotPassword from './components/authentication/forgotPassword';
 import ResetPassword from './components/authentication/resetPassword';
 import SuccessPage from './components/authentication/successPage';
-import Schedule from './components/pages/Schedule';
 import Discussion from './components/pages/Discussion';
 import PastShifts from './components/pages/PastShifts';
-import Contacts from './components/pages/Contacts';
+import Contacts from './components/pages/contacts/Contacts';
 import History from './components/pages/History';
 import PrivateRoute from './components/authentication/PrivateRoute';
-import CreateShift from './components/pages/CreateShift';
 import ShiftSignUp from './components/pages/ShiftSignUp';
 import DiscussionThread from './components/pages/DiscussionThread';
+import ScheduleManager from './components/pages/ScheduleManager';
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -71,14 +70,11 @@ export default function App() {
         <Route path="/success">
           <SuccessPage />
         </Route>
-        <PrivateRoute isLoggedIn={isLoggedIn} path="/schedule/create-shift">
-          <CreateShift />
-        </PrivateRoute>
         <PrivateRoute isLoggedIn={isLoggedIn} path="/shift-signup">
           <ShiftSignUp />
         </PrivateRoute>
         <PrivateRoute isLoggedIn={isLoggedIn} path="/schedule">
-          <Schedule {...{ isAdmin }} />
+          <ScheduleManager isAdmin={isAdmin} />
         </PrivateRoute>
         <PrivateRoute isLoggedIn={isLoggedIn} path="/discussion/:id">
           <DiscussionThread />

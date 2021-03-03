@@ -1,3 +1,5 @@
+/* eslint-disable prefer-destructuring */
+
 // Validation
 function timeComesBefore(time1, time2) {
   const [hour1, minute1] = time1.split(':', 2);
@@ -34,4 +36,21 @@ function getDateRange(startDate, endDate) {
   return dates;
 }
 
-export { timeComesBefore, dateComesBefore, getDateRange };
+// Editing Helper
+function eventDataToFront(event) {
+  const { dates, ...eventCopy } = event;
+  if (dates.length === 1) {
+    eventCopy.date = dates[0];
+    eventCopy.repeats = false;
+    eventCopy.endRepeatDate = '';
+  } else {
+    eventCopy.date = dates[0];
+    eventCopy.repeats = true;
+    eventCopy.endRepeatDate = dates[dates.length - 1];
+  }
+  return eventCopy;
+}
+
+export {
+  timeComesBefore, dateComesBefore, getDateRange, eventDataToFront,
+};

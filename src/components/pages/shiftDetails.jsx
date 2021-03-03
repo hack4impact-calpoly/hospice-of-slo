@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap/Modal';
 import firebase from 'firebase/app';
 import 'firebase/firestore';
+import { useHistory } from 'react-router-dom';
 
 const StyledCard = styled(Card)`
   border: none;
@@ -43,6 +44,7 @@ export default function ShiftDetails(props) {
     id, address, dates, startTime, endTime, notes, isAdmin, func,
   } = props;
   const [show, setShow] = useState(false);
+  const history = useHistory();
 
   async function deleteVigilDocument() {
     setShow(false);
@@ -56,7 +58,7 @@ export default function ShiftDetails(props) {
       { isAdmin
         ? (
           <StyledDiv>
-            <BiPencil style={{ cursor: 'pointer' }} size="32" onClick={() => console.log('Pencil Icon works')} className="mb-4" />
+            <BiPencil style={{ cursor: 'pointer' }} size="32" onClick={() => history.push('/schedule/edit-shift')} className="mb-4" />
             <BiTrash style={{ cursor: 'pointer' }} size="32" onClick={() => setShow(true)} className="mb-4" />
           </StyledDiv>
         )
