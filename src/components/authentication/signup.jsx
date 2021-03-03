@@ -79,6 +79,8 @@ export default function SignUp(props) {
   const [errMessage, setErrMessage] = useState('');
   /* eslint-disable no-unused-vars */
   const [isAdmin, setIsAdmin] = React.useState(false);
+  const [prevShifts, setprevShifts] = React.useState([]);
+
   const history = useHistory();
 
   const validatePass = () => {
@@ -121,6 +123,7 @@ export default function SignUp(props) {
       name: name,
       phone: phone,
       isAdmin: isAdmin,
+      prevShifts: prevShifts,
     };
     userRef.set(userData);
   };

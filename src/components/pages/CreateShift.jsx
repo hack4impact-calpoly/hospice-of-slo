@@ -52,10 +52,10 @@ function CreateShift({ curEvent }) {
 
   // Validation Functions
   /* Current Validation:
-      - location, date, startTime, and endTime are required
-      - endTime must come after startTime
-      - If event is repeating, endRepeatDate is required and must come after the start date
-  */
+        - location, date, startTime, and endTime are required
+        - endTime must come after startTime
+        - If event is repeating, endRepeatDate is required and must come after the start date
+    */
   function isEndDateRequired(endRepeatDate) {
     const repeats = watch('repeats', false);
     return !repeats || !!endRepeatDate;
@@ -120,26 +120,26 @@ function CreateShift({ curEvent }) {
         </Form.Group>
 
         {watch('repeats', false) && ( // Only render this field if the repeats box is checked
-          <Form.Group>
-            <Form.Label>End Repeat On</Form.Label>
-            <Form.Control
-              type="date"
-              name="endRepeatDate"
-              isInvalid={(!!errors.endRepeatDate)}
-              ref={register(
-                {
-                  validate: {
-                    isRequired: isEndDateRequired,
-                    endRepeatDateComesAfterStart: endRepeatDateFollows,
-                  },
+        <Form.Group>
+          <Form.Label>End Repeat On</Form.Label>
+          <Form.Control
+            type="date"
+            name="endRepeatDate"
+            isInvalid={(!!errors.endRepeatDate)}
+            ref={register(
+              {
+                validate: {
+                  isRequired: isEndDateRequired,
+                  endRepeatDateComesAfterStart: endRepeatDateFollows,
                 },
-              )}
-            />
-            <Form.Control.Feedback type="invalid">
-              {errors.endRepeatDate?.type === 'isRequired' && 'End date is required if the event is repeating'}
-              {errors.endRepeatDate?.type === 'endRepeatDateComesAfterStart' && 'This date should occur after your starting date'}
-            </Form.Control.Feedback>
-          </Form.Group>
+              },
+            )}
+          />
+          <Form.Control.Feedback type="invalid">
+            {errors.endRepeatDate?.type === 'isRequired' && 'End date is required if the event is repeating'}
+            {errors.endRepeatDate?.type === 'endRepeatDateComesAfterStart' && 'This date should occur after your starting date'}
+          </Form.Control.Feedback>
+        </Form.Group>
         )}
 
         <Form.Group>

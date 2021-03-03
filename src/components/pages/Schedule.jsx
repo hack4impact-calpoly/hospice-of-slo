@@ -4,6 +4,7 @@ import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
+import firebase from 'firebase';
 import HeaderWithNav from '../navigation/nav-header';
 import ShiftDetails from './shiftDetails';
 import Calendar from './Calendar';
@@ -27,6 +28,26 @@ const StyledButton = styled.button`
 const PaddedDiv = styled.div`
   padding: 0 2%;
 `;
+async function addShiftPress() {
+  // creates a new shift and adds it to a specific vigil
+
+  console.log('press');
+  const currentUser = firebase.auth().currentUser.uid;
+  //  console.log("ID " + vigil.id);
+  const db = firebase.firestore();
+  const vigilRef = db.collection('vigils').doc('kEtigasg0zFzkhYBaWGc');
+  vigilRef.collection('shift').add({
+    shiftStartTime: 'start', // vigil.startTime,
+    shiftEndTime: 'end', // vigil.endTime,
+    userID: currentUser,
+  })
+    .then(() => {
+      console.log('Document successfully written!');
+    })
+    .catch((error) => {
+      console.error('Error writing document: ', error);
+    });
+}
 
 export default function Schedule({ isAdmin, selectVigil, setSelectVigil }) {
   const [show, setShow] = useState(false);
@@ -86,7 +107,7 @@ export default function Schedule({ isAdmin, selectVigil, setSelectVigil }) {
             />
           </Modal.Body>
           <Modal.Footer>
-            <StyledButton onClick={() => window.alert('Successful sign up!')}>Sign Up</StyledButton>
+            <StyledButton onClick={addShiftPress}>Sign Up</StyledButton>
           </Modal.Footer>
         </Modal>
         <Calendar isAdmin={isAdmin} />
