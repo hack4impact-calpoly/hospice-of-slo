@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 import HeaderWithNav from '../navigation/nav-header';
 import ShiftDetails from './shiftDetails';
 import Calendar from './Calendar';
+import eventPropType from '../../dataStructures/propTypes';
 
 const StyledButton = styled.button`
   color: white;
@@ -27,13 +28,9 @@ const PaddedDiv = styled.div`
   padding: 0 2%;
 `;
 
-export default function Schedule(props) {
-  const { isAdmin } = props;
+export default function Schedule({ isAdmin, selectVigil, setSelectVigil }) {
   const [show, setShow] = useState(false);
   const [vigils, setVigils] = useState([]);
-  const [selectVigil, setSelectVigil] = useState({
-    id: '', address: '', dates: [], endTime: '', startTime: '', notes: '',
-  });
 
   // Gets Vigil Data from redux store
   const storeVigils = useSelector((state) => state.vigils.vigils);
@@ -100,4 +97,6 @@ export default function Schedule(props) {
 
 Schedule.propTypes = {
   isAdmin: PropTypes.bool.isRequired,
+  selectVigil: eventPropType.isRequired,
+  setSelectVigil: PropTypes.func.isRequired,
 };

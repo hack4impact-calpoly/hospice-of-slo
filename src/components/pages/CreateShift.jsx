@@ -7,7 +7,10 @@ import firebase from 'firebase/app';
 import 'firebase/firestore';
 import HeaderWithBackArrow from '../navigation/back-header';
 import { SubmitButton, CancelButton } from '../../styled-components/form-components';
-import { timeComesBefore, dateComesBefore, getDateRange } from './CreateShiftHelper';
+import {
+  timeComesBefore, dateComesBefore, getDateRange, eventDataToFront,
+} from './CreateShiftHelper';
+import eventPropType from '../../dataStructures/propTypes';
 
 // Styled Components
 const PaddedDiv = styled.div`
@@ -20,11 +23,15 @@ const CenterCol = styled(Col)`
   justify-content: center;
 `;
 
-export default function CreateShift() {
+function CreateShift({ curEvent }) {
+  // Event Editing info
+  const isEditing = Object.keys(curEvent).length !== 0;
+  const defaultVals = isEditing ? eventDataToFront(curEvent) : curEvent;
+
   // Form Stuff
   const {
     register, watch, handleSubmit, errors,
-  } = useForm();
+  } = useForm({ defaultValues: defaultVals });
   const history = useHistory();
 
   async function onSubmit(data, event) {
@@ -34,7 +41,12 @@ export default function CreateShift() {
     } = data;
     shift.dates = repeats ? getDateRange(date, endRepeatDate) : [date];
     const db = firebase.firestore();
-    await db.collection('vigils').add(shift);
+    if (isEditing) {
+      await db.collection('vigils').doc(curEvent.id).set(shift);
+    } else {
+      await db.collection('vigils').add(shift);
+    }
+    // TODO: Update Redux
     history.push('/schedule');
   }
 
@@ -62,7 +74,7 @@ export default function CreateShift() {
   // React Component
   return (
     <PaddedDiv>
-      <HeaderWithBackArrow>Create Shift</HeaderWithBackArrow>
+      <HeaderWithBackArrow>{isEditing ? 'Edit Shift' : 'Create Shift'}</HeaderWithBackArrow>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <Form.Group>
           <Form.Label>Location</Form.Label>
@@ -139,10 +151,20 @@ export default function CreateShift() {
           <Form.Row>
             <Col><CancelButton onClick={() => history.push('/schedule')}>Cancel</CancelButton></Col>
             <Col xs={1} />
-            <Col><SubmitButton type="submit">Add Shift</SubmitButton></Col>
+            <Col><SubmitButton type="submit">{isEditing ? 'Update Shift' : 'Add Shift'}</SubmitButton></Col>
           </Form.Row>
         </Form.Group>
       </Form>
     </PaddedDiv>
   );
 }
+
+CreateShift.propTypes = {
+  curEvent: eventPropType,
+};
+
+CreateShift.defaultProps = {
+  curEvent: {},
+};
+
+export default CreateShift;
