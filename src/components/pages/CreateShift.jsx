@@ -151,7 +151,7 @@ function CreateShift({ curEvent }) {
           <Form.Row>
             <Col><CancelButton onClick={() => history.push('/schedule')}>Cancel</CancelButton></Col>
             <Col xs={1} />
-            <Col><SubmitButton type="submit">{isEditing ? 'Save Edits' : 'Add Shift'}</SubmitButton></Col>
+            <Col><SubmitButton type="submit">{isEditing ? 'Update Shift' : 'Add Shift'}</SubmitButton></Col>
           </Form.Row>
         </Form.Group>
       </Form>
