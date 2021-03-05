@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import Modal from 'react-bootstrap/Modal';
 import * as constants from '../../constants';
 import ShiftDetails from './shiftDetails';
 
-export default function Calendar(props) {
-  const { isAdmin } = props;
+export default function Calendar() {
+  const isAdmin = useSelector((state) => state.user.user.isAdmin);
 
   const [addEventText, setAddEventText] = useState('Add Event');
   const [headerText, setHeaderText] = useState('');
@@ -108,7 +108,6 @@ export default function Calendar(props) {
             startTime={clickedInfo.startTime}
             endTime={clickedInfo.endTime}
             notes={clickedInfo.notes}
-            isAdmin={isAdmin}
             func={handleCloseClick}
           />
         </Modal.Body>
@@ -116,7 +115,3 @@ export default function Calendar(props) {
     </div>
   );
 }
-
-Calendar.propTypes = {
-  isAdmin: PropTypes.bool.isRequired,
-};

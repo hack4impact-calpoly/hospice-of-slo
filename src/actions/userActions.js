@@ -1,10 +1,10 @@
-import { INITIALIZE_USERS } from '../reduxConstants/index';
+import { INITIALIZE_USER } from '../reduxConstants/index';
 
-const initializeUsers = (users) => ({
-  type: INITIALIZE_USERS,
-  users,
+const initializeUser = (user) => ({
+  type: INITIALIZE_USER,
+  user,
 });
 
 export default {
-  initializeUsers,
+  initializeUser,
 };

@@ -3,6 +3,7 @@ import Card from 'react-bootstrap/Card';
 import { BiTrash, BiPencil } from 'react-icons/bi';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 import Modal from 'react-bootstrap/Modal';
 import firebase from 'firebase/app';
 import 'firebase/firestore';
@@ -41,8 +42,9 @@ const StyledModal = styled(Modal)`
 
 export default function ShiftDetails(props) {
   const {
-    id, address, dates, startTime, endTime, notes, isAdmin, func,
+    id, address, dates, startTime, endTime, notes, func,
   } = props;
+  const isAdmin = useSelector((state) => state.user.user.isAdmin);
   const [show, setShow] = useState(false);
   const history = useHistory();
 
@@ -83,7 +85,6 @@ export default function ShiftDetails(props) {
 }
 
 ShiftDetails.propTypes = {
-  isAdmin: PropTypes.bool.isRequired,
   id: PropTypes.string.isRequired,
   address: PropTypes.string.isRequired,
   dates: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
