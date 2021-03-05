@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { Route, Switch, useRouteMatch } from 'react-router-dom';
-import PropTypes from 'prop-types';
 import CreateShift from './CreateShift';
 import Schedule from './Schedule';
 
-function ScheduleManager({ isAdmin }) {
+function ScheduleManager() {
   const match = useRouteMatch();
   const [selectVigil, setSelectVigil] = useState({
     id: '', address: '', dates: [], endTime: '', startTime: '', notes: '',
@@ -19,14 +18,10 @@ function ScheduleManager({ isAdmin }) {
         <CreateShift curEvent={selectVigil} />
       </Route>
       <Route path={`${match.url}`}>
-        <Schedule {...{ isAdmin, selectVigil, setSelectVigil }} />
+        <Schedule {...{ selectVigil, setSelectVigil }} />
       </Route>
     </Switch>
   );
 }
-
-ScheduleManager.propTypes = {
-  isAdmin: PropTypes.bool.isRequired,
-};
 
 export default ScheduleManager;

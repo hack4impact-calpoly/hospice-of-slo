@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import './navbar.css';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import {
   BiUser, BiCalendarAlt, BiChat, BiClipboard, BiPhone, BiTime, BiLogOut,
 } from 'react-icons/bi';
@@ -46,8 +47,9 @@ NavLink.defaultProps = {
   handleClick: () => {},
 };
 
-export default function Navbar(props) {
-  const { isAdmin } = props;
+export default function Navbar() {
+  const isAdmin = useSelector((state) => state.user.user.isAdmin);
+
   function signOut() {
     try {
       firebase.auth().signOut();
@@ -72,7 +74,3 @@ export default function Navbar(props) {
     </Menu>
   );
 }
-
-Navbar.propTypes = {
-  isAdmin: PropTypes.bool.isRequired,
-};

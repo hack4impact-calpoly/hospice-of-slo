@@ -1,16 +1,10 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import HeaderWithNav from '../navigation/nav-header';
 
-export default function PastShifts(props) {
-  const { isAdmin } = props;
+export default function PastShifts() {
   return (
     <div>
-      <HeaderWithNav {...{ isAdmin }}>Past Shifts</HeaderWithNav>
+      <HeaderWithNav>Past Shifts</HeaderWithNav>
     </div>
   );
 }
-
-PastShifts.propTypes = {
-  isAdmin: PropTypes.bool.isRequired,
-};
