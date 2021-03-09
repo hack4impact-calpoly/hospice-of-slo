@@ -5,7 +5,7 @@ import interactionPlugin from '@fullcalendar/interaction';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import Modal from 'react-bootstrap/Modal';
-import * as constants from '../../constants';
+import * as constants from '../../../constants';
 import ShiftDetails from './shiftDetails';
 
 export default function Calendar(props) {

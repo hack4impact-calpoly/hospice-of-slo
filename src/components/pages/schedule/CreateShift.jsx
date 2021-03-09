@@ -5,12 +5,12 @@ import { useHistory } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import firebase from 'firebase/app';
 import 'firebase/firestore';
-import HeaderWithBackArrow from '../navigation/back-header';
-import { SubmitButton, CancelButton } from '../../styled-components/form-components';
+import HeaderWithBackArrow from '../../navigation/back-header';
+import { SubmitButton, CancelButton } from '../../../styled-components/form-components';
 import {
   timeComesBefore, dateComesBefore, getDateRange, eventDataToFront,
 } from './CreateShiftHelper';
-import eventPropType from '../../dataStructures/propTypes';
+import eventPropType from '../../../dataStructures/propTypes';
 
 // Styled Components
 const PaddedDiv = styled.div`

@@ -5,10 +5,10 @@ import Button from 'react-bootstrap/Button';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import firebase from 'firebase';
-import HeaderWithNav from '../navigation/nav-header';
+import HeaderWithNav from '../../navigation/nav-header';
 import ShiftDetails from './shiftDetails';
 import Calendar from './Calendar';
-import eventPropType from '../../dataStructures/propTypes';
+import eventPropType from '../../../dataStructures/propTypes';
 
 const StyledButton = styled.button`
   color: white;

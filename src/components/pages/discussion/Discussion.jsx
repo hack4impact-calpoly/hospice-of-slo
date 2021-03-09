@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import Row from 'react-bootstrap/Row';
 import Container from 'react-bootstrap/Container';
 import { Link } from 'react-router-dom';
-import HeaderWithNav from '../navigation/nav-header';
+import HeaderWithNav from '../../navigation/nav-header';
 import CreateThread from './createThread';
-import * as constants from '../../constants';
+import * as constants from '../../../constants';
 import Forum from './Forum';
 
 export default function Discussion(props) {

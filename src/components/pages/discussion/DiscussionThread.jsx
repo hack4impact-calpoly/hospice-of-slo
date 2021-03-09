@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import firebase from 'firebase/app';
 import 'firebase/firestore';
 import { useParams } from 'react-router-dom';
-import { FloatingActionButton } from '../../styled-components/discussion-components';
-import HeaderWithBackArrow from '../navigation/back-header';
+import { FloatingActionButton } from '../../../styled-components/discussion-components';
+import HeaderWithBackArrow from '../../navigation/back-header';
 import DiscussionPost from './DiscussionPost';
 
 const PostWrapper = styled.div`
