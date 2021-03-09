@@ -20,7 +20,7 @@ const StyledMidCol = styled(Col)`
 
 export default function ShiftSignup(props) {
   const {
-    isAdmin, address, date, time, notes,
+    address, date, time, notes,
   } = props;
   const [startTime, setStart] = useState('');
   const [endTime, setEnd] = useState('');
@@ -44,7 +44,7 @@ export default function ShiftSignup(props) {
     <Container>
       <Row className="mt-2">
         <Col>
-          <ShiftDetails isAdmin={isAdmin} address={address} date={date} time={time} notes={notes} />
+          <ShiftDetails address={address} date={date} time={time} notes={notes} />
         </Col>
       </Row>
       <Row className="mt-4 font-weight-bold">
@@ -79,7 +79,6 @@ export default function ShiftSignup(props) {
 }
 
 ShiftSignup.propTypes = {
-  isAdmin: PropTypes.bool,
   address: PropTypes.string,
   date: PropTypes.string,
   time: PropTypes.string,
@@ -87,7 +86,6 @@ ShiftSignup.propTypes = {
 };
 
 ShiftSignup.defaultProps = {
-  isAdmin: false,
   address: '',
   date: '',
   time: '',

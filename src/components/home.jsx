@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import { React, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import firebase from 'firebase';
@@ -7,6 +6,25 @@ import actions from '../actions/index';
 
 import HeaderWithNav from './navigation/nav-header';
 
+const retrieveUser = async (dbRef) => {
+  const currentUser = firebase.auth().currentUser.uid;
+  const userRef = dbRef.collection('users').doc(currentUser);
+  const temp = await userRef.get();
+  const ps = [];
+  temp.data().prevShifts.forEach((shift) => {
+    ps.push(shift.path);
+  });
+
+  const user = {
+    id: currentUser,
+    isAdmin: temp.data().isAdmin,
+    prevShifts: ps,
+  };
+  console.log(user);
+
+  return user;
+};
+
 const retrieveUsers = async (dbRef) => {
   const users = [];
   const usersRef = dbRef.collection('users');
@@ -14,13 +32,12 @@ const retrieveUsers = async (dbRef) => {
 
   usersSnapshot.forEach((doc) => {
     const {
-      email, isAdmin, name, phone,
+      email, name, phone,
     } = doc.data();
 
     users.push({
       id: doc.id,
       email,
-      isAdmin,
       name,
       phone,
     });
@@ -44,13 +61,13 @@ const retrieveVigils = async (dbRef) => {
       dates,
       startTime,
       endTime,
-      notes, // Shifts Array
+      notes, // TODO: Add Shifts Array
     });
   });
   return vigils;
 };
 
-export default function Home(props) {
+export default function Home() {
   const dispatch = useDispatch();
   useEffect(() => {
     const initializeDatabase = async () => {
@@ -58,31 +75,31 @@ export default function Home(props) {
 
       // Retrieve firestore data in parallel
       const firestoreResponse = await Promise.all([
-        retrieveUsers(dbRef),
+        retrieveUser(dbRef), // Gets current users prevShifts and isAdmin?
+        retrieveUsers(dbRef), // Gets all users contact/account information
         retrieveVigils(dbRef),
       ]);
-      const [users, vigils] = firestoreResponse;
+      const [user, users, vigils] = firestoreResponse;
 
       // Initialize redux store
-      console.log('Home: Initialize Vigils store');
-      dispatch(actions.vigils.initalizeVigils(vigils));
+      console.log('Home: Initialize User store');
+      dispatch(actions.user.initializeUser(user));
 
       console.log('Home: Initialize Users store');
       dispatch(actions.users.initializeUsers(users));
+
+      console.log('Home: Initialize Vigils store');
+      dispatch(actions.vigils.initalizeVigils(vigils));
+
       // navigation.navigate('Root');
     };
 
     initializeDatabase();
   }, []);
 
-  const { isAdmin } = props;
   return (
     <div>
-      <HeaderWithNav {...{ isAdmin }}>Home</HeaderWithNav>
+      <HeaderWithNav>Home</HeaderWithNav>
     </div>
   );
 }
-
-Home.propTypes = {
-  isAdmin: PropTypes.bool.isRequired,
-};

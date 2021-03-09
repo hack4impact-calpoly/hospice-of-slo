@@ -1,16 +1,15 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import Row from 'react-bootstrap/Row';
 import Container from 'react-bootstrap/Container';
 import { Link } from 'react-router-dom';
 import HeaderWithNav from '../../navigation/nav-header';
+import { useSelector } from 'react-redux';
 import CreateThread from './createThread';
 import * as constants from '../../../constants';
 import Forum from './Forum';
 
-export default function Discussion(props) {
-  const { isAdmin } = props;
-  const value = true; // replace with isAdmin later... after testing
+export default function Discussion() {
+  const isAdmin = useSelector((state) => state.user.user.isAdmin);
 
   // grabbing vigil information from constant events for now
   const [vigils] = useState([constants.event1, constants.event2, constants.event3]);
@@ -24,16 +23,12 @@ export default function Discussion(props) {
 
   return (
     <div>
-      <HeaderWithNav {...{ isAdmin }}>Discussions</HeaderWithNav>
+      <HeaderWithNav>Discussions</HeaderWithNav>
       <Link to="/discussion/PiIorC3YwcjdcKLhROCb">View Thread</Link>
-      {value ? <CreateThread /> : null}
+      {isAdmin ? <CreateThread /> : null}
       <Container fluid>
         {forums}
       </Container>
     </div>
   );
 }
-
-Discussion.propTypes = {
-  isAdmin: PropTypes.bool.isRequired,
-};

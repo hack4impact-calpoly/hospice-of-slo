@@ -1,6 +1,4 @@
-/* eslint-disable */
 import React from 'react';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import HeaderWithNav from '../../navigation/nav-header';
@@ -12,25 +10,17 @@ const ListWrapper = styled.div`
   flex-direction: column;
 `;
 
-export default function Contacts(props) {
-  const { isAdmin } = props;
-
+export default function Contacts() {
   // Gets User Data from redux store
   const users = useSelector((state) => state.users.users);
   console.log(users);
 
   return (
     <div>
-      <HeaderWithNav {...{ isAdmin }}>Contacts</HeaderWithNav>
+      <HeaderWithNav>Contacts</HeaderWithNav>
       <ListWrapper>
-        {users.map((user) =>
-          <ContactCard key={user.id} name={user.name} email={user.email} phone={user.phone} color={'#333333'}/>
-        )}
+        {users.map((user) => <ContactCard key={user.id} name={user.name} email={user.email} phone={user.phone} color="#333333" />)}
       </ListWrapper>
     </div>
   );
 }
-
-Contacts.propTypes = {
-  isAdmin: PropTypes.bool.isRequired,
-};

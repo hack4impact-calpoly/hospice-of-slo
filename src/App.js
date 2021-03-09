@@ -49,7 +49,7 @@ export default function App() {
           path="/"
           render={() => (
             isLoggedIn ? (
-              <Home {...{ isAdmin }} />
+              <Home />
             ) : (
               <Redirect to="/login" />
             )
@@ -74,22 +74,22 @@ export default function App() {
           <ShiftSignUp />
         </PrivateRoute>
         <PrivateRoute isLoggedIn={isLoggedIn} path="/schedule">
-          <ScheduleManager isAdmin={isAdmin} />
+          <ScheduleManager />
         </PrivateRoute>
         <PrivateRoute isLoggedIn={isLoggedIn} path="/discussion/:id">
           <DiscussionThread />
         </PrivateRoute>
         <PrivateRoute isLoggedIn={isLoggedIn} path="/discussion">
-          <Discussion {...{ isAdmin }} />
+          <Discussion />
         </PrivateRoute>
         <PrivateRoute isLoggedIn={isLoggedIn} path="/past-shifts">
-          <PastShifts {...{ isAdmin }} />
+          <PastShifts />
         </PrivateRoute>
         <PrivateRoute isLoggedIn={isAdmin} path="/contacts">
-          <Contacts {...{ isAdmin }} />
+          <Contacts />
         </PrivateRoute>
         <PrivateRoute isLoggedIn={isAdmin} path="/history">
-          <History {...{ isAdmin }} />
+          <History />
         </PrivateRoute>
       </Switch>
     </div>

@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import Navbar from './navbar';
 import StyledHeading from '../../styled-components/styled-heading';
 
-export default function HeaderWithNav({ isAdmin, children }) {
+export default function HeaderWithNav({ children }) {
   return (
     <div>
-      <Navbar {...{ isAdmin }} />
+      <Navbar />
       <StyledHeading>{children}</StyledHeading>
     </div>
   );
@@ -14,5 +14,4 @@ export default function HeaderWithNav({ isAdmin, children }) {
 
 HeaderWithNav.propTypes = {
   children: PropTypes.string.isRequired,
-  isAdmin: PropTypes.bool.isRequired,
 };

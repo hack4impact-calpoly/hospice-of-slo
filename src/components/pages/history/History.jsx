@@ -1,15 +1,10 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import HeaderWithNav from '../../navigation/nav-header';
 
-export default function History(props) {
-  const { isAdmin } = props;
+export default function History() {
   return (
     <div>
-      <HeaderWithNav {...{ isAdmin }}>History</HeaderWithNav>
+      <HeaderWithNav>History</HeaderWithNav>
     </div>
   );
 }
-History.propTypes = {
-  isAdmin: PropTypes.bool.isRequired,
-};

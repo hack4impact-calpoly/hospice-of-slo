@@ -49,7 +49,7 @@ async function addShiftPress() {
     });
 }
 
-export default function Schedule({ isAdmin, selectVigil, setSelectVigil }) {
+export default function Schedule({ selectVigil, setSelectVigil }) {
   const [show, setShow] = useState(false);
   const [vigils, setVigils] = useState([]);
 
@@ -85,7 +85,7 @@ export default function Schedule({ isAdmin, selectVigil, setSelectVigil }) {
 
   return (
     <div>
-      <HeaderWithNav {...{ isAdmin }}>Schedule</HeaderWithNav>
+      <HeaderWithNav>Schedule</HeaderWithNav>
       <PaddedDiv>
         {vigils.map((vigil) => (
           <div key={vigil.id}>
@@ -96,7 +96,6 @@ export default function Schedule({ isAdmin, selectVigil, setSelectVigil }) {
           <Modal.Header closeButton>Shift Details</Modal.Header>
           <Modal.Body>
             <ShiftDetails
-              isAdmin={isAdmin}
               func={handleClose}
               id={selectVigil.id}
               address={selectVigil.address}
@@ -110,14 +109,13 @@ export default function Schedule({ isAdmin, selectVigil, setSelectVigil }) {
             <StyledButton onClick={addShiftPress}>Sign Up</StyledButton>
           </Modal.Footer>
         </Modal>
-        <Calendar isAdmin={isAdmin} />
+        <Calendar />
       </PaddedDiv>
     </div>
   );
 }
 
 Schedule.propTypes = {
-  isAdmin: PropTypes.bool.isRequired,
   selectVigil: eventPropType.isRequired,
   setSelectVigil: PropTypes.func.isRequired,
 };

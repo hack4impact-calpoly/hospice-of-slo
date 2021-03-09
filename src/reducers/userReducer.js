@@ -1,19 +1,19 @@
-import { INITIALIZE_USERS } from '../reduxConstants/index';
+import { INITIALIZE_USER } from '../reduxConstants/index';
 
 const initialState = {
-  users: [],
+  user: [],
 };
 
-const vigilReducer = (state = initialState, action) => {
+const userReducer = (state = initialState, action) => {
   switch (action.type) {
-    case INITIALIZE_USERS:
-      console.log('Initializing Users store');
+    case INITIALIZE_USER:
+      console.log('Initializing User store');
       return {
-        users: [...action.users],
+        user: action.user,
       };
     default:
       return state;
   }
 };
 
-export default vigilReducer;
+export default userReducer;
