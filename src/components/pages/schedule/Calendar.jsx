@@ -10,7 +10,6 @@ import ShiftDetails from './shiftDetails';
 
 export default function Calendar() {
   const isAdmin = useSelector((state) => state.user.user.isAdmin);
-
   const [addEventText, setAddEventText] = useState('Add Event');
   const [headerText, setHeaderText] = useState('');
 
@@ -108,6 +107,7 @@ export default function Calendar() {
             startTime={clickedInfo.startTime}
             endTime={clickedInfo.endTime}
             notes={clickedInfo.notes}
+            isAdmin={isAdmin}
             func={handleCloseClick}
           />
         </Modal.Body>
