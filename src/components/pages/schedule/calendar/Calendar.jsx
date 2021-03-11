@@ -4,11 +4,13 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap/Modal';
-import * as constants from '../../../constants';
 import ShiftDetails from './shiftDetails';
 
-export default function Calendar() {
+export default function Calendar(props) {
+  const { eventData, setSelectVigil } = props;
+
   const isAdmin = useSelector((state) => state.user.user.isAdmin);
   const [addEventText, setAddEventText] = useState('Add Event');
   const [headerText, setHeaderText] = useState('');
@@ -32,8 +34,6 @@ export default function Calendar() {
     window.addEventListener('resize', updateMedia);
     return () => window.removeEventListener('resize', updateMedia);
   });
-
-  const [events] = useState([constants.event1, constants.event2, constants.event3]);
   const history = useHistory();
 
   const [showModal, setShowModal] = useState(false);
@@ -60,7 +60,12 @@ export default function Calendar() {
 
   const handleEventClick = (info) => {
     setClickedInfo({
-      id: info.event.id, address: info.event.title, dates: info.event.dates, endTime: info.event.endStr, startTime: info.event.startStr, notes: info.event.notes,
+      id: info.event.id,
+      address: info.event.title,
+      dates: info.event.extendedProps.dates,
+      endTime: info.event.extendedProps.eTime,
+      startTime: info.event.extendedProps.sTime,
+      notes: info.event.extendedProps.notes,
     });
     setShowModal(true);
   };
@@ -76,7 +81,7 @@ export default function Calendar() {
             plugins={[timeGridPlugin, interactionPlugin]}
             initialView="timeGridDay"
             selectable
-            events={events}
+            events={eventData}
             eventClick={handleEventClick}
             headerToolbar={adminCalendarHeader}
             customButtons={{ addEventButton }}
@@ -90,7 +95,7 @@ export default function Calendar() {
             plugins={[timeGridPlugin, interactionPlugin]}
             initialView="timeGridDay"
             selectable
-            events={events}
+            events={eventData}
             eventClick={handleEventClick}
             headerToolbar={volunteerCalendarHeader}
             height="80vh"
@@ -107,11 +112,14 @@ export default function Calendar() {
             startTime={clickedInfo.startTime}
             endTime={clickedInfo.endTime}
             notes={clickedInfo.notes}
-            isAdmin={isAdmin}
-            func={handleCloseClick}
+            setSelectVigil={setSelectVigil}
           />
         </Modal.Body>
       </Modal>
     </div>
   );
 }
+
+Calendar.propTypes = {
+  eventData: PropTypes.arrayOf(PropTypes.object).isRequired,
+};

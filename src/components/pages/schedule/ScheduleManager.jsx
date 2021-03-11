@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Route, Switch, useRouteMatch } from 'react-router-dom';
-import CreateShift from './CreateShift';
+import CreateShift from './createVigil/CreateVigil';
 import Schedule from './Schedule';
 
 function ScheduleManager() {
@@ -18,7 +18,7 @@ function ScheduleManager() {
         <CreateShift curEvent={selectVigil} />
       </Route>
       <Route path={`${match.url}`}>
-        <Schedule {...{ selectVigil, setSelectVigil }} />
+        <Schedule setSelectVigil={setSelectVigil} />
       </Route>
     </Switch>
   );

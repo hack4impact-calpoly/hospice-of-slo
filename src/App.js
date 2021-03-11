@@ -17,7 +17,6 @@ import PastShifts from './components/pages/pastShifts/PastShifts';
 import Contacts from './components/pages/contacts/Contacts';
 import History from './components/pages/history/History';
 import PrivateRoute from './components/authentication/PrivateRoute';
-import ShiftSignUp from './components/pages/schedule/ShiftSignUp';
 import DiscussionThread from './components/pages/discussion/DiscussionThread';
 import ScheduleManager from './components/pages/schedule/ScheduleManager';
 
@@ -70,9 +69,6 @@ export default function App() {
         <Route path="/success">
           <SuccessPage />
         </Route>
-        <PrivateRoute isLoggedIn={isLoggedIn} path="/shift-signup">
-          <ShiftSignUp />
-        </PrivateRoute>
         <PrivateRoute isLoggedIn={isLoggedIn} path="/schedule">
           <ScheduleManager />
         </PrivateRoute>
