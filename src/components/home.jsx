@@ -67,6 +67,27 @@ const retrieveVigils = async (dbRef) => {
   return vigils;
 };
 
+const retrieveDiscussions = async (dbRef) => {
+  const discussions = [];
+  const discussionsRef = dbRef.collection('discussions');
+  const discussionsSnapshot = await discussionsRef.get();
+
+  discussionsSnapshot.forEach((doc) => {
+    const {
+      messages, dateCreated, name, pinned,
+    } = doc.data();
+
+    discussions.push({
+      id: doc.id,
+      messages,
+      dateCreated,
+      name,
+      pinned,
+    });
+  });
+  return discussions;
+};
+
 export default function Home() {
   const dispatch = useDispatch();
   useEffect(() => {
@@ -78,8 +99,9 @@ export default function Home() {
         retrieveUser(dbRef), // Gets current users prevShifts and isAdmin?
         retrieveUsers(dbRef), // Gets all users contact/account information
         retrieveVigils(dbRef),
+        retrieveDiscussions(dbRef), // Gets discussions
       ]);
-      const [user, users, vigils] = firestoreResponse;
+      const [user, users, vigils, discussions] = firestoreResponse;
 
       // Initialize redux store
       console.log('Home: Initialize User store');
@@ -90,6 +112,9 @@ export default function Home() {
 
       console.log('Home: Initialize Vigils store');
       dispatch(actions.vigils.initalizeVigils(vigils));
+
+      console.log('Home: Initialize Discussions store');
+      dispatch(actions.discussions.initalizeDiscussions(discussions));
 
       // navigation.navigate('Root');
     };
