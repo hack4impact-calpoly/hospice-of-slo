@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React, { useState } from 'react';
 import {
   Row, Col, Button, Modal, Form,
@@ -6,6 +5,7 @@ import {
 import styled from 'styled-components';
 import { BsFillCircleFill } from 'react-icons/bs';
 import firebase from 'firebase';
+
 const StyledCreate = styled.button`
   color: white;
   background-color: #84C0C9;
@@ -63,7 +63,6 @@ const AddThread = styled(Button)`
   }
 `;
 
-
 export default function CreateThread() {
   const [title, setTitle] = useState('');
   const [color, setColor] = useState('Blue');
@@ -83,22 +82,23 @@ export default function CreateThread() {
   const handleColor = (e) => {
     setColor(e.target.value);
   };
-    async function createDiscussionPress() {
-        // creates a new discussion
-        const db = firebase.firestore();
-        const discussions = db.collection('discussions');
-        discussions.add({
-            name: title,
-            dateCreated: firebase.firestore.FieldValue.serverTimestamp(), // time stamp
-            pinned: true, // pinned is true by default
-        })
-            .then(() => {
-                console.log('Document successfully written!');
-            })
-            .catch((error) => {
-                console.error('Error writing document: ', error);
-            });
-    }
+  async function createDiscussionPress() {
+    // creates a new discussion
+    const db = firebase.firestore();
+    const discussions = db.collection('discussions');
+    discussions.add({
+      name: title,
+      dateCreated: firebase.firestore.FieldValue.serverTimestamp(), // time stamp
+      pinned: true, // pinned is true by default
+    })
+      .then(() => {
+        console.log('Document successfully written!');
+        db.handleClose();
+      })
+      .catch((error) => {
+        console.error('Error writing document: ', error);
+      });
+  }
 
   return (
     <div>
