@@ -13,6 +13,7 @@
     "bootstrap": "^4.5.3",
     "express": "^4.17.1",
     "firebase": "^8.2.5",
+    "json-2-csv": "^3.10.2",
     "prop-types": "^15.7.2",
     "react": "^17.0.1",
     "react-bootstrap": "^1.4.3",
