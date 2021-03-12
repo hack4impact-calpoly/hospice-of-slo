@@ -20,7 +20,6 @@ async function generateCSV(users) {
 
   // Download CSV File
   const ContactsURL = await contactsCsvRef.getDownloadURL();
-  console.log(ContactsURL);
   window.open(ContactsURL);
 }
 
