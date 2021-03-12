@@ -146,29 +146,27 @@ export default function ShiftDetails(props) {
             <Card.Subtitle>Notes</Card.Subtitle>
             <Card.Text>{notes}</Card.Text>
             <Card.Subtitle className="mb-1">Time</Card.Subtitle>
-            <Card.Text>
-              <Row>
-                <Col>
-                  <StyledSelect
-                    onChange={(e) => setShiftStart(e.value)}
-                    options={times}
-                    components={{ DropdownIndicator: () => null, IndicatorSeparator: () => null }}
-                    maxMenuHeight={250}
-                  />
-                </Col>
-                <StyledMidCol sm={1}>
-                  <p>to</p>
-                </StyledMidCol>
-                <Col>
-                  <StyledSelect
-                    onChange={(e) => setShiftEnd(e.value)}
-                    options={times}
-                    components={{ DropdownIndicator: () => null, IndicatorSeparator: () => null }}
-                    maxMenuHeight={250}
-                  />
-                </Col>
-              </Row>
-            </Card.Text>
+            <Row>
+              <Col>
+                <StyledSelect
+                  onChange={(e) => setShiftStart(e.value)}
+                  options={times}
+                  components={{ DropdownIndicator: () => null, IndicatorSeparator: () => null }}
+                  maxMenuHeight={250}
+                />
+              </Col>
+              <StyledMidCol sm={1}>
+                <p>to</p>
+              </StyledMidCol>
+              <Col>
+                <StyledSelect
+                  onChange={(e) => setShiftEnd(e.value)}
+                  options={times}
+                  components={{ DropdownIndicator: () => null, IndicatorSeparator: () => null }}
+                  maxMenuHeight={250}
+                />
+              </Col>
+            </Row>
             <Card.Text>
               <SignUpButton onClick={addShiftPress}>Sign Up</SignUpButton>
             </Card.Text>

@@ -9,12 +9,10 @@ import configureStore from './store/configureStore';
 const store = configureStore();
 
 ReactDOM.render(
-  <React.StrictMode style={{ backgroundColor: '#DCDCDC' }}>
-    <BrowserRouter>
-      <Provider store={store}>
-        <App />
-      </Provider>
-    </BrowserRouter>
-  </React.StrictMode>,
+  <BrowserRouter>
+    <Provider store={store}>
+      <App style={{ backgroundColor: '#DCDCDC' }} />
+    </Provider>
+  </BrowserRouter>,
   document.getElementById('root'),
 );
