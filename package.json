@@ -15,6 +15,7 @@
     "firebase": "^8.3.0",
     "jquery": "^3.6.0",
     "json-2-csv": "^3.10.2",
+    "moment": "^2.29.1",
     "next": "^10.0.8",
     "popper.js": "^1.16.1",
     "prop-types": "^15.7.2",
