@@ -17,7 +17,7 @@ export default function Discussion() {
   // make a forum link from each vigil
   const forums = vigils.map((v) => (
     <Row key={v.title} className="justify-content-md-center">
-      <Forum title={v.title} backgroundColor={v.backgroundColor} />
+      <Forum title={v.title} backgroundColor={v.backgroundColor} docId="6YgbciDAfXmz7KOkT8un" />
     </Row>
   ));
 

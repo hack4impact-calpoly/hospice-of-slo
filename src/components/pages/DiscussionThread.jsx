@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import firebase from 'firebase/app';
 import 'firebase/firestore';
 import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { FloatingActionButton } from '../../styled-components/discussion-components';
 import HeaderWithBackArrow from '../navigation/back-header';
 import DiscussionPost from './DiscussionPost';
@@ -20,6 +21,10 @@ export default function DiscussionThread() {
   const messagesDB = discussionDB.collection('messages');
   const [title, setTitle] = useState('');
   const [posts, setPosts] = useState([]);
+
+  const storeDiscussions = useSelector((state) => state.discussions.discussions);
+  console.log('storeDiscussions');
+  console.log(storeDiscussions);
 
   async function getPosts() {
     // Get Title
