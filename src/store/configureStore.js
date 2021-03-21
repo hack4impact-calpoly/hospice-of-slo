@@ -9,7 +9,7 @@ const rootReducer = combineReducers({
   vigils: vigilReducer,
   users: usersReducer,
   user: userReducer,
-  discussionsReducer: discussionsReducer,
+  discussions: discussionsReducer,
 });
 
 const configureStore = () => createStore(rootReducer, applyMiddleware(thunk));
