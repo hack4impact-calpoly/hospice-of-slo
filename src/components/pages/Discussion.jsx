@@ -5,18 +5,13 @@ import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import HeaderWithNav from '../navigation/nav-header';
 import CreateThread from './createThread';
-// import * as constants from '../../constants';
 import Forum from './Forum';
 
 export default function Discussion() {
   const isAdmin = useSelector((state) => state.user.user.isAdmin);
 
   // grabbing vigil information from constant events for now
-  // const [vigils] = useState([constants.event1, constants.event2, constants.event3]);
   const storeDiscussions = useSelector((state) => state.discussions.discussions);
-  console.log(storeDiscussions);
-
-  // so for each discussion, make one of these forum links below: (instead of using the current vigils)
 
   const forumsPinned = storeDiscussions.map((d) => {
     if (d.pinned) {

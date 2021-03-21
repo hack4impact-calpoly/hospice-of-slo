@@ -70,7 +70,6 @@ const retrieveDiscussions = async (dbRef) => {
   const discussions = [];
   const discussionsRef = dbRef.collection('discussions');
   const discussionsSnapshot = await discussionsRef.get();
-  console.log(discussionsSnapshot);
 
   const discussionsIds = [];
   discussionsSnapshot.forEach(async (doc) => {
@@ -81,7 +80,6 @@ const retrieveDiscussions = async (dbRef) => {
     } = doc.data();
 
     const msgRef = discussionsRef.doc(doc.id).collection('messages');
-    console.log(msgRef);
     const messageSnapshot = await msgRef.get();
     messageSnapshot.forEach((msg) => {
       const {
