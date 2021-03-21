@@ -31,7 +31,7 @@ const Arrow = styled(BiChevronRight)`
 
 export default function Forum(props) {
   const { title, backgroundColor, docId } = props;
-  const discussionLink = `/discussions/${docId}`;
+  const discussionLink = `/discussion/${docId}`;
   return (
     <Col md={9} lg={8} xl={7}>
       <ForumLink to={discussionLink} style={{ width: '100%' }}>
@@ -50,4 +50,5 @@ export default function Forum(props) {
 Forum.propTypes = {
   title: PropTypes.string.isRequired,
   backgroundColor: PropTypes.string.isRequired,
+  docId: PropTypes.string.isRequired,
 };

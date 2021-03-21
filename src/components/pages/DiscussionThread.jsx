@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import firebase from 'firebase/app';
+// import firebase from 'firebase/app';
 import 'firebase/firestore';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -15,25 +15,26 @@ const PostWrapper = styled.div`
 `;
 
 export default function DiscussionThread() {
+  console.log('you are in DISCUSSIONTHREAD');
   const { id } = useParams();
-  const db = firebase.firestore();
-  const discussionDB = db.collection('discussions').doc(id);
-  const messagesDB = discussionDB.collection('messages');
+  const discussions = useSelector((store) => store.discussions.discussions);
+  let discussion;
+  discussions.forEach((d) => {
+    if (d.id === id) {
+      discussion = d;
+    }
+  });
+  // console.log('The Discussion');
+  // console.log(discussion);
   const [title, setTitle] = useState('');
   const [posts, setPosts] = useState([]);
-
-  const storeDiscussions = useSelector((state) => state.discussions.discussions);
-  console.log('storeDiscussions');
-  console.log(storeDiscussions);
+  // useSelector((state) => console.log(state));
 
   async function getPosts() {
     // Get Title
-    const discussionData = await discussionDB.get();
-    setTitle(discussionData.data().name);
+    setTitle(discussion.name);
     // Get Messages
-    const messagesData = await messagesDB.get();
-    const messages = [];
-    messagesData.forEach((message) => messages.push(message.data()));
+    const { messages } = discussion;
     // Populate each user ref from a message
     let usersData = messages.map((message) => message.userRef.get());
     usersData = await Promise.all(usersData);
