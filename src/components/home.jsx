@@ -1,7 +1,6 @@
 import { React, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import firebase from 'firebase';
-import 'firebase/firestore';
 import actions from '../actions/index';
 
 import HeaderWithNav from './navigation/nav-header';
@@ -71,20 +70,74 @@ const retrieveDiscussions = async (dbRef) => {
   const discussions = [];
   const discussionsRef = dbRef.collection('discussions');
   const discussionsSnapshot = await discussionsRef.get();
+  console.log(discussionsSnapshot);
 
-  discussionsSnapshot.forEach((doc) => {
+  const discussionsIds = [];
+  discussionsSnapshot.forEach(async (doc) => {
+    const messages = [];
+
     const {
-      messages, dateCreated, name, pinned,
+      dateCreated, name, pinned,
     } = doc.data();
+
+    const msgRef = discussionsRef.doc(doc.id).collection('messages');
+    console.log(msgRef);
+    const messageSnapshot = await msgRef.get();
+    messageSnapshot.forEach((msg) => {
+      const {
+        message, timeSent, userRef,
+      } = msg.data();
+
+      messages.push({
+        message,
+        timeSent,
+        userRef,
+      });
+    });
 
     discussions.push({
       id: doc.id,
-      messages,
       dateCreated,
       name,
       pinned,
+      messages,
     });
+
+    discussionsIds.push(doc.id);
   });
+
+  // await Promise.all(discussionsSnapshot.docs.map(async (doc) => {
+  //   const {
+  //     dateCreated, name, pinned,
+  //   } = doc.data();
+
+  //   const messageRef = doc.collection('messages');
+  //   const messageSnapshot = await messageRef.get();
+  //   const messages = [];
+  //   // REMINDER: add a message collecion to the docs without it
+  //   messageSnapshot.forEach((msgDoc) => {
+  //     const {
+  //       message, timeSent, userRef,
+  //     } = msgDoc.data();
+
+  //     messages.push({
+  //       id: msgDoc.id,
+  //       message,
+  //       timeSent,
+  //       userRef,
+  //     });
+  //   });
+
+  //   discussions.push({
+  //     id: doc.id,
+  //     dateCreated,
+  //     name,
+  //     pinned,
+  //     messages,
+  //   });
+  // }));
+  console.log('Retreive discussions');
+  console.log(discussions);
   return discussions;
 };
 
@@ -114,7 +167,7 @@ export default function Home() {
       dispatch(actions.vigils.initalizeVigils(vigils));
 
       console.log('Home: Initialize Discussions store');
-      dispatch(actions.discussions.initalizeDiscussions(discussions));
+      dispatch(actions.discussions.initializeDiscussions(discussions));
 
       // navigation.navigate('Root');
     };
