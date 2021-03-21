@@ -29,6 +29,11 @@ export default function Discussion() {
 
     return null;
   });
+
+  // sort the discussions by most recently created
+  storeDiscussions.sort((a, b) => a.dateCreated - b.dateCreated);
+  storeDiscussions.reverse();
+
   const forumsNotPinned = storeDiscussions.map((d) => {
     if (!d.pinned) {
       return ([
@@ -40,13 +45,6 @@ export default function Discussion() {
 
     return null;
   });
-
-  // make a forum link from each vigil
-  // const forums = vigils.map((v) => (
-  //   <Row key={v.title} className="justify-content-md-center">
-  //     <Forum title={v.title} backgroundColor={v.backgroundColor} docId="PiIorC3YwcjdcKLhROCb" />
-  //   </Row>
-  // ));
 
   return (
     <div>
