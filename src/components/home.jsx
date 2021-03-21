@@ -106,38 +106,6 @@ const retrieveDiscussions = async (dbRef) => {
     discussionsIds.push(doc.id);
   });
 
-  // await Promise.all(discussionsSnapshot.docs.map(async (doc) => {
-  //   const {
-  //     dateCreated, name, pinned,
-  //   } = doc.data();
-
-  //   const messageRef = doc.collection('messages');
-  //   const messageSnapshot = await messageRef.get();
-  //   const messages = [];
-  //   // REMINDER: add a message collecion to the docs without it
-  //   messageSnapshot.forEach((msgDoc) => {
-  //     const {
-  //       message, timeSent, userRef,
-  //     } = msgDoc.data();
-
-  //     messages.push({
-  //       id: msgDoc.id,
-  //       message,
-  //       timeSent,
-  //       userRef,
-  //     });
-  //   });
-
-  //   discussions.push({
-  //     id: doc.id,
-  //     dateCreated,
-  //     name,
-  //     pinned,
-  //     messages,
-  //   });
-  // }));
-  console.log('Retreive discussions');
-  console.log(discussions);
   return discussions;
 };
 

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-// import firebase from 'firebase/app';
 import 'firebase/firestore';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -15,7 +14,6 @@ const PostWrapper = styled.div`
 `;
 
 export default function DiscussionThread() {
-  console.log('you are in DISCUSSIONTHREAD');
   const { id } = useParams();
   const discussions = useSelector((store) => store.discussions.discussions);
   let discussion;
@@ -24,11 +22,9 @@ export default function DiscussionThread() {
       discussion = d;
     }
   });
-  // console.log('The Discussion');
-  // console.log(discussion);
+
   const [title, setTitle] = useState('');
   const [posts, setPosts] = useState([]);
-  // useSelector((state) => console.log(state));
 
   async function getPosts() {
     // Get Title
