@@ -45,6 +45,11 @@ function CreateShift({ curEvent }) {
       await db.collection('vigils').doc(curEvent.id).set(shift);
     } else {
       await db.collection('vigils').add(shift);
+      await db.collection('discussions').add({
+        name: shift.address,
+        dateCreated: firebase.firestore.FieldValue.serverTimestamp(),
+        pinned: false,
+      });
     }
     // TODO: Update Redux
     history.push('/schedule');

@@ -89,7 +89,7 @@ export default function CreateThread() {
     discussions.add({
       name: title,
       dateCreated: firebase.firestore.FieldValue.serverTimestamp(), // time stamp
-      pinned: true, // pinned is true by default
+      pinned: false, // DEV-48 new pinned default value is false
     })
       .then(() => {
         console.log('Document successfully written!');
