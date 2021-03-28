@@ -23,6 +23,18 @@ const ExportButton = styled(SubmitButton)`
   align-self: flex-end;
   margin-bottom: 10px;
 `;
+const FormS = styled(Form.Control)`
+  font-size: 18px;
+  background-color: #E5E5E5;
+ width: 20%;
+  display: flex;
+  flex-direction: column;
+  max-width: calc(750px + 30%);
+  margin: 0 auto;
+  @media screen and (max-width: 768px) {
+    font-size: 16px;  
+  }
+`;
 
 export default function Contacts() {
     // Gets User Data from redux store
@@ -42,16 +54,15 @@ export default function Contacts() {
     return (
         <div>
             <HeaderWithNav>Contacts</HeaderWithNav>
-            <div style={{ textAlign: 'center', paddingTop: '30vh' }}>
-                <Form.Control
+                <FormS
                     className="mb-3" placeholder={"Enter name here"} onChange={(e) => {
                     setSearchTerm(e.target.value);
                     console.log(searchTerm);
                 }} placeholder='Search for a name!' />
-                <br></br>
-                </div>
+
             <ListWrapper>
                 <ExportButton onClick={() => generateCSV(users)}>Export</ExportButton>
+
                 {users.filter(user => user.name.toLowerCase().includes(searchTerm.toLowerCase())).sort(compare).map((user) => <ContactCard key={user.id} name={user.name} email={user.email} phone={user.phone} color="#333333" />)}
             </ListWrapper>
         </div>
