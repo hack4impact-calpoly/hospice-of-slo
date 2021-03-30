@@ -85,7 +85,7 @@ export default function App() {
         <PrivateRoute isLoggedIn={isLoggedIn} path="/past-shifts">
           <PastShifts />
         </PrivateRoute>
-        <PrivateRoute isLoggedIn={isAdmin} path="/contacts">
+        <PrivateRoute isLoggedIn={isLoggedIn} path="/contacts">
           <Contacts />
         </PrivateRoute>
         <PrivateRoute isLoggedIn={isAdmin} path="/history">
