@@ -11,6 +11,7 @@ import Modal from 'react-bootstrap/Modal';
 import firebase from 'firebase/app';
 import 'firebase/firestore';
 import { useHistory } from 'react-router-dom';
+import moment from 'moment';
 
 const StyledCard = styled(Card)`
   border: none;
@@ -25,7 +26,6 @@ const StyledButton = styled.button`
   font-size: 14px;
   fontFamily: Roboto;
   
-
   &:hover{
     color: white;
     background-color: #558E97;
@@ -53,7 +53,6 @@ const StyledDiv = styled.div`
    position: absolute;
    top: 0;
    right: 0;
-   padding: 1.5vh .5vh;
 `;
 
 const StyledModal = styled(Modal)`
@@ -80,6 +79,15 @@ export default function ShiftDetails(props) {
   const isAdmin = useSelector((state) => state.user.user.isAdmin);
   const [show, setShow] = useState(false);
   const history = useHistory();
+
+  const dateFormat = 'dddd, MMM D';
+  const formattedDate = dates.length === 1
+    ? moment(dates[0]).format(dateFormat)
+    : `${moment(dates[0]).format(dateFormat)} to ${moment(dates[dates.length - 1]).format(dateFormat)}`;
+
+  const curFormat = 'HH:mm';
+  const timeFormat = 'h:mma';
+  const formattedTime = `${moment(startTime, curFormat).format(timeFormat)} to ${moment(endTime, curFormat).format(timeFormat)}`;
   const [shiftStartTime, setShiftStart] = useState('');
   const [shiftEndTime, setShiftEnd] = useState('');
 
@@ -141,8 +149,8 @@ export default function ShiftDetails(props) {
               )
               : null}
             <Card.Title className="font-weight-bold">{address}</Card.Title>
-            <Card.Text>{dates}</Card.Text>
-            <Card.Text>{`${startTime} to ${endTime}`}</Card.Text>
+            <Card.Text>{formattedDate}</Card.Text>
+            <Card.Text>{formattedTime}</Card.Text>
             <Card.Subtitle>Notes</Card.Subtitle>
             <Card.Text>{notes}</Card.Text>
             <Card.Subtitle className="mb-1">Time</Card.Subtitle>
