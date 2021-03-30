@@ -1,7 +1,6 @@
 import React from 'react';
 import Row from 'react-bootstrap/Row';
 import Container from 'react-bootstrap/Container';
-import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import HeaderWithNav from '../../navigation/nav-header';
 import CreateThread from './createThread';
@@ -44,7 +43,6 @@ export default function Discussion() {
   return (
     <div>
       <HeaderWithNav>Discussions</HeaderWithNav>
-      <Link to="/discussion/PiIorC3YwcjdcKLhROCb">View Thread</Link>
       {isAdmin ? <CreateThread /> : null}
       <Container fluid>
         {forumsPinned}
