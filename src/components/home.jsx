@@ -1,7 +1,6 @@
 import { React, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import firebase from 'firebase';
-import 'firebase/firestore';
 import actions from '../actions/index';
 
 import HeaderWithNav from './navigation/nav-header';
@@ -67,6 +66,47 @@ const retrieveVigils = async (dbRef) => {
   return vigils;
 };
 
+const retrieveDiscussions = async (dbRef) => {
+  const discussions = [];
+  const discussionsRef = dbRef.collection('discussions');
+  const discussionsSnapshot = await discussionsRef.get();
+
+  const discussionsIds = [];
+  discussionsSnapshot.forEach(async (doc) => {
+    const messages = [];
+
+    const {
+      dateCreated, name, pinned,
+    } = doc.data();
+
+    const msgRef = discussionsRef.doc(doc.id).collection('messages');
+    const messageSnapshot = await msgRef.get();
+    messageSnapshot.forEach((msg) => {
+      const {
+        message, timeSent, userRef,
+      } = msg.data();
+
+      messages.push({
+        message,
+        timeSent,
+        userRef,
+      });
+    });
+
+    discussions.push({
+      id: doc.id,
+      dateCreated,
+      name,
+      pinned,
+      messages,
+    });
+
+    discussionsIds.push(doc.id);
+  });
+
+  return discussions;
+};
+
 export default function Home() {
   const dispatch = useDispatch();
   useEffect(() => {
@@ -78,8 +118,9 @@ export default function Home() {
         retrieveUser(dbRef), // Gets current users prevShifts and isAdmin?
         retrieveUsers(dbRef), // Gets all users contact/account information
         retrieveVigils(dbRef),
+        retrieveDiscussions(dbRef), // Gets discussions
       ]);
-      const [user, users, vigils] = firestoreResponse;
+      const [user, users, vigils, discussions] = firestoreResponse;
 
       // Initialize redux store
       console.log('Home: Initialize User store');
@@ -90,6 +131,9 @@ export default function Home() {
 
       console.log('Home: Initialize Vigils store');
       dispatch(actions.vigils.initalizeVigils(vigils));
+
+      console.log('Home: Initialize Discussions store');
+      dispatch(actions.discussions.initializeDiscussions(discussions));
 
       // navigation.navigate('Root');
     };
