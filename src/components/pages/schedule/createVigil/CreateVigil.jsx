@@ -5,12 +5,12 @@ import { useHistory } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import firebase from 'firebase/app';
 import 'firebase/firestore';
-import HeaderWithBackArrow from '../navigation/back-header';
-import { SubmitButton, CancelButton } from '../../styled-components/form-components';
+import HeaderWithBackArrow from '../../../navigation/back-header';
+import { SubmitButton, CancelButton } from '../../../../styled-components/form-components';
 import {
   timeComesBefore, dateComesBefore, getDateRange, eventDataToFront,
-} from './CreateShiftHelper';
-import eventPropType from '../../dataStructures/propTypes';
+} from './CreateVigilHelper';
+import eventPropType from '../../../../dataStructures/propTypes';
 
 // Styled Components
 const PaddedDiv = styled.div`
@@ -23,7 +23,7 @@ const CenterCol = styled(Col)`
   justify-content: center;
 `;
 
-function CreateShift({ curEvent }) {
+function CreateVigil({ curEvent }) {
   // Event Editing info
   const isEditing = Object.keys(curEvent).length !== 0;
   const defaultVals = isEditing ? eventDataToFront(curEvent) : curEvent;
@@ -164,12 +164,12 @@ function CreateShift({ curEvent }) {
   );
 }
 
-CreateShift.propTypes = {
+CreateVigil.propTypes = {
   curEvent: eventPropType,
 };
 
-CreateShift.defaultProps = {
+CreateVigil.defaultProps = {
   curEvent: {},
 };
 
-export default CreateShift;
+export default CreateVigil;

@@ -3,7 +3,7 @@ import Row from 'react-bootstrap/Row';
 import Container from 'react-bootstrap/Container';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import HeaderWithNav from '../navigation/nav-header';
+import HeaderWithNav from '../../navigation/nav-header';
 import CreateThread from './createThread';
 import Forum from './Forum';
 

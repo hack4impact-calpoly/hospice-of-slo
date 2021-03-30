@@ -19,7 +19,6 @@ const retrieveUser = async (dbRef) => {
     isAdmin: temp.data().isAdmin,
     prevShifts: ps,
   };
-  console.log(user);
 
   return user;
 };
@@ -123,16 +122,9 @@ export default function Home() {
       const [user, users, vigils, discussions] = firestoreResponse;
 
       // Initialize redux store
-      console.log('Home: Initialize User store');
       dispatch(actions.user.initializeUser(user));
-
-      console.log('Home: Initialize Users store');
       dispatch(actions.users.initializeUsers(users));
-
-      console.log('Home: Initialize Vigils store');
       dispatch(actions.vigils.initalizeVigils(vigils));
-
-      console.log('Home: Initialize Discussions store');
       dispatch(actions.discussions.initializeDiscussions(discussions));
 
       // navigation.navigate('Root');
