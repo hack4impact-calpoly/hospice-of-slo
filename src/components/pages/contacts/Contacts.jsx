@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
-import { Form } from 'react-bootstrap';
+import { Row, Col, Form } from 'react-bootstrap';
 import HeaderWithNav from '../../navigation/nav-header';
 import ContactCard from './ContactCard';
 import generateCSV from './ContactsCsv';
@@ -16,19 +16,18 @@ const ListWrapper = styled.div`
 `;
 
 const ExportButton = styled(SubmitButton)`
-  width: 30%;
-  max-width: 125px;
-padding-left: 10px;
+  width: 100px;
   margin: 3px auto;
+  position: relative;
+  float: right;
   margin-bottom: 10px;
 `;
+
 const FormS = styled(Form.Control)`
   font-size: 18px;
   background-color: #E5E5E5;
- width:40%;
-  margin: 0 10px;
-float: left;
-  max-width: calc(750px + 30%);
+  width: 100%;
+  float: left;
 `;
 
 export default function Contacts() {
@@ -49,20 +48,21 @@ export default function Contacts() {
   return (
     <div>
       <HeaderWithNav>Contacts</HeaderWithNav>
-
       <ListWrapper>
-        <div className="search">
-          <FormS
-            className="mb-3"
-            placeholder="search..."
-            onChange={(e) => {
-              setSearchTerm(e.target.value);
-            }}
-          />
-          <ExportButton onClick={() => generateCSV(users)}>Export</ExportButton>
-
-        </div>
-
+        <Row>
+          <Col xs={7} sm={9} md={10} className="search">
+            <FormS
+              className="mb-3"
+              placeholder="search..."
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+              }}
+            />
+          </Col>
+          <Col>
+            <ExportButton onClick={() => generateCSV(users)}>Export</ExportButton>
+          </Col>
+        </Row>
         {users.filter((user) => user.name.toLowerCase().includes(searchTerm.toLowerCase())).sort(compare).map((user) => <ContactCard key={user.id} name={user.name} email={user.email} phone={user.phone} color="#333333" />)}
       </ListWrapper>
     </div>
