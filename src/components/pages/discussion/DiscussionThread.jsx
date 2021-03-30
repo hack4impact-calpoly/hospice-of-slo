@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import firebase from 'firebase/app';
 import 'firebase/firestore';
+import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { FloatingActionButton } from '../../../styled-components/discussion-components';
 import HeaderWithBackArrow from '../../navigation/back-header';
@@ -15,20 +15,22 @@ const PostWrapper = styled.div`
 
 export default function DiscussionThread() {
   const { id } = useParams();
-  const db = firebase.firestore();
-  const discussionDB = db.collection('discussions').doc(id);
-  const messagesDB = discussionDB.collection('messages');
+  const discussions = useSelector((store) => store.discussions.discussions);
+  let discussion;
+  discussions.forEach((d) => {
+    if (d.id === id) {
+      discussion = d;
+    }
+  });
+
   const [title, setTitle] = useState('');
   const [posts, setPosts] = useState([]);
 
   async function getPosts() {
     // Get Title
-    const discussionData = await discussionDB.get();
-    setTitle(discussionData.data().name);
+    setTitle(discussion.name);
     // Get Messages
-    const messagesData = await messagesDB.get();
-    const messages = [];
-    messagesData.forEach((message) => messages.push(message.data()));
+    const { messages } = discussion;
     // Populate each user ref from a message
     let usersData = messages.map((message) => message.userRef.get());
     usersData = await Promise.all(usersData);
