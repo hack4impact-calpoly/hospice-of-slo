@@ -33,7 +33,7 @@ const FormS = styled(Form.Control)`
 export default function Contacts() {
   // Gets User Data from redux store
   const users = useSelector((state) => state.users.users);
-  console.log(users);
+  const isAdmin = useSelector((state) => state.user.user.isAdmin);
   const [searchTerm, setSearchTerm] = useState('');
 
   function compare(a, b) { // sorts in alphabetical order
@@ -50,7 +50,7 @@ export default function Contacts() {
       <HeaderWithNav>Contacts</HeaderWithNav>
       <ListWrapper>
         <Row>
-          <Col xs={7} sm={9} md={10} className="search">
+          <Col className="search">
             <FormS
               className="mb-3"
               placeholder="search..."
@@ -59,9 +59,13 @@ export default function Contacts() {
               }}
             />
           </Col>
-          <Col>
-            <ExportButton onClick={() => generateCSV(users)}>Export</ExportButton>
-          </Col>
+          {isAdmin
+            ? (
+              <Col xs={5} sm={3} md={2}>
+                <ExportButton onClick={() => generateCSV(users)}>Export</ExportButton>
+              </Col>
+            )
+            : null }
         </Row>
         {users.filter((user) => user.name.toLowerCase().includes(searchTerm.toLowerCase())).sort(compare).map((user) => <ContactCard key={user.id} name={user.name} email={user.email} phone={user.phone} color="#333333" />)}
       </ListWrapper>
