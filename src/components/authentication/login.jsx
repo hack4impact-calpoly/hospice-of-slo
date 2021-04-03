@@ -102,7 +102,6 @@ export default function Login() {
       .then(() => {
         // signed in
         const currentUser = firebase.auth().currentUser.uid;
-        console.log(currentUser);
         const db = firebase.firestore();
         const userRef = db.collection('users').doc(currentUser);
         userRef.get().then((user) => {

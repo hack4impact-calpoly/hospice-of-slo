@@ -6,8 +6,6 @@ export default function PrivateRoute({
   children, path, exact, adminOnly,
 }) {
   const currentUser = (sessionStorage.getItem('userid'));
-  console.log(currentUser);
-  console.log(adminOnly);
 
   const checkAccess = () => {
     if (currentUser === null) {

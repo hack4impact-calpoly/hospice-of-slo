@@ -6,11 +6,8 @@ import actions from '../../actions/index';
 
 const retrieveUser = async (dbRef) => {
   const currentUser = (sessionStorage.getItem('userid'));
-  console.log(currentUser);
   const userRef = dbRef.collection('users').doc(currentUser);
-  console.log(userRef);
   const temp = await userRef.get();
-  console.log('get it: ', temp.data());
   const ps = [];
   temp.data().prevShifts.forEach((shift) => {
     ps.push(shift.path);
@@ -21,9 +18,7 @@ const retrieveUser = async (dbRef) => {
     isAdmin: temp.data().isAdmin,
     prevShifts: ps,
   };
-  console.log(user);
   sessionStorage.setItem('user', JSON.stringify(user));
-  console.log(sessionStorage.getItem('user'));
   return user;
 };
 
@@ -93,14 +88,12 @@ export default function AuthProvider({ children }) {
       // navigation.navigate('Root');
     };
     firebase.auth().onAuthStateChanged((user) => {
-      console.log('user: ', user);
       if (user != null) {
         sessionStorage.setItem('userid', user.uid);
         initializeDatabase();
       } else {
         sessionStorage.clear();
       }
-      console.log(sessionStorage.getItem('user'));
       setPending(false);
     });
   }, []);
