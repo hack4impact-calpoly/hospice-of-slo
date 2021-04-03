@@ -4,7 +4,6 @@ import {
   Container, Row, Col, Form,
 } from 'react-bootstrap';
 import { Link, useHistory } from 'react-router-dom';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import firebase from 'firebase';
 import 'firebase/firestore';
@@ -66,10 +65,7 @@ const StyledError = styled.div`
   color: red;
 `;
 
-export default function SignUp(props) {
-  const {
-    toggleLoggedIn,
-  } = props;
+export default function SignUp() {
   const [name, setName] = React.useState('');
   const [password, setPassword] = useState('');
   const [rePassword, setRePassword] = useState('');
@@ -134,11 +130,13 @@ export default function SignUp(props) {
         .then((user) => {
           user.user.updateProfile({
             displayName: name,
-          }).then(() => {
-            logUserData(user.user); // creates a document for user with corresponding ID
-            toggleLoggedIn();
-            history.push('/');
           })
+            .then(() => {
+              logUserData(user.user) // creates a document for user with corresponding ID
+                .then(() => {
+                  history.push('/');
+                });
+            })
             .catch((error) => {
               console.log('Display name not set.'); // feedback should be put on frontend
               console.log(error);
@@ -262,7 +260,3 @@ export default function SignUp(props) {
     </StyledDiv>
   );
 }
-
-SignUp.propTypes = {
-  toggleLoggedIn: PropTypes.func.isRequired,
-};

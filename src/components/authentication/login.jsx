@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import {
   Container, Row, Col, Form, Image,
@@ -90,10 +89,7 @@ const FLink = styled(Link)`
   }
 `;
 
-export default function Login(props) {
-  const {
-    toggleLoggedIn, setIsAdmin,
-  } = props;
+export default function Login() {
   const history = useHistory();
 
   const [email, setEmail] = React.useState('');
@@ -106,15 +102,11 @@ export default function Login(props) {
       .then(() => {
         // signed in
         const currentUser = firebase.auth().currentUser.uid;
+        console.log(currentUser);
         const db = firebase.firestore();
         const userRef = db.collection('users').doc(currentUser);
         userRef.get().then((user) => {
           if (user.exists) {
-            // check if user is admin and reroute to proper location
-            if (user.data().isAdmin === true) {
-              setIsAdmin(true);
-            }
-            toggleLoggedIn();
             history.push('/');
           } else {
             // user.data() will be undefined in this case
@@ -167,8 +159,3 @@ export default function Login(props) {
     </StyledDiv>
   );
 }
-
-Login.propTypes = {
-  toggleLoggedIn: PropTypes.func.isRequired,
-  setIsAdmin: PropTypes.func.isRequired,
-};

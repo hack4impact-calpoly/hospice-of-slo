@@ -63,7 +63,7 @@ export default function Schedule({ selectVigil, setSelectVigil }) {
 
   useEffect(() => {
     fetchData();
-  }, []); // This useEffect block gets whole collection of vigil documents upon rendering of this component
+  }); // This useEffect block gets whole collection of vigil documents upon rendering of this component
 
   function handleClose() {
     setShow(false);

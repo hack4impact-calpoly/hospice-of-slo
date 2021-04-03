@@ -3,24 +3,43 @@ import PropTypes from 'prop-types';
 import { Redirect, Route } from 'react-router-dom';
 
 export default function PrivateRoute({
-  children, isLoggedIn, path, exact,
+  children, path, exact, adminOnly,
 }) {
+  const currentUser = (sessionStorage.getItem('userid'));
+  console.log(currentUser);
+  console.log(adminOnly);
+
+  const checkAccess = () => {
+    if (currentUser === null) {
+      console.log('user is null');
+      return (<Redirect to="/login" />);
+    }
+    if (adminOnly) {
+      if (!(JSON.parse(sessionStorage.getItem('user')).isAdmin)) {
+        return (<Redirect to="/discussion" />);
+      }
+      return (children);
+    }
+    return (children);
+  };
+
   return (
     <Route
       path={path}
       exact={exact}
-      render={() => (isLoggedIn ? children : <Redirect to="/login" />)}
+      render={() => (checkAccess())}
     />
   );
 }
 
 PrivateRoute.propTypes = {
   children: PropTypes.element.isRequired,
-  isLoggedIn: PropTypes.bool.isRequired,
   path: PropTypes.string.isRequired,
   exact: PropTypes.bool,
+  adminOnly: PropTypes.bool,
 };
 
 PrivateRoute.defaultProps = {
   exact: false,
+  adminOnly: false,
 };
