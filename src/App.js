@@ -11,15 +11,14 @@ import Signup from './components/authentication/signup';
 import ForgotPassword from './components/authentication/forgotPassword';
 import ResetPassword from './components/authentication/resetPassword';
 import SuccessPage from './components/authentication/successPage';
-import Discussion from './components/pages/Discussion';
-import PastShifts from './components/pages/PastShifts';
+import Discussion from './components/pages/discussion/Discussion';
+import PastShifts from './components/pages/pastShifts/PastShifts';
 import Contacts from './components/pages/contacts/Contacts';
-import History from './components/pages/History';
+import History from './components/pages/history/History';
 import PrivateRoute from './components/authentication/PrivateRoute';
-import ShiftSignUp from './components/pages/ShiftSignUp';
-import DiscussionThread from './components/pages/DiscussionThread';
-import ScheduleManager from './components/pages/ScheduleManager';
 import AuthProvider from './components/authentication/Auth';
+import DiscussionThread from './components/pages/discussion/DiscussionThread';
+import ScheduleManager from './components/pages/schedule/ScheduleManager';
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -59,9 +58,6 @@ export default function App() {
           <Route path="/success">
             <SuccessPage />
           </Route>
-          <PrivateRoute path="/shift-signup">
-            <ShiftSignUp />
-          </PrivateRoute>
           <PrivateRoute path="/schedule">
             <ScheduleManager />
           </PrivateRoute>
@@ -74,7 +70,7 @@ export default function App() {
           <PrivateRoute path="/past-shifts">
             <PastShifts />
           </PrivateRoute>
-          <PrivateRoute adminOnly path="/contacts">
+          <PrivateRoute path="/contacts">
             <Contacts />
           </PrivateRoute>
           <PrivateRoute adminOnly path="/history">

@@ -60,12 +60,10 @@ export default function Navbar() {
 
   return (
     <Menu>
-      <NavLink to="/discussion" Icon={BiChat}>Discussion</NavLink>
+      <NavLink to="/discussion" Icon={BiChat}>Discussions</NavLink>
       <NavLink to="/schedule" Icon={BiCalendarAlt}>Schedule</NavLink>
       <NavLink to="/past-shifts" Icon={BiClipboard}>Past Shifts</NavLink>
-      { isAdmin
-        ? <NavLink to="/contacts" Icon={BiPhone}>Contacts</NavLink>
-        : null}
+      <NavLink to="/contacts" Icon={BiPhone}>Contacts</NavLink>
       { isAdmin
         ? <NavLink to="/history" Icon={BiTime}>History</NavLink>
         : null}

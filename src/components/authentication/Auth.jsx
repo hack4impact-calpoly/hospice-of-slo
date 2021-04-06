@@ -64,6 +64,47 @@ const retrieveVigils = async (dbRef) => {
   return vigils;
 };
 
+const retrieveDiscussions = async (dbRef) => {
+  const discussions = [];
+  const discussionsRef = dbRef.collection('discussions');
+  const discussionsSnapshot = await discussionsRef.get();
+
+  const discussionsIds = [];
+  discussionsSnapshot.forEach(async (doc) => {
+    const messages = [];
+
+    const {
+      dateCreated, name, pinned,
+    } = doc.data();
+
+    const msgRef = discussionsRef.doc(doc.id).collection('messages');
+    const messageSnapshot = await msgRef.get();
+    messageSnapshot.forEach((msg) => {
+      const {
+        message, timeSent, userRef,
+      } = msg.data();
+
+      messages.push({
+        message,
+        timeSent,
+        userRef,
+      });
+    });
+
+    discussions.push({
+      id: doc.id,
+      dateCreated,
+      name,
+      pinned,
+      messages,
+    });
+
+    discussionsIds.push(doc.id);
+  });
+
+  return discussions;
+};
+
 export default function AuthProvider({ children }) {
   const [pending, setPending] = useState(true);
   const dispatch = useDispatch();
@@ -77,13 +118,15 @@ export default function AuthProvider({ children }) {
         retrieveUser(dbRef), // Gets current users prevShifts and isAdmin?
         retrieveUsers(dbRef), // Gets all users contact/account information
         retrieveVigils(dbRef),
+        retrieveDiscussions(dbRef), // Gets discussions
       ]);
-      const [user, users, vigils] = firestoreResponse;
+      const [user, users, vigils, discussions] = firestoreResponse;
 
       // Initialize redux store
       dispatch(actions.user.initializeUser(user));
       dispatch(actions.users.initializeUsers(users));
       dispatch(actions.vigils.initalizeVigils(vigils));
+      dispatch(actions.discussions.initializeDiscussions(discussions));
 
       // navigation.navigate('Root');
     };
@@ -94,7 +137,14 @@ export default function AuthProvider({ children }) {
       } else {
         sessionStorage.clear();
       }
-      setPending(false);
+      /*
+        When u refresh the page (or it is initially loaded), this code waits 4 seconds
+        to make sure that data is loaded in from firebase and put in the store.
+        TODO: See [DEV-61] - fix this.
+      */
+      setTimeout(() => {
+        setPending(false);
+      }, 4000);
     });
   }, []);
 
