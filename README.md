@@ -1,7 +1,7 @@
 # Hospice of SLO
 ### A volunteer scheduling, communicating, and tracking software application made for <a href="https://hospiceslo.org/" target="_blank">Hospice of SLO</a>.
 
-![User View](https://github.com/hack4impact-calpoly/hospice-of-slo/tree/DEV-59-UpdateReadme/src/images/calendar.png)
+![User View](/images/calendar.png)
 
 ## Table of Contents
 - [Overview](#overview)
