@@ -3,15 +3,12 @@
 
 ![User View](https://github.com/hack4impact-calpoly/hospice-of-slo/tree/DEV-59-UpdateReadme/src/images/calendar.png)
 
-![User View](https://github.com/hack4impact-calpoly/hospice-of-slo/tree/DEV-59-UpdateReadme/src/images/login.png)
-
 ## Table of Contents
 - [Overview](#overview)
   - [Purpose](#purpose)
   - [Team](#team)
 - [Getting Started for Developers](#getting-started-for-developers)
   - [Clone the repository](#clone-the-repository)
-  - [Install Requirements](#install-requirements)
   - [Run the frontend](#run-the-frontend)
   - [Run the backend](#run-the-frontend)
   - [Making Changes](#making-changes)
@@ -27,7 +24,6 @@ The purpose of this application was to improve the volunteer scheduling, communi
 The Hospice of SLO project team consists of 9 Cal Poly students. Over the course of about 9 months, they worked as a team to deploy this web application. The team members are listed below: 
 
 <p float="left">
-<a href="https://github.com/n0ximus" target="_blank"><img src="https://avatars.githubusercontent.com/u/25959989?v=4" width="150" /></a>
  <a href="https://github.com/ctperry0301" target="_blank"><img src="https://avatars3.githubusercontent.com/u/15805074?s=400&u=c2a0e7ef773958b28ce01ae19dcdbb1eefcce015&v=4" width="150" /></a>
 <a href="https://github.com/n0ximus" target="_blank"><img src="https://avatars.githubusercontent.com/u/25959989?v=4" width="150" /></a>
 </p>
@@ -49,8 +45,6 @@ The Hospice of SLO project team consists of 9 Cal Poly students. Over the course
 
 ### Clone the repository
 ``` git clone https://github.com/hack4impact-calpoly/hospice-of-slo.git ```
-
-#### Install requirements
 
 #### Run the frontend
 1. ```npm start ``` (if its your first time, you might need to run ```npm i```)
