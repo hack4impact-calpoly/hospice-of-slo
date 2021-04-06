@@ -1,13 +1,40 @@
 # Hospice of SLO
+### A volunteer scheduling, communicating, and tracking software application made for <a href="https://hospiceslo.org/" target="_blank">Hospice of SLO</a>.
 
-Volunteer Scheduling, Communicating, and tracking for Hospice of Slo
 
-## Getting Started for Developers
+## Table of Contents
+- [Overview](#overview)
+  - [Purpose](#purpose)
+  - [Team](#team)
+- [Getting Started for Developers](#getting-started-for-developers)
+  - [Clone the repository](#clone-the-repository)
+  - [Install Requirements](#install-requirements)
+  - [Run the frontend](#run-the-frontend)
+  - [Run the backend](#run-the-frontend)
+  - [Making Changes](#making-changes)
+  - [Commiting Changes](#commiting-changes)
+  - [Making Pull Requests](#making-pull-requests)
+
+### Overview
+
+#### Purpose
+The purpose of this application was to improve the volunteer scheduling, communicating, and tracking processes for Hospice of SLO. 
+
+### Team
+The Hospice of SLO project team consists of 9 Cal Poly students. Over the course of about 9 months, they worked as a team to deploy this web application. The team members are listed below: 
+
+<p float="left">
+  <a href="" target="_blank"><img src="" width="150" /></a>
+
+</p>
+
+
+## Getting Started for Developers 
 
 ### Clone the repository
 ``` git clone https://github.com/hack4impact-calpoly/hospice-of-slo.git ```
 
-### Running the app
+#### Install requirements
 
 #### Run the frontend
 1. ```npm start ``` (if its your first time, you might need to run ```npm i```)
