@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import {
-  BiUser, BiCalendarAlt, BiChat, BiClipboard, BiPhone, BiTime, BiLogOut,
+  BiCalendarAlt, BiChat, BiClipboard, BiPhone, BiTime, BiLogOut,
 } from 'react-icons/bi';
 import firebase from 'firebase/app';
 import 'firebase/auth';
@@ -60,9 +60,8 @@ export default function Navbar() {
 
   return (
     <Menu>
-      <NavLink to="/" Icon={BiUser}>Name</NavLink>
+      <NavLink to="/discussion" Icon={BiChat}>Discussions</NavLink>
       <NavLink to="/schedule" Icon={BiCalendarAlt}>Schedule</NavLink>
-      <NavLink to="/discussion" Icon={BiChat}>Discussion</NavLink>
       <NavLink to="/past-shifts" Icon={BiClipboard}>Past Shifts</NavLink>
       <NavLink to="/contacts" Icon={BiPhone}>Contacts</NavLink>
       { isAdmin
