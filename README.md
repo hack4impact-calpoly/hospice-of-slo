@@ -27,9 +27,23 @@ The purpose of this application was to improve the volunteer scheduling, communi
 The Hospice of SLO project team consists of 9 Cal Poly students. Over the course of about 9 months, they worked as a team to deploy this web application. The team members are listed below: 
 
 <p float="left">
-<a href="https://github.com/n0ximus1" target="_blank"><img src="https://avatars.githubusercontent.com/u/25959989?v=4" width="150" /></a>
+<a href="https://github.com/n0ximus" target="_blank"><img src="https://avatars.githubusercontent.com/u/25959989?v=4" width="150" /></a>
  <a href="https://github.com/ctperry0301" target="_blank"><img src="https://avatars3.githubusercontent.com/u/15805074?s=400&u=c2a0e7ef773958b28ce01ae19dcdbb1eefcce015&v=4" width="150" /></a>
+<a href="https://github.com/n0ximus" target="_blank"><img src="https://avatars.githubusercontent.com/u/25959989?v=4" width="150" /></a>
 </p>
+
+(From left to right)
+- Cole Perry - Team Lead/Software Developer
+- Sage Meadows - Software Developer
+- Marissa Darnell - Software Developer 
+- Ben McMann - Software Developer
+- Vance Winstead - Software Developer
+- Jonathan Lu - Software Developer
+- Skyler Han - Software Developer
+- Tim Kim - Software Developer
+- Mandy Ko - Designer
+
+
 
 ## Getting Started for Developers 
 
