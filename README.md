@@ -18,7 +18,7 @@
 ### Overview
 
 #### Purpose
-The purpose of this application was to improve the volunteer scheduling, communicating, and tracking processes for Hospice of SLO. 
+Hospice of San Luis Obispo County (Hospice SLO County) is an incorporated 501(c)3 volunteer hospice serving San Luis Obispo County residents who are facing a life-limiting illness, end of life or grief. The purpose of this application was to improve the volunteer scheduling, communicating, and tracking processes for Hospice of SLO. 
 
 ### Team
 The Hospice of SLO project team consists of 9 Cal Poly students. Over the course of about 9 months, they worked as a team to deploy this web application. The team members are listed below: 
