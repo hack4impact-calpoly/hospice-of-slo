@@ -85,7 +85,7 @@ export default function Calendar(props) {
             eventClick={handleEventClick}
             headerToolbar={adminCalendarHeader}
             customButtons={{ addEventButton }}
-            height="80vh"
+            height="85vh"
             allDaySlot={false}
           />
         )
