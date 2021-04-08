@@ -9,14 +9,13 @@ import Forum from './Forum';
 export default function Discussion() {
   const isAdmin = useSelector((state) => state.user.user.isAdmin);
 
-  // grabbing vigil information from constant events for now
   const storeDiscussions = useSelector((state) => state.discussions.discussions);
 
   const forumsPinned = storeDiscussions.map((d) => {
     if (d.pinned) {
       return ([
         <Row key={d.name} className="justify-content-md-center">
-          <Forum title={d.name} backgroundColor={d.backgroundColor} docId={d.id} />
+          <Forum title={d.name} docId={d.id} />
         </Row>,
       ]);
     }
@@ -32,7 +31,7 @@ export default function Discussion() {
     if (!d.pinned) {
       return ([
         <Row key={d.name} className="justify-content-md-center">
-          <Forum title={d.name} backgroundColor={d.backgroundColor} docId={d.id} />
+          <Forum title={d.name} docId={d.id} />
         </Row>,
       ]);
     }

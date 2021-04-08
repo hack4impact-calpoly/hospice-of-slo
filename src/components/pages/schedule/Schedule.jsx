@@ -25,7 +25,7 @@ export default function Schedule(props) {
         title: v.address,
         start: `${v.dates[0]}T${v.startTime}`,
         end: `${v.dates[v.dates.length - 1]}T${v.endTime}`,
-        backgroundColor: (v.dates.length !== 1) ? '#8FCBD4' : '#D0CAEB', // if single/multi day event
+        backgroundColor: '#8FCBD4',
         notes: v.notes,
         id: v.id,
         dates: v.dates,

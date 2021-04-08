@@ -3,7 +3,6 @@ import {
   Row, Col, Button, Modal, Form,
 } from 'react-bootstrap';
 import styled from 'styled-components';
-import { BsFillCircleFill } from 'react-icons/bs';
 import firebase from 'firebase';
 
 const StyledCreate = styled.button`
@@ -24,24 +23,17 @@ const StyledCancel = styled.button`
   background: none;
   border: none;
   padding: 0 20px 
-  
 `;
 
-const ColorDiv = styled.div`
-  width: 85%;
-  padding: 0 5px;
+const StyledHeading = styled.h4`
+  text-align: center;
+  margin-bottom: 30px;
 `;
 
 const StyledRow = styled(Row)`
   display: flex;
   justify-content: flex-end;
   padding: 0 15px; 
-`;
-
-const CenteredCol = styled(Col)`
-  display: flex;
-  align-items: center;
-  justify-content: center;
 `;
 
 const StyledCol = styled(Col)`
@@ -65,23 +57,11 @@ const AddThread = styled(Button)`
 
 export default function CreateThread() {
   const [title, setTitle] = useState('');
-  const [color, setColor] = useState('Blue');
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const colors = {
-    Blue: '#7EB0B8',
-    Purple: '#d0caeb',
-    Grey: '#C4C4C4',
-  };
-
-  const colorOptions = Object.keys(colors).map((c) => <option key={c}>{c}</option>);
-
-  const handleColor = (e) => {
-    setColor(e.target.value);
-  };
   async function createDiscussionPress() {
     // creates a new discussion
     const db = firebase.firestore();
@@ -106,24 +86,15 @@ export default function CreateThread() {
       <Modal show={show} onEscapeKeyDown={handleClose} onHide={handleClose} centered>
         <Modal.Body>
           <StyledCol>
+            <StyledHeading> Create New Discussion </StyledHeading>
             <Form.Control
               className="mb-3"
-              placeholder="Title"
+              placeholder="Discussion Name"
               onChange={(e) => {
                 setTitle(e.target.value);
                 console.log(title);
               }}
             />
-            <Form.Row>
-              <ColorDiv>
-                <Form.Control as="select" value={color} onChange={handleColor}>
-                  {colorOptions}
-                </Form.Control>
-              </ColorDiv>
-              <CenteredCol>
-                <BsFillCircleFill color={colors[color]} size={25} />
-              </CenteredCol>
-            </Form.Row>
             <StyledRow className="mt-3">
               <StyledCancel onClick={handleClose}>Cancel</StyledCancel>
               <StyledCreate type="submit" onClick={createDiscussionPress}>Create</StyledCreate>
