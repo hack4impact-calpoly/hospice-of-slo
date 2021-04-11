@@ -31,7 +31,7 @@ The Hospice of SLO project team consists of 9 Cal Poly students. Over the course
 <a href="https://github.com/jlu51" target="_blank"><img src="https://avatars.githubusercontent.com/u/32073638?v=4" width="150" /></a>
 <a href="https://github.com/skylerdee3" target="_blank"><img src="https://avatars.githubusercontent.com/u/44215060?v=4" width="150" /></a>
 <a href="https://github.com/timkim14" target="_blank"><img src="https://avatars1.githubusercontent.com/u/47136824?s=400&u=30df6b053786b888b9f058e64c07703b01020ea1&v=4" width="150" /></a>
-<a href="www.linkedin.com/in/mandy-ko" target="_blank"><img src="https://media-exp1.licdn.com/dms/image/C5603AQG87k5tpCozhA/profile-displayphoto-shrink_200_200/0/1582659300735?e=1623888000&v=beta&t=d3oqs1A8HL5aD2tmuPP1bup0_aL5NE8K70BiO34wEzo" width="150" /></a>
+<a href="www.linkedin.com/in/mandy-ko"><img src="https://media-exp1.licdn.com/dms/image/C5603AQG87k5tpCozhA/profile-displayphoto-shrink_200_200/0/1582659300735?e=1623888000&v=beta&t=d3oqs1A8HL5aD2tmuPP1bup0_aL5NE8K70BiO34wEzo" width="150" /></a>
 
 </p>
 
