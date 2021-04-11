@@ -5,12 +5,14 @@ import { useHistory } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import firebase from 'firebase/app';
 import 'firebase/firestore';
+import { useDispatch } from 'react-redux';
 import HeaderWithBackArrow from '../../../navigation/back-header';
 import { SubmitButton, CancelButton } from '../../../../styled-components/form-components';
 import {
   timeComesBefore, dateComesBefore, getDateRange, eventDataToFront,
 } from './CreateVigilHelper';
 import eventPropType from '../../../../dataStructures/propTypes';
+import actions from '../../../../actions';
 
 // Styled Components
 const PaddedDiv = styled.div`
@@ -28,6 +30,9 @@ function CreateVigil({ curEvent }) {
   const isEditing = Object.keys(curEvent).length !== 0;
   const defaultVals = isEditing ? eventDataToFront(curEvent) : curEvent;
 
+  // Redux setup
+  const dispatch = useDispatch();
+
   // Form Stuff
   const {
     register, watch, handleSubmit, errors,
@@ -43,15 +48,16 @@ function CreateVigil({ curEvent }) {
     const db = firebase.firestore();
     if (isEditing) {
       await db.collection('vigils').doc(curEvent.id).set(shift);
+      dispatch(actions.vigils.editVigil(curEvent.id, { ...shift, id: curEvent.id }));
     } else {
-      await db.collection('vigils').add(shift);
+      const backRef = await db.collection('vigils').add(shift);
       await db.collection('discussions').add({
         name: shift.address,
         dateCreated: firebase.firestore.FieldValue.serverTimestamp(),
         pinned: false,
       });
+      dispatch(actions.vigils.addVigil({ ...shift, id: backRef.id }));
     }
-    // TODO: Update Redux
     history.push('/schedule');
   }
 
