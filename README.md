@@ -10,7 +10,6 @@
 - [Getting Started for Developers](#getting-started-for-developers)
   - [Clone the repository](#clone-the-repository)
   - [Run the frontend](#run-the-frontend)
-  - [Run the backend](#run-the-frontend)
   - [Making Changes](#making-changes)
   - [Commiting Changes](#commiting-changes)
   - [Making Pull Requests](#making-pull-requests)
@@ -18,10 +17,10 @@
 ### Overview
 
 #### Purpose
-The purpose of this application was to improve the volunteer scheduling, communicating, and tracking processes for Hospice of SLO. 
+The purpose of this application is to improve the volunteer scheduling, communicating, and tracking processes for Hospice of SLO. 
 
 ### Team
-The Hospice of SLO project team consists of 9 Cal Poly students. Over the course of about 9 months, they worked as a team to deploy this web application. The team members are listed below: 
+The Hospice of SLO project team consists of 9 Cal Poly students. Over the course of about 9 months, we worked as a team to deploy this web application. The team members are listed below: 
 
 <p float="left">
  <a href="https://github.com/ctperry0301" target="_blank"><img src="https://avatars3.githubusercontent.com/u/15805074?s=400&u=c2a0e7ef773958b28ce01ae19dcdbb1eefcce015&v=4" width="150" /></a>
@@ -43,7 +42,7 @@ The Hospice of SLO project team consists of 9 Cal Poly students. Over the course
 - Vance Winstead - Software Developer
 - Jonathan Lu - Software Developer
 - Skyler Han - Software Developer
-- Tim Kim - Software Developer
+- Tim Kim - Project Manager
 - Mandy Ko - Designer
 
 
@@ -56,9 +55,6 @@ The Hospice of SLO project team consists of 9 Cal Poly students. Over the course
 #### Run the frontend
 1. ```npm start ``` (if its your first time, you might need to run ```npm i```)
 
-#### Run the backend
-1. ```cd backend ```
-2. ```npm run dev ```
 
 ### Making Changes
 1. Before you start making changes, ```git pull``` and then ```npm i```
