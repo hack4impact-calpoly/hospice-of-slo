@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useSelector } from 'react-redux';
 import { Col, Row } from 'react-bootstrap';
 import Container from 'react-bootstrap/Container';
 import HeaderWithNav from '../../navigation/nav-header';
@@ -17,13 +18,39 @@ const StyledCol = styled(Col)`
 `;
 
 export default function PastShifts() {
-  const data = [{
-    name: 'Bruh', vigil: 'also bruh', date: '1/1/11', time: '24:00:00',
-  }, {
-    name: 'Bruh', vigil: 'also bruh', date: '1/1/11', time: '24:00:00',
-  }, {
-    name: 'Bruh', vigil: 'also bruh', date: '1/1/11', time: '24:00:00',
-  }];
+  const storeUsers = useSelector((state) => state.users.users);
+
+  const allShifts = [];
+  storeUsers.forEach((user) => {
+    if (user.prevShifts.length > 0) {
+      user.prevShifts.forEach((shift) => {
+        const oneShift = {};
+        oneShift.ref = shift;
+        oneShift.name = user.name;
+        allShifts.push(oneShift);
+      });
+    }
+  });
+
+  const data = allShifts.map(async (shift) => {
+    const shiftData = {
+      name: shift.name,
+    };
+    await shift.ref.get().then((docSnapshot) => {
+      const {
+        address, shiftStartTime, shiftEndTime,
+      } = docSnapshot.data();
+      shiftData.vigil = address;
+      shiftData.date = shiftStartTime;
+      shiftData.time = shiftEndTime;
+    });
+    console.log('SHIFT DATA');
+    console.log(shiftData);
+    return shiftData;
+  });
+
+  console.log('data');
+  console.log(data);
 
   function aRow(col1, col2, col3, col4, color) {
     return (
