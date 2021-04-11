@@ -25,7 +25,7 @@ The Hospice of SLO project team consists of 9 Cal Poly students. Over the course
 <p float="left">
  <a href="https://github.com/ctperry0301" target="_blank"><img src="https://avatars3.githubusercontent.com/u/15805074?s=400&u=c2a0e7ef773958b28ce01ae19dcdbb1eefcce015&v=4" width="150" /></a>
 <a href="https://linkedin.com/in/sagemeadows/" target="_blank"><img src="https://avatars.githubusercontent.com/u/25959989?v=4" width="150" /></a>
-<a href="https://github.com/marissadarnell" target="_blank"><img src="https://avatars.githubusercontent.com/u/63181280?v=4" width="150" /></a>
+<a href="https://github.com/marissadarnell" target="_blank"><img src="https://media-exp1.licdn.com/dms/image/C5603AQFnMGpjuO5ViQ/profile-displayphoto-shrink_200_200/0/1604626459488?e=1623888000&v=beta&t=O2MF1LatQ975EaFMHqS_lrBy37t1KuDpbO00r3-ezig" width="150" /></a>
 <a href="https://github.com/bbmcmann" target="_blank"><img src="https://avatars.githubusercontent.com/u/54374897?v=4" width="150" /></a>
 <a href="https://github.com/vwinstea" target="_blank"><img src="https://avatars.githubusercontent.com/u/32073638?v=4" width="150" /></a>
 <a href="https://github.com/jlu51" target="_blank"><img src="https://avatars.githubusercontent.com/u/32073638?v=4" width="150" /></a>
