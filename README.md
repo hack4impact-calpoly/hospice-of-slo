@@ -1,7 +1,7 @@
 # Hospice of SLO
 ### A volunteer scheduling, communicating, and tracking software application made for <a href="https://hospiceslo.org/" target="_blank">Hospice of SLO</a>.
 
-![User View](https://github.com/hack4impact-calpoly/hospice-of-slo/tree/DEV-59-UpdateReadme/src/images/calendar.png)
+![User View](https://github.com/hack4impact-calpoly/hospice-of-slo/tree/DEV-59-UpdateReadme/src/images/calendar.PNG)
 
 ## Table of Contents
 - [Overview](#overview)
@@ -31,6 +31,7 @@ The Hospice of SLO project team consists of 9 Cal Poly students. Over the course
 <a href="https://github.com/jlu51" target="_blank"><img src="https://avatars.githubusercontent.com/u/32073638?v=4" width="150" /></a>
 <a href="https://github.com/skylerdee3" target="_blank"><img src="https://avatars.githubusercontent.com/u/44215060?v=4" width="150" /></a>
 <a href="https://github.com/timkim14" target="_blank"><img src="https://avatars1.githubusercontent.com/u/47136824?s=400&u=30df6b053786b888b9f058e64c07703b01020ea1&v=4" width="150" /></a>
+<a href="www.linkedin.com/in/mandy-ko" target="_blank"><img src="https://media-exp1.licdn.com/dms/image/C5603AQG87k5tpCozhA/profile-displayphoto-shrink_200_200/0/1582659300735?e=1623888000&v=beta&t=d3oqs1A8HL5aD2tmuPP1bup0_aL5NE8K70BiO34wEzo" width="150" /></a>
 
 </p>
 
@@ -54,7 +55,6 @@ The Hospice of SLO project team consists of 9 Cal Poly students. Over the course
 
 #### Run the frontend
 1. ```npm start ``` (if its your first time, you might need to run ```npm i```)
-
 
 ### Making Changes
 1. Before you start making changes, ```git pull``` and then ```npm i```
