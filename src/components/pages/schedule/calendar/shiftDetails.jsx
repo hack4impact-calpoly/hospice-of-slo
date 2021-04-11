@@ -6,12 +6,13 @@ import Select from 'react-select';
 import { BiTrash, BiPencil } from 'react-icons/bi';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Modal from 'react-bootstrap/Modal';
 import firebase from 'firebase/app';
 import 'firebase/firestore';
 import { useHistory } from 'react-router-dom';
 import moment from 'moment';
+import actions from '../../../../actions';
 
 const StyledCard = styled(Card)`
   border: none;
@@ -79,6 +80,7 @@ export default function ShiftDetails(props) {
   const isAdmin = useSelector((state) => state.user.user.isAdmin);
   const [show, setShow] = useState(false);
   const history = useHistory();
+  const dispatch = useDispatch();
 
   const dateFormat = 'dddd, MMM D';
   const formattedDate = dates.length === 1
@@ -112,6 +114,7 @@ export default function ShiftDetails(props) {
 
   async function deleteVigilDocument() {
     await firebase.firestore().collection('vigils').doc(id).delete();
+    dispatch(actions.vigils.deleteVigil(id));
     setShow(false);
   }
 
