@@ -1,9 +1,11 @@
 import React from 'react';
 import { Col } from 'react-bootstrap';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { BiChevronRight } from 'react-icons/bi';
+import Edit from './EditDiscussion';
 
 const ForumBox = styled.button`
   width: 100%;
@@ -30,6 +32,7 @@ const Arrow = styled(BiChevronRight)`
 `;
 
 export default function Forum(props) {
+  const isAdmin = useSelector((state) => state.user.user.isAdmin);
   const { title, docId } = props;
   const discussionLink = `/discussion/${docId}`;
   return (
@@ -39,7 +42,7 @@ export default function Forum(props) {
           className="mt-3 d-flex"
         >
           {title}
-          <Arrow />
+          {isAdmin ? <Edit /> : <Arrow />}
         </ForumBox>
       </ForumLink>
     </Col>

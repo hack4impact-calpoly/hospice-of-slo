@@ -23,9 +23,10 @@ export default function Discussion() {
     return null;
   });
 
+  storeDiscussions.sort((a, b) => b.dateCreated - a.dateCreated);
   // sort the discussions by most recently created
-  storeDiscussions.sort((a, b) => a.dateCreated - b.dateCreated);
-  storeDiscussions.reverse();
+  // storeDiscussions.sort((a, b) => a.dateCreated - b.dateCreated);
+  // storeDiscussions.reverse();
 
   const forumsNotPinned = storeDiscussions.map((d) => {
     if (!d.pinned) {
