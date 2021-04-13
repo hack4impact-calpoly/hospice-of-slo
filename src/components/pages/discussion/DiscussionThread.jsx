@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import 'firebase/firestore';
@@ -12,7 +14,11 @@ const PostWrapper = styled.div`
   display: flex;
   flex-direction: column;
 `;
-
+const StyledText = styled.p`
+  text-align: center;
+  font-size: 16px;
+  color: #6C6B6B;
+`;
 export default function DiscussionThread() {
   const { id } = useParams();
   const discussions = useSelector((store) => store.discussions.discussions);
@@ -24,13 +30,13 @@ export default function DiscussionThread() {
   });
 
   const [title, setTitle] = useState('');
-  const [posts, setPosts] = useState([]);
+    const [posts, setPosts] = useState([]);
+    // Get Messages
+    const { messages } = discussion;
 
   async function getPosts() {
     // Get Title
     setTitle(discussion.name);
-    // Get Messages
-    const { messages } = discussion;
     // Populate each user ref from a message
     let usersData = messages.map((message) => message.userRef.get());
     usersData = await Promise.all(usersData);
@@ -43,7 +49,16 @@ export default function DiscussionThread() {
     }
     setPosts(populatedMessages);
   }
+    const displayEmptySignal = () => {
+        console.log(messages.length);
+        /* only display empty message if there 
+         * are no messages */
+        if (messages.length <= 0) {
+            return <StyledText>This forum has no messages yet</StyledText>
+        }
+ 
 
+    }
   useEffect(() => {
     getPosts();
   }, []);
@@ -51,7 +66,8 @@ export default function DiscussionThread() {
   return (
     <div>
       <HeaderWithBackArrow>{title}</HeaderWithBackArrow>
-      <FloatingActionButton>+</FloatingActionButton>
+          <FloatingActionButton>+</FloatingActionButton>
+          {displayEmptySignal()};
       <PostWrapper>
         {posts.map((post) => <DiscussionPost key={post.timeSent} author={post.user.name} timeSent={post.timeSent.toDate()} message={post.message} />)}
       </PostWrapper>
