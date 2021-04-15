@@ -47,11 +47,14 @@ export default function DiscussionThread() {
 
   const [title, setTitle] = useState('');
   const [posts, setPosts] = useState([]);
-  const [message, setMessage] = useState();
+  const [message, setMessage] = useState('');
 
   const [show, setShow] = useState(false);
 
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    setShow(false);
+    setMessage('');
+  };
   const handleShow = () => setShow(true);
 
   async function getPosts() {
