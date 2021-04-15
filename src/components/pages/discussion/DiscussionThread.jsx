@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import 'firebase/firestore';
