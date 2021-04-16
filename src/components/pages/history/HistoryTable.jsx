@@ -1,10 +1,10 @@
 import React from 'react';
 import HeaderWithNav from '../../navigation/nav-header';
 
-export default function PastShifts() {
+export default function HistoryTable() {
   return (
     <div>
-      <HeaderWithNav>Past Shifts</HeaderWithNav>
+      <HeaderWithNav>History Table</HeaderWithNav>
     </div>
   );
 }
