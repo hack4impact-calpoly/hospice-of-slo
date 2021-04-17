@@ -15,6 +15,7 @@ import Discussion from './components/pages/discussion/Discussion';
 import PastShifts from './components/pages/pastShifts/PastShifts';
 import Contacts from './components/pages/contacts/Contacts';
 import History from './components/pages/history/History';
+import HistoryTable from './components/pages/history/HistoryTable';
 import PrivateRoute from './components/authentication/PrivateRoute';
 import AuthProvider from './components/authentication/Auth';
 import DiscussionThread from './components/pages/discussion/DiscussionThread';
@@ -72,6 +73,9 @@ export default function App() {
           </PrivateRoute>
           <PrivateRoute path="/contacts">
             <Contacts />
+          </PrivateRoute>
+          <PrivateRoute adminOnly path="/history/:id">
+            <HistoryTable />
           </PrivateRoute>
           <PrivateRoute adminOnly path="/history">
             <History />
