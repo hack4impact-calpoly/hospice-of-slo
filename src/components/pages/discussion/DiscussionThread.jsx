@@ -1,4 +1,3 @@
-/* eslint-disable no-shadow */
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import 'firebase/firestore';
@@ -14,6 +13,11 @@ const PostWrapper = styled.div`
   padding: 0 15%;
   display: flex;
   flex-direction: column;
+`;
+const StyledText = styled.p`
+  text-align: center;
+  font-size: 16px;
+  color: #6C6B6B;
 `;
 
 const StyledPost = styled.button`
@@ -48,6 +52,8 @@ export default function DiscussionThread() {
 
   const [title, setTitle] = useState('');
   const [posts, setPosts] = useState([]);
+  // Get Messages
+  const { messages } = discussion;
   const [message, setMessage] = useState('');
 
   const [show, setShow] = useState(false);
@@ -61,10 +67,8 @@ export default function DiscussionThread() {
   async function getPosts() {
     // Get Title
     setTitle(discussion.name);
-    // Get Messages
-    const { messages } = discussion;
-    // Populate each user ref from a message
-    let usersData = messages.map((message) => message.userRef.get());
+    // Populate each user ref from a message. Changed "message" to "m" because of ESlint
+    let usersData = messages.map((m) => m.userRef.get());
     usersData = await Promise.all(usersData);
     const users = [];
     usersData.forEach((user) => users.push(user.data()));
@@ -75,6 +79,16 @@ export default function DiscussionThread() {
     }
     setPosts(populatedMessages);
   }
+  const displayEmptySignal = () => {
+    console.log(messages.length);
+    /* only display empty message if there
+         * are no messages */
+    if (messages.length <= 0) {
+      return <StyledText>This forum has no messages yet</StyledText>;
+    }
+    // return dummy div, ESlint needs map() to have a default return
+    return <div />;
+  };
 
   const postMessage = async () => {
     const db = firebase.firestore();
@@ -97,6 +111,8 @@ export default function DiscussionThread() {
   return (
     <div>
       <HeaderWithBackArrow>{title}</HeaderWithBackArrow>
+      <FloatingActionButton>+</FloatingActionButton>
+      {displayEmptySignal()}
       <FloatingActionButton onClick={handleShow}>+</FloatingActionButton>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
