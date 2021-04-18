@@ -1,4 +1,5 @@
 import React from 'react';
+import { Helmet } from 'react-helmet';
 import {
   Route,
   Switch,
@@ -39,6 +40,11 @@ firebase.initializeApp(firebaseConfig);
 export default function App() {
   return (
     <div className="main">
+      <Helmet>
+        <title>Hospice of SLO</title>
+        <meta name="keywords" content="Hospice of SLO Login, SLO Hospice Login, SLO Hospice Volunteer Login, SLO Hospice Volunteer" />
+        <meta name="description" content="Hospice of SLO's Volunteer Management System and their forum for updates" />
+      </Helmet>
       <AuthProvider>
         <Switch>
           <PrivateRoute exact path="/">
