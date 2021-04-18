@@ -27,14 +27,15 @@ const Arrow = styled(BiChevronRight)`
   align-self: center;
   margin-left: auto;
   font-size: 30px;
+  font-weight: bold;
 `;
 
 export default function HistoryForum(props) {
-  const { title, docId } = props;
-  const discussionLink = `/history/${docId}`;
+  const { title } = props;
+  const tableLink = `/history/${title}`;
   return (
-    <Col md={9} lg={8} xl={7}>
-      <ForumLink to={discussionLink} style={{ width: '100%' }}>
+    <Col md={11} lg={10} xl={9}>
+      <ForumLink to={tableLink} style={{ width: '100%' }}>
         <ForumBox
           className="mt-3 d-flex"
         >
@@ -48,5 +49,4 @@ export default function HistoryForum(props) {
 
 HistoryForum.propTypes = {
   title: PropTypes.string.isRequired,
-  docId: PropTypes.string.isRequired,
 };

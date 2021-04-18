@@ -132,8 +132,6 @@ const retrieveHistoryShifts = async (dbRef) => {
       historyShifts.push(thisShift);
     });
   });
-  console.log('historyShiftsOUTER');
-  console.log(historyShifts);
   return historyShifts;
 };
 
@@ -154,8 +152,6 @@ export default function AuthProvider({ children }) {
         retrieveHistoryShifts(dbRef),
       ]);
       const [user, users, vigils, discussions, historyShifts] = firestoreResponse;
-      console.log('historyShiftsMAIn');
-      console.log(historyShifts);
       // Initialize redux store
       dispatch(actions.user.initializeUser(user));
       dispatch(actions.users.initializeUsers(users));

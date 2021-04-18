@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-// import { useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Col, Row } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
@@ -19,43 +19,19 @@ const StyledCol = styled(Col)`
 `;
 
 export default function HistoryTable() {
-  // const storeUsers = useSelector((state) => state.users.users);
   const { id } = useParams();
-  // const allShifts = [];
-  // storeUsers.forEach((user) => {
-  //     if (user.prevShifts.length > 0) {
-  //     user.prevShifts.forEach((shift) => {
-  //         const oneShift = {};
-  //         oneShift.ref = shift;
-  //         oneShift.name = user.name;
-  //         allShifts.push(oneShift);
-  //     });
-  //     }
-  // });
+  const storeHistory = useSelector((state) => state.historyShifts.historyShifts);
 
-  // const data = allShifts.map(async (shift) => {
-  //     const shiftData = {
-  //     name: shift.name,
-  //     };
-  //     await shift.ref.get().then((docSnapshot) => {
-  //     const {
-  //         address, shiftStartTime, shiftEndTime,
-  //     } = docSnapshot.data();
-  //     shiftData.vigil = address;
-  //     shiftData.date = shiftStartTime;
-  //     shiftData.time = shiftEndTime;
-  //     });
-  //     console.log('SHIFT DATA');
-  //     console.log(shiftData);
-  //     return shiftData;
-  // });
-
-  // console.log('data');
-  // console.log(data);
+  const vigilHistory = [];
+  storeHistory.forEach((shift) => {
+    if (shift.address === id) {
+      vigilHistory.push(shift);
+    }
+  });
 
   function aRow(col1, col2, col3, col4, color) {
     return (
-      <StyledRow style={{ background: color }} className="justify-content-md-center">
+      <StyledRow key={col4} style={{ background: color }} className="justify-content-md-center">
         <StyledCol>
           {col1}
         </StyledCol>
@@ -71,15 +47,25 @@ export default function HistoryTable() {
       </StyledRow>
     );
   }
-  const topRow = aRow('Name', 'Vigil', 'Date', 'Time', '#C4C4C4');
 
-  // const pastRows = data.map((r) => aRow(r.name, r.vigil, r.date, r.time, '#DCDCDC'));
+  const table = [aRow('Name', 'Vigil', 'Date', 'Time', '#C4C4C4')];
+
+  const dateOptions = { month: 'numeric', day: 'numeric', year: '2-digit' };
+  const timeOptions = { hour: 'numeric', minute: 'numeric', hour12: true };
+
+  vigilHistory.forEach((r) => {
+    const timePer = `${r.shiftStartTime.toDate().toLocaleTimeString(undefined, timeOptions)} 
+        to ${r.shiftEndTime.toDate().toLocaleTimeString(undefined, timeOptions)}`;
+    const shiftDate = `${r.shiftStartTime.toDate().toLocaleDateString(undefined, dateOptions)}`;
+
+    table.push(aRow(r.name, r.address, shiftDate, timePer, '#DCDCDC'));
+  });
 
   return (
     <div>
       <HeaderWithNav>{id}</HeaderWithNav>
       <Container>
-        {topRow}
+        {table.length > 1 ? table : 'This vigil has no shift history.'}
       </Container>
     </div>
   );
