@@ -4,6 +4,8 @@ import {
 } from 'react-bootstrap';
 import styled from 'styled-components';
 import firebase from 'firebase';
+import PropTypes from 'prop-types';
+import { discussionPropType } from '../../../dataStructures/propTypes';
 
 const StyledCreate = styled.button`
   color: white;
@@ -55,41 +57,57 @@ const AddThread = styled(Button)`
   }
 `;
 
-export default function CreateThread() {
+export default function CreateThread(props) {
+  const { discussion, isEditing } = props;
   const [title, setTitle] = useState('');
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  async function createDiscussionPress() {
+  async function discussionPress() {
     // creates a new discussion
     const db = firebase.firestore();
     const discussions = db.collection('discussions');
-    discussions.add({
-      name: title,
-      dateCreated: firebase.firestore.FieldValue.serverTimestamp(), // time stamp
-      pinned: true, // pinned is true by default when manual discussion is created.
-    })
-      .then(() => {
-        console.log('Document successfully written!');
-        db.handleClose();
+    if (isEditing) { // editing a Discussion name
+      discussions.doc(discussion.id)
+        .update({
+          name: title,
+        })
+        .then(() => {
+          console.log('Document successfully updated');
+          handleClose();
+        })
+        .catch((error) => {
+          console.error('Error writing document: ', error);
+        });
+    } else { // creating a Discussion
+      discussions.add({
+        name: title,
+        dateCreated: firebase.firestore.FieldValue.serverTimestamp(), // time stamp
+        pinned: true, // pinned is true by default when manual discussion is created.
       })
-      .catch((error) => {
-        console.error('Error writing document: ', error);
-      });
+        .then(() => {
+          console.log('Document successfully written!');
+          handleClose();
+        })
+        .catch((error) => {
+          console.error('Error writing document: ', error);
+        });
+    }
   }
 
   return (
     <div>
-      <AddThread size="sm" onClick={handleShow}>+</AddThread>
+      {isEditing ? <div role="button" tabIndex={0} onKeyPress={handleShow} onClick={handleShow}>edit</div> : <AddThread size="sm" onClick={handleShow}>+</AddThread>}
       <Modal show={show} onEscapeKeyDown={handleClose} onHide={handleClose} centered>
         <Modal.Body>
           <StyledCol>
-            <StyledHeading> Create New Discussion </StyledHeading>
+            <StyledHeading>{isEditing ? 'Edit Discussion' : 'Create New Discussion'}</StyledHeading>
             <Form.Control
               className="mb-3"
-              placeholder="Discussion Name"
+              placeholder={isEditing ? discussion.name : 'Discussion Name'}
+              defaultValue={isEditing ? discussion.name : ''}
               onChange={(e) => {
                 setTitle(e.target.value);
                 console.log(title);
@@ -97,7 +115,12 @@ export default function CreateThread() {
             />
             <StyledRow className="mt-3">
               <StyledCancel onClick={handleClose}>Cancel</StyledCancel>
-              <StyledCreate type="submit" onClick={createDiscussionPress}>Create</StyledCreate>
+              <StyledCreate
+                type="submit"
+                onClick={isEditing ? discussionPress : discussionPress}
+              >
+                {isEditing ? 'Done' : 'Create'}
+              </StyledCreate>
             </StyledRow>
           </StyledCol>
         </Modal.Body>
@@ -105,3 +128,13 @@ export default function CreateThread() {
     </div>
   );
 }
+
+CreateThread.propTypes = {
+  discussion: discussionPropType,
+  isEditing: PropTypes.bool,
+};
+
+CreateThread.defaultProps = {
+  discussion: {},
+  isEditing: false,
+};
