@@ -36,13 +36,9 @@ export default function Schedule(props) {
     setEventData(vigilsData);
   };
 
-  const fetchData = async () => {
-    await getVigilInfo();
-  };
-
   useEffect(() => {
-    fetchData();
-  }, []); // This useEffect block gets whole collection of vigil documents upon rendering of this component
+    getVigilInfo();
+  }, [storeVigils]); // This useEffect block gets whole collection of vigil documents upon redux updates
 
   return (
     <div>
