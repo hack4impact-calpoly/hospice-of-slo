@@ -10,7 +10,7 @@ const retrieveUser = async (dbRef) => {
   const temp = await userRef.get();
   const ps = [];
   temp.data().prevShifts.forEach((shift) => {
-    ps.push(shift.path);
+    ps.push(shift); // instead of ps.push(shift.path)
   });
 
   const user = {
