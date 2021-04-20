@@ -10,7 +10,7 @@ const retrieveUser = async (dbRef) => {
   const temp = await userRef.get();
   const ps = [];
   temp.data().prevShifts.forEach((shift) => {
-    ps.push(shift.path);
+    ps.push(shift); // instead of ps.push(shift.path)
   });
 
   const user = {
@@ -90,7 +90,6 @@ const retrieveDiscussions = async (dbRef) => {
         userRef,
       });
     });
-
     discussions.push({
       id: doc.id,
       dateCreated,
@@ -101,8 +100,39 @@ const retrieveDiscussions = async (dbRef) => {
 
     discussionsIds.push(doc.id);
   });
-
   return discussions;
+};
+
+const retrieveHistoryShifts = async (dbRef) => {
+  const historyShifts = [];
+  const vigilsRef = dbRef.collection('vigils');
+  const vigilsSnapshot = await vigilsRef.get();
+
+  vigilsSnapshot.forEach(async (doc) => {
+    const historyShiftsRef = vigilsRef.doc(doc.id).collection('shifts');
+    const historyShiftsSnapshot = await historyShiftsRef.get();
+
+    historyShiftsSnapshot.forEach(async (shift) => {
+      const {
+        address, shiftEndTime, shiftStartTime, userRef,
+      } = shift.data();
+      const userSnapshot = await userRef.get();
+
+      const {
+        name,
+      } = userSnapshot.data();
+
+      const thisShift = {
+        id: doc.id,
+        address,
+        shiftEndTime,
+        shiftStartTime,
+        name,
+      };
+      historyShifts.push(thisShift);
+    });
+  });
+  return historyShifts;
 };
 
 export default function AuthProvider({ children }) {
@@ -119,14 +149,15 @@ export default function AuthProvider({ children }) {
         retrieveUsers(dbRef), // Gets all users contact/account information
         retrieveVigils(dbRef),
         retrieveDiscussions(dbRef), // Gets discussions
+        retrieveHistoryShifts(dbRef),
       ]);
-      const [user, users, vigils, discussions] = firestoreResponse;
-
+      const [user, users, vigils, discussions, historyShifts] = firestoreResponse;
       // Initialize redux store
       dispatch(actions.user.initializeUser(user));
       dispatch(actions.users.initializeUsers(users));
       dispatch(actions.vigils.initalizeVigils(vigils));
       dispatch(actions.discussions.initializeDiscussions(discussions));
+      dispatch(actions.history.initializeHistory(historyShifts));
 
       // navigation.navigate('Root');
     };

@@ -1,14 +1,16 @@
 import React from 'react';
 import { Col } from 'react-bootstrap';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { BiChevronRight } from 'react-icons/bi';
+import Edit from './EditDiscussion';
 
 const ForumBox = styled.button`
+  text-align: left; 
   width: 100%;
   border: none;
-  padding: 20px;
   opacity: 80%;
   font-size: 18px;
 
@@ -18,9 +20,15 @@ const ForumBox = styled.button`
 `;
 
 const ForumLink = styled(Link)`
+  padding: 20px;
   :hover{
     text-decoration: none; 
   }
+`;
+
+const Dots = styled(Edit)`
+  position: absolute;
+  right: 20px;
 `;
 
 const Arrow = styled(BiChevronRight)`
@@ -30,18 +38,17 @@ const Arrow = styled(BiChevronRight)`
 `;
 
 export default function Forum(props) {
+  const isAdmin = useSelector((state) => state.user.user.isAdmin);
   const { title, docId } = props;
   const discussionLink = `/discussion/${docId}`;
   return (
     <Col md={9} lg={8} xl={7}>
-      <ForumLink to={discussionLink} style={{ width: '100%' }}>
-        <ForumBox
-          className="mt-3 d-flex"
-        >
+      <ForumBox className="mt-3 d-flex">
+        <ForumLink to={discussionLink} style={{ width: '100%' }}>
           {title}
-          <Arrow />
-        </ForumBox>
-      </ForumLink>
+        </ForumLink>
+        {isAdmin ? <Dots docId={docId} /> : <Arrow />}
+      </ForumBox>
     </Col>
   );
 }

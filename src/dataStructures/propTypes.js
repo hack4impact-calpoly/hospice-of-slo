@@ -9,4 +9,13 @@ const eventPropType = PropTypes.shape({
   notes: PropTypes.string,
 });
 
+const discussionPropType = PropTypes.shape({
+  id: PropTypes.string,
+  dateCreated: PropTypes.t,
+  name: PropTypes.string,
+  pinned: PropTypes.bool,
+  messages: PropTypes.arrayOf(PropTypes.object),
+});
+
 export default eventPropType;
+export { discussionPropType };
