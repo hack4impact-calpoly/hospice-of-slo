@@ -13,6 +13,7 @@ import 'firebase/firestore';
 import { useHistory } from 'react-router-dom';
 import moment from 'moment';
 import actions from '../../../../actions';
+import ShiftCalendar from './shiftCalendar';
 
 const StyledCard = styled(Card)`
   border: none;
@@ -73,6 +74,14 @@ const StyledMidCol = styled(Col)`
   font-weight: bold;
 `;
 
+const LessPadedText = styled(Card.Text)`
+  margin-bottom: 5px;
+`;
+
+const PaddedSubtitle = styled(Card.Subtitle)`
+  padding: 50px 0 10px;
+`;
+
 export default function ShiftDetails(props) {
   const {
     id, address, dates, startTime, endTime, notes, setSelectVigil,
@@ -81,6 +90,9 @@ export default function ShiftDetails(props) {
   const [show, setShow] = useState(false);
   const history = useHistory();
   const dispatch = useDispatch();
+  const vigil = {
+    id, address, dates, startTime, endTime, notes,
+  };
 
   const dateFormat = 'dddd, MMM D';
   const formattedDate = dates.length === 1
@@ -140,7 +152,10 @@ export default function ShiftDetails(props) {
 
   return (
     <Container>
-      <Row className="mt-2">
+      <Row>
+        <Col>
+          <ShiftCalendar vigil={vigil} />
+        </Col>
         <Col>
           <StyledCard>
             { isAdmin
@@ -152,11 +167,11 @@ export default function ShiftDetails(props) {
               )
               : null}
             <Card.Title className="font-weight-bold">{address}</Card.Title>
-            <Card.Text>{formattedDate}</Card.Text>
+            <LessPadedText>{formattedDate}</LessPadedText>
             <Card.Text>{formattedTime}</Card.Text>
             <Card.Subtitle>Notes</Card.Subtitle>
             <Card.Text>{notes}</Card.Text>
-            <Card.Subtitle className="mb-1">Time</Card.Subtitle>
+            <PaddedSubtitle>Sign up for a Shift</PaddedSubtitle>
             <Row>
               <Col>
                 <StyledSelect
