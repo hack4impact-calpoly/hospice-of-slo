@@ -1,47 +1,64 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import timeGridPlugin from '@fullcalendar/timegrid';
+import { useSelector } from 'react-redux';
+import interactionPlugin from '@fullcalendar/interaction';
 import eventPropType from '../../../../dataStructures/propTypes';
 
 function ShiftCalendar({ vigil }) {
   const {
-    dates, startTime, endTime,
+    /* eslint-disable-next-line */
+    dates, startTime, endTime, // TODO: Update imports to reflect DEV-63
   } = vigil;
 
-  // Dummy Data
-  const shifts = [
-    {
-      start: new Date('April 20, 2021 08:00'),
-      end: new Date('April 20, 2021 09:30'),
-      title: 'Shift 1',
-      backgroundColor: '#8FCBD4',
-    },
-    {
-      start: new Date('April 20, 2021 12:00'),
-      end: new Date('April 20, 2021 14:00'),
-      title: 'Shift 2',
-      backgroundColor: '#8FCBD4',
-    },
-    {
-      start: new Date('April 20, 2021 13:00'),
-      end: new Date('April 20, 2021 16:00'),
-      title: 'Shift 3',
-      backgroundColor: '#8FCBD4',
-    },
-  ];
-  // End Dummy Data
+  const [eventData, setEventData] = useState([]);
 
+  // Gets all shift Data from redux store
+  const storeShifts = useSelector((state) => state.historyShifts.historyShifts);
+
+  // Gets all shifts from the vigil that was clicked on.
+  const vigilShifts = [];
+  storeShifts.forEach((shift) => {
+    if (shift.address === vigil.address) {
+      vigilShifts.push(shift);
+    }
+  });
+
+  const getShifts = () => {
+    const vigilsData = [];
+    vigilShifts.forEach((shift) => {
+      vigilsData.push({
+        title: shift.name,
+        start: shift.shiftStartTime.toDate().toISOString(),
+        end: shift.shiftEndTime.toDate().toISOString(),
+        backgroundColor: '#8FCBD4',
+      });
+    });
+    setEventData(vigilsData);
+  };
+
+  useEffect(() => {
+    getShifts();
+  }, [storeShifts]); // This useEffect block gets whole collection of vigil documents upon redux updates
+
+  const volunteerCalendarHeader = {
+    center: '',
+    end: 'prev,next',
+  };
+  const validRange = {
+    start: dates[0], // TODO: This will need to be changed to be endTime
+    end: dates[(dates.length - 1)], // TODO: This will need to be changed to be endTime, also add one to the date.
+  };
   return (
     <FullCalendar
       initialView="timeGridDay"
-      plugins={[timeGridPlugin]}
+      plugins={[timeGridPlugin, interactionPlugin]}
       initialDate={dates[0]}
-      events={[...shifts]}
-      headerToolbar={false}
+      validRange={validRange}
+      events={[...eventData]}
+      headerToolbar={volunteerCalendarHeader}
       allDaySlot={false}
-      slotMinTime={startTime}
-      slotMaxTime={endTime}
-      height="100%"
+      height="400px"
       dayHeaderFormat={{ month: 'numeric', day: 'numeric' }}
       slotEventOverlap={false}
     />

@@ -103,7 +103,7 @@ export default function Calendar(props) {
           />
         )}
       <Modal show={showModal} size="lg" onEscapeKeyDown={handleCloseClick} onHide={handleCloseClick} centered>
-        <Modal.Header closeButton>Vigil Details</Modal.Header>
+        <Modal.Header className="font-weight-bold" closeButton>{clickedInfo.address}</Modal.Header>
         <Modal.Body>
           <ShiftDetails
             id={clickedInfo.id}

@@ -66,20 +66,8 @@ const StyledSelect = styled(Select)`
   padding-bottom: 15px;
 `;
 
-const StyledMidCol = styled(Col)`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  fontFamily Roboto;
-  font-weight: bold;
-`;
-
 const LessPadedText = styled(Card.Text)`
   margin-bottom: 5px;
-`;
-
-const PaddedSubtitle = styled(Card.Subtitle)`
-  padding: 50px 0 10px;
 `;
 
 export default function ShiftDetails(props) {
@@ -111,13 +99,14 @@ export default function ShiftDetails(props) {
     const db = firebase.firestore();
     const vigilRef = db.collection('vigils').doc(id);
     vigilRef.collection('shifts').add({
-      shiftStartTime,
-      shiftEndTime,
+      address: vigil.address,
+      shiftStartTime, // TODO: This will need to be put into firebase as a timeStamp
+      shiftEndTime, // TODO: This will need to be put into firebase as a timeStamp
       userRef: db.doc(`users/${currentUser}`),
     })
       .then(() => {
         console.log('Document successfully written!');
-        // Should navigate back and update with redux.
+        // TODO: Redux changes should be added here instead of the console.log
       })
       .catch((error) => {
         console.error('Error writing document: ', error);
@@ -130,7 +119,7 @@ export default function ShiftDetails(props) {
     setShow(false);
   }
 
-  const times = [ // Placeholder Values. Change at some point
+  const times = [ // TODO: remove this once select is converted to a dateTime
     { value: '8:00', label: '8:00 A.M.' },
     { value: '8:30', label: '8:30 A.M.' },
     { value: '9:00', label: '9:00 A.M.' },
@@ -153,10 +142,13 @@ export default function ShiftDetails(props) {
   return (
     <Container>
       <Row>
-        <Col>
-          <ShiftCalendar vigil={vigil} />
+        <Col xs={12} sm={12} md={12} lg={6} className="mb-4">
+          <div>
+            <Card.Title className="font-weight-bold">Schedule</Card.Title>
+            <ShiftCalendar vigil={vigil} />
+          </div>
         </Col>
-        <Col>
+        <Col xs={12} sm={12} md={12} lg={6}>
           <StyledCard>
             { isAdmin
               ? (
@@ -166,14 +158,15 @@ export default function ShiftDetails(props) {
                 </StyledDiv>
               )
               : null}
-            <Card.Title className="font-weight-bold">{address}</Card.Title>
+            <Card.Title className="font-weight-bold">Details</Card.Title>
             <LessPadedText>{formattedDate}</LessPadedText>
             <Card.Text>{formattedTime}</Card.Text>
-            <Card.Subtitle>Notes</Card.Subtitle>
+            <Card.Subtitle className="font-weight-bold">Notes</Card.Subtitle>
             <Card.Text>{notes}</Card.Text>
-            <PaddedSubtitle>Sign up for a Shift</PaddedSubtitle>
+            <Card.Subtitle className="font-weight-bold pb-2">Sign up for a Shift</Card.Subtitle>
             <Row>
               <Col>
+                {/* TODO: Make this select a DateTime */}
                 <StyledSelect
                   onChange={(e) => setShiftStart(e.value)}
                   options={times}
@@ -181,10 +174,9 @@ export default function ShiftDetails(props) {
                   maxMenuHeight={250}
                 />
               </Col>
-              <StyledMidCol sm={1}>
-                <p>to</p>
-              </StyledMidCol>
+              <p className="pt-1">to</p>
               <Col>
+                {/* TODO: Make this select a DateTime */}
                 <StyledSelect
                   onChange={(e) => setShiftEnd(e.value)}
                   options={times}
@@ -198,7 +190,7 @@ export default function ShiftDetails(props) {
             </Card.Text>
             <StyledModal show={show} centered>
               <Modal.Body>
-                Are you sure you want to delete this Vigil?
+                Are you sure you want delete this Vigil?
               </Modal.Body>
               <Modal.Footer>
                 <StyledButton onClick={() => setShow(false)}>Cancel</StyledButton>
