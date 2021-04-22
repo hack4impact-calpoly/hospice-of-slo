@@ -39,8 +39,12 @@ export default function ContactCard({
   return (
     <GreyDiv>
       <Name>{name}</Name>
-      <Email>{email}</Email>
-      <Phone>{phone}</Phone>
+      <a href={`mailto:${email}`}>
+        <Email>{email}</Email>
+      </a>
+      <a href={`sms:+1-${phone}`}>
+        <Phone>{phone}</Phone>
+      </a>
     </GreyDiv>
   );
 }
