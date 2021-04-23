@@ -130,7 +130,7 @@ export default function ShiftDetails(props) {
     setShow(false);
   }
 
-  const times = [ // Placeholder Values. Change at some point
+  const times = [ // Placeholder Values. Will be removable at some point.
     { value: '8:00', label: '8:00 A.M.' },
     { value: '8:30', label: '8:30 A.M.' },
     { value: '9:00', label: '9:00 A.M.' },
