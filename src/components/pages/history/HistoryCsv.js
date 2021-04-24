@@ -16,9 +16,9 @@ async function generateCSV(shifts) {
   };
   const shiftsCSV = await json2csvAsync(shifts, options);
 
-  // Create CSV File
+  // Create CSV File, file name is history_for_ADDRESS_.csv
   const storageRef = firebase.storage().ref();
-  const historyCsvRef = storageRef.child('history.csv');
+  const historyCsvRef = storageRef.child(`history_for${(JSON.stringify(shifts[0].address)).split(/\s/).join('')}.csv`);
   await historyCsvRef.putString(shiftsCSV);
 
   // Download CSV File

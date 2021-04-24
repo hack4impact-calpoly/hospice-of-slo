@@ -44,7 +44,7 @@ export default function HistoryTable() {
       shift.startTime = `${shift.shiftStartTime.toDate().toLocaleTimeString(undefined, timeOptions)}`;
       shift.endTime = `${shift.shiftEndTime.toDate().toLocaleTimeString(undefined, timeOptions)}`;
       shift.duration = `${moment(shift.shiftEndTime.toDate()).diff(moment(shift.shiftStartTime.toDate()), 'hours')}`;
-      
+      // Acceptable to add fields to JSON Object data? we are just this JSON Object to make the CSV file, esLint does not like this.
       vigilHistory.push(shift);
     }
   });
