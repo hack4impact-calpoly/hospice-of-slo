@@ -51,10 +51,10 @@ The Hospice of SLO project team consists of 9 Cal Poly students. Over the course
 ## Getting Started for Developers 
 
 ### Clone the repository
-``` git clone https://github.com/hack4impact-calpoly/hospice-of-slo.git ```
+```git clone https://github.com/hack4impact-calpoly/hospice-of-slo.git```
 
 #### Run the frontend
-1. ```npm start ``` (if its your first time, you might need to run ```npm i```)
+1. ```npm start``` (if its your first time, you might need to run ```npm i```)
 
 ### Making Changes
 1. Before you start making changes, ```git pull``` and then ```npm i```
