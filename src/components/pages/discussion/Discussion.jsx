@@ -11,9 +11,7 @@ import Forum from './Forum';
 const FormS = styled(Form.Control)`
   font-size: 18px;
   background-color: #E5E5E5;
-  width: 57.5%;
-  position: relative;
-  margin: 0 auto;
+  width: 100%;
 `;
 
 export default function Discussion() {
@@ -63,17 +61,18 @@ export default function Discussion() {
     <div>
       <HeaderWithNav>Discussions</HeaderWithNav>
       {isAdmin ? <CreateThread /> : null}
-      <Col className="search">
-        <FormS
-          className="mb-3"
-          placeholder="search..."
-          onChange={(e) => {
-            setSearchTerm(e.target.value);
-          }}
-        />
-      </Col>
-
       <Container fluid>
+        <Row className="justify-content-md-center">
+          <Col className="search" md={9} lg={8} xl={7}>
+            <FormS
+              className="mb-3"
+              placeholder="search..."
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+              }}
+            />
+          </Col>
+        </Row>
 
         {forumsPinned}
         {forumsNotPinned}
