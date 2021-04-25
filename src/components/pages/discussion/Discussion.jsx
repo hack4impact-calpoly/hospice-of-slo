@@ -20,17 +20,6 @@ export default function Discussion() {
 
   const storeDiscussions = useSelector((state) => state.discussions.discussions);
 
-  const forumsPinned = storeDiscussions.map((d) => {
-    if (d.pinned) {
-      return ([
-        <Row key={d.name} className="justify-content-md-center">
-          <Forum title={d.name} docId={d.id} />
-        </Row>,
-      ]);
-    }
-
-    return null;
-  });
   function compare(a, b) { // sorts in alphabetical order
     if (a.name < b.name) {
       return -1;
@@ -41,10 +30,22 @@ export default function Discussion() {
     return 0;
   }
   // sort the discussions by most recently created
-  storeDiscussions.sort((a, b) => a.dateCreated - b.dateCreated);
-  storeDiscussions.reverse();
+  // storeDiscussions.sort((a, b) => a.dateCreated - b.dateCreated);
+  // storeDiscussions.reverse();
 
-  /* organize formums based on search and map them */
+  /* organize pinned/not pinned forumns based on search and map them */
+  const forumsPinned = storeDiscussions.filter((discussion) => discussion.name.toLowerCase().includes(searchTerm.toLowerCase())).sort(compare).map((d) => {
+    if (d.pinned) {
+      return ([
+        <Row key={d.name} className="justify-content-md-center">
+          <Forum title={d.name} docId={d.id} />
+        </Row>,
+      ]);
+    }
+
+    return null;
+  });
+
   const forumsNotPinned = storeDiscussions.filter((discussion) => discussion.name.toLowerCase().includes(searchTerm.toLowerCase())).sort(compare).map((d) => {
     if (!d.pinned) {
       return ([

@@ -7,3 +7,4 @@ export const INITIALIZE_HISTORY = 'INITIALIZE_HISTORY';
 export const ADD_VIGIL = 'ADD_VIGIL';
 export const EDIT_VIGIL = 'EDIT_VIGIL';
 export const DELETE_VIGIL = 'DELETE_VIGIL';
+export const ADD_DISCUSSION = 'ADD_DISCUSSION';

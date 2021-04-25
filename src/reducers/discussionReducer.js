@@ -1,4 +1,6 @@
-import { INITIALIZE_DISCUSSIONS } from '../reduxConstants/index';
+import {
+  INITIALIZE_DISCUSSIONS, ADD_DISCUSSION,
+} from '../reduxConstants/index';
 
 const initialState = {
   discussions: [],
@@ -11,6 +13,12 @@ const discussionsReducer = (state = initialState, action) => {
       return {
         discussions: action.discussions,
       };
+    case ADD_DISCUSSION: {
+      const discussionsCopy = [...state.discussions];
+      discussionsCopy.push(action.payload.newDiscussion);
+      return { discussions: discussionsCopy };
+    }
+
     default:
       return state;
   }
