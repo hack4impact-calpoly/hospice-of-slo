@@ -4,8 +4,10 @@ import {
 } from 'react-bootstrap';
 import styled from 'styled-components';
 import firebase from 'firebase';
+import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import { discussionPropType } from '../../../dataStructures/propTypes';
+import actions from '../../../actions';
 
 const StyledCreate = styled.button`
   color: white;
@@ -65,6 +67,9 @@ export default function CreateThread(props) {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+  // Redux setup
+  const dispatch = useDispatch();
+
   async function discussionPress() {
     // creates a new discussion
     const db = firebase.firestore();
@@ -77,18 +82,21 @@ export default function CreateThread(props) {
         .then(() => {
           console.log('Document successfully updated');
           handleClose();
+          dispatch(actions.discussions.editDiscussion(discussion.id, { ...discussion, name: title }));
         })
         .catch((error) => {
           console.error('Error writing document: ', error);
         });
     } else { // creating a Discussion
-      discussions.add({
+      const newDiscussion = {
         name: title,
         dateCreated: firebase.firestore.FieldValue.serverTimestamp(), // time stamp
         pinned: true, // pinned is true by default when manual discussion is created.
-      })
-        .then(() => {
+      };
+      discussions.add(newDiscussion)
+        .then((backRef) => {
           console.log('Document successfully written!');
+          dispatch(actions.discussions.addDiscussion({ ...newDiscussion, id: backRef.id, messages: [] }));
           handleClose();
         })
         .catch((error) => {
