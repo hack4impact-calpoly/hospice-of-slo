@@ -1,5 +1,5 @@
 import {
-  INITIALIZE_DISCUSSIONS, ADD_DISCUSSION,
+  INITIALIZE_DISCUSSIONS, ADD_DISCUSSION, EDIT_DISCUSSION, DELETE_DISCUSSION,
 } from '../reduxConstants/index';
 
 const initialState = {
@@ -18,7 +18,16 @@ const discussionsReducer = (state = initialState, action) => {
       discussionsCopy.push(action.payload.newDiscussion);
       return { discussions: discussionsCopy };
     }
-
+    case EDIT_DISCUSSION: {
+      const discussionsCopy = state.discussions.filter((d) => d.id !== action.payload.oldDiscussionId);
+      discussionsCopy.push(action.payload.newDiscussion);
+      return { discussions: discussionsCopy };
+    }
+    case DELETE_DISCUSSION: {
+      const discussionsCopy = state.discussions.filter((d) => d.id !== action.payload.oldDiscussionId);
+      console.log(action.payload.oldDiscussionId);
+      return { discussions: discussionsCopy };
+    }
     default:
       return state;
   }

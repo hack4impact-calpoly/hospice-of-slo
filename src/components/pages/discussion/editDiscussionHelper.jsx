@@ -1,22 +1,27 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import firebase from 'firebase';
+import { useDispatch } from 'react-redux';
 import { discussionPropType } from '../../../dataStructures/propTypes';
+import actions from '../../../actions';
 
 export default function EditHelper(props) {
   const { isPinning, isDeleting, discussion } = props;
   const pin = discussion.pinned ? 'unpin' : 'pin';
 
+  const dispatch = useDispatch();
+
   const db = firebase.firestore();
   const discussions = db.collection('discussions');
   async function discussionPress() {
-    if (isPinning) { // editing a Discussion name
+    if (isPinning) { // editing a Discussion
       discussions.doc(discussion.id)
         .update({
           pinned: !(discussion.pinned),
         })
         .then(() => {
           console.log('Document successfully updated');
+          dispatch(actions.discussions.editDiscussion(discussion.id, { ...discussion, pinned: !(discussion.pinned) }));
         })
         .catch((error) => {
           console.error('Error writing document: ', error);
@@ -27,6 +32,7 @@ export default function EditHelper(props) {
         .delete()
         .then(() => {
           console.log('Document successfully deleted');
+          dispatch(actions.discussions.deleteDiscussion(discussion.id));
         })
         .catch((error) => {
           console.error('Error deleting document: ', error);

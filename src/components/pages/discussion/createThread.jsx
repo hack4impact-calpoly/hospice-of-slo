@@ -82,6 +82,7 @@ export default function CreateThread(props) {
         .then(() => {
           console.log('Document successfully updated');
           handleClose();
+          dispatch(actions.discussions.editDiscussion(discussion.id, { ...discussion, name: title }));
         })
         .catch((error) => {
           console.error('Error writing document: ', error);
