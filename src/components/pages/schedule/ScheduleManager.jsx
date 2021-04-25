@@ -6,7 +6,7 @@ import Schedule from './Schedule';
 function ScheduleManager() {
   const match = useRouteMatch();
   const [selectVigil, setSelectVigil] = useState({
-    id: '', address: '', dates: [], endTime: '', startTime: '', notes: '',
+    id: '', address: '', endTime: new Date(), startTime: new Date(), notes: '',
   });
 
   return (

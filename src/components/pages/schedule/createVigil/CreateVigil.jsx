@@ -9,9 +9,9 @@ import { useDispatch } from 'react-redux';
 import HeaderWithBackArrow from '../../../navigation/back-header';
 import { SubmitButton, CancelButton } from '../../../../styled-components/form-components';
 import {
-  timeComesBefore, dateComesBefore, getDateRange, eventDataToFront,
+  timeComesBefore, eventDataToFront, combineDateAndTime, dateComesBefore,
 } from './CreateVigilHelper';
-import eventPropType from '../../../../dataStructures/propTypes';
+import { vigilPropType } from '../../../../dataStructures/propTypes';
 import actions from '../../../../actions';
 
 // Styled Components
@@ -35,21 +35,28 @@ function CreateVigil({ curEvent }) {
 
   // Form Stuff
   const {
-    register, watch, handleSubmit, errors,
+    register, getValues, handleSubmit, errors,
   } = useForm({ defaultValues: defaultVals });
   const history = useHistory();
 
   async function onSubmit(data, event) {
     event.preventDefault();
+    console.log(data);
     const {
-      repeats, endRepeatDate, date, ...shift
+      address, startDate, startTime, endDate, endTime, notes,
     } = data;
-    shift.dates = repeats ? getDateRange(date, endRepeatDate) : [date];
+    const shift = {
+      address,
+      startTime: combineDateAndTime(startDate, startTime),
+      endTime: combineDateAndTime(endDate, endTime),
+      notes,
+    };
     const db = firebase.firestore();
-    if (isEditing) {
+
+    if (isEditing) { // Editing current event
       await db.collection('vigils').doc(curEvent.id).set(shift);
       dispatch(actions.vigils.editVigil(curEvent.id, { ...shift, id: curEvent.id }));
-    } else {
+    } else { // Creating new event
       const backRef = await db.collection('vigils').add(shift);
       await db.collection('discussions').add({
         name: shift.address,
@@ -58,28 +65,25 @@ function CreateVigil({ curEvent }) {
       });
       dispatch(actions.vigils.addVigil({ ...shift, id: backRef.id }));
     }
+
     history.push('/schedule');
   }
 
   // Validation Functions
   /* Current Validation:
         - location, date, startTime, and endTime are required
-        - endTime must come after startTime
-        - If event is repeating, endRepeatDate is required and must come after the start date
+        - endDate must be the same as or come after startDate
+        - If startDate and endDate are the same, startTime must come before endTime
     */
-  function isEndDateRequired(endRepeatDate) {
-    const repeats = watch('repeats', false);
-    return !repeats || !!endRepeatDate;
-  }
 
-  function endRepeatDateFollows(endRepeatDate) {
-    const startRepeatDate = watch('date');
-    return dateComesBefore(startRepeatDate, endRepeatDate);
+  function endDateAfterStart(endDate) {
+    const startDate = getValues('startDate');
+    return dateComesBefore(startDate, endDate);
   }
 
   function endTimeAfterStart(endTime) {
-    const startTime = watch('startTime');
-    return timeComesBefore(startTime, endTime);
+    const { startDate, endDate, startTime } = getValues();
+    return startDate !== endDate || timeComesBefore(startTime, endTime);
   }
 
   // React Component
@@ -94,23 +98,36 @@ function CreateVigil({ curEvent }) {
         </Form.Group>
 
         <Form.Group>
-          <Form.Label>Date</Form.Label>
-          <Form.Control type="date" name="date" ref={register({ required: true })} isInvalid={!!errors.date} />
-          <Form.Control.Feedback type="invalid">Please provide a date</Form.Control.Feedback>
+          <Form.Label>Start</Form.Label>
+          <Form.Row>
+            <Col>
+              <Form.Control type="date" name="startDate" ref={register({ required: true })} isInvalid={!!errors.startDate} />
+              <Form.Control.Feedback type="invalid">Please provide a starting date</Form.Control.Feedback>
+            </Col>
+            <CenterCol xs={2} md={1} />
+            <Col>
+              <Form.Control type="time" name="startTime" ref={register({ required: true })} isInvalid={!!errors.startTime} />
+              <Form.Control.Feedback type="invalid">Please provide a starting time</Form.Control.Feedback>
+            </Col>
+          </Form.Row>
         </Form.Group>
 
         <Form.Group>
-          <Form.Label>Time</Form.Label>
+          <Form.Label>End</Form.Label>
           <Form.Row>
             <Col>
-              <Form.Control type="time" name="startTime" ref={register({ required: true })} isInvalid={!!errors.startTime} />
-              <Form.Control.Feedback type="invalid">Please provide a start time</Form.Control.Feedback>
+              <Form.Control
+                type="date"
+                name="endDate"
+                ref={register({ required: true, validate: endDateAfterStart })}
+                isInvalid={!!errors.endDate}
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.endDate?.type === 'required' && 'Please provide an ending date'}
+                {errors.endDate?.type === 'validate' && 'This date should be the same as or after the starting date'}
+              </Form.Control.Feedback>
             </Col>
-
-            <CenterCol xs={2} md={1}>
-              <span>to</span>
-            </CenterCol>
-
+            <CenterCol xs={2} md={1} />
             <Col>
               <Form.Control
                 type="time"
@@ -125,33 +142,6 @@ function CreateVigil({ curEvent }) {
             </Col>
           </Form.Row>
         </Form.Group>
-
-        <Form.Group>
-          <Form.Check label="Repeats Daily" name="repeats" ref={register} />
-        </Form.Group>
-
-        {watch('repeats', false) && ( // Only render this field if the repeats box is checked
-        <Form.Group>
-          <Form.Label>End Repeat On</Form.Label>
-          <Form.Control
-            type="date"
-            name="endRepeatDate"
-            isInvalid={(!!errors.endRepeatDate)}
-            ref={register(
-              {
-                validate: {
-                  isRequired: isEndDateRequired,
-                  endRepeatDateComesAfterStart: endRepeatDateFollows,
-                },
-              },
-            )}
-          />
-          <Form.Control.Feedback type="invalid">
-            {errors.endRepeatDate?.type === 'isRequired' && 'End date is required if the event is repeating'}
-            {errors.endRepeatDate?.type === 'endRepeatDateComesAfterStart' && 'This date should occur after your starting date'}
-          </Form.Control.Feedback>
-        </Form.Group>
-        )}
 
         <Form.Group>
           <Form.Label>Notes</Form.Label>
@@ -171,7 +161,7 @@ function CreateVigil({ curEvent }) {
 }
 
 CreateVigil.propTypes = {
-  curEvent: eventPropType,
+  curEvent: vigilPropType,
 };
 
 CreateVigil.defaultProps = {

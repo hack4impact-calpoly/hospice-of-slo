@@ -1,56 +1,30 @@
-/* eslint-disable prefer-destructuring */
+import moment from 'moment';
 
 // Validation
 function timeComesBefore(time1, time2) {
-  const [hour1, minute1] = time1.split(':', 2);
-  const [hour2, minute2] = time2.split(':', 2);
-  if (parseInt(hour1, 10) < parseInt(hour2, 10)) {
-    return true;
-  }
-  if (parseInt(hour1, 10) > parseInt(hour2, 10)) {
-    return false;
-  }
-
-  return parseInt(minute1, 10) < parseInt(minute2, 10);
+  const timeFormat = 'HH:mm';
+  return moment(time1, timeFormat).isSameOrBefore(moment(time2, timeFormat));
 }
 
 function dateComesBefore(date1, date2) {
-  const d1 = new Date(date1);
-  const d2 = new Date(date2);
-  return d1 < d2;
+  return new Date(date1) <= new Date(date2);
 }
 
 // On Submit Helpers
-function formatDate(date) {
-  return date.toISOString().slice(0, 10);
-}
-
-function getDateRange(startDate, endDate) {
-  const curDate = new Date(startDate);
-  const stopDate = new Date(endDate);
-  const dates = [];
-  while (curDate <= stopDate) {
-    dates.push(formatDate(curDate));
-    curDate.setDate(curDate.getDate() + 1);
-  }
-  return dates;
+function combineDateAndTime(date, time) {
+  return new Date(`${date} ${time}`);
 }
 
 // Editing Helper
 function eventDataToFront(event) {
-  const { dates, ...eventCopy } = event;
-  if (dates.length === 1) {
-    eventCopy.date = dates[0];
-    eventCopy.repeats = false;
-    eventCopy.endRepeatDate = '';
-  } else {
-    eventCopy.date = dates[0];
-    eventCopy.repeats = true;
-    eventCopy.endRepeatDate = dates[dates.length - 1];
-  }
+  const { ...eventCopy } = event;
+  eventCopy.startDate = moment(event.startTime).format('YYYY-MM-DD');
+  eventCopy.endDate = moment(event.endTime).format('YYYY-MM-DD');
+  eventCopy.startTime = moment(event.startTime).format('HH:mm');
+  eventCopy.endTime = moment(event.endTime).format('HH:mm');
   return eventCopy;
 }
 
 export {
-  timeComesBefore, dateComesBefore, getDateRange, eventDataToFront,
+  timeComesBefore, dateComesBefore, combineDateAndTime, eventDataToFront,
 };

@@ -1,12 +1,10 @@
 import React from 'react';
 import FullCalendar from '@fullcalendar/react';
 import timeGridPlugin from '@fullcalendar/timegrid';
-import eventPropType from '../../../../dataStructures/propTypes';
+import { vigilPropType } from '../../../../dataStructures/propTypes';
 
 function ShiftCalendar({ vigil }) {
-  const {
-    dates, startTime, endTime,
-  } = vigil;
+  const { startTime, endTime } = vigil;
 
   // Dummy Data
   const shifts = [
@@ -35,7 +33,7 @@ function ShiftCalendar({ vigil }) {
     <FullCalendar
       initialView="timeGridDay"
       plugins={[timeGridPlugin]}
-      initialDate={dates[0]}
+      initialDate={startTime}
       events={[...shifts]}
       headerToolbar={false}
       allDaySlot={false}
@@ -49,7 +47,7 @@ function ShiftCalendar({ vigil }) {
 }
 
 ShiftCalendar.propTypes = {
-  vigil: eventPropType.isRequired,
+  vigil: vigilPropType.isRequired,
 };
 
 export default ShiftCalendar;
