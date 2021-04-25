@@ -140,7 +140,7 @@ export default function AuthProvider({ children }) {
 
   useEffect(() => {
     const initializeDatabase = async () => {
-      const dbRef = firebase.firestore();
+      const dbRef = await firebase.firestore();
 
       // Retrieve firestore data in parallel
       const firestoreResponse = await Promise.all([
@@ -152,29 +152,30 @@ export default function AuthProvider({ children }) {
       ]);
       const [user, users, vigils, discussions, historyShifts] = firestoreResponse;
       // Initialize redux store
-      dispatch(actions.user.initializeUser(user));
-      dispatch(actions.users.initializeUsers(users));
-      dispatch(actions.vigils.initalizeVigils(vigils));
-      dispatch(actions.discussions.initializeDiscussions(discussions));
-      dispatch(actions.history.initializeHistory(historyShifts));
-
+      await dispatch(actions.user.initializeUser(user));
+      await dispatch(actions.users.initializeUsers(users));
+      await dispatch(actions.vigils.initalizeVigils(vigils));
+      await dispatch(actions.discussions.initializeDiscussions(discussions));
+      await dispatch(actions.history.initializeHistory(historyShifts));
       // navigation.navigate('Root');
     };
+
+    const wraperFunc = async () => {
+      await initializeDatabase().then(() => {
+        setTimeout(() => {
+          setPending(false);
+        }, 1000);
+        console.log(pending);
+      });
+    };
+
     firebase.auth().onAuthStateChanged((user) => {
       if (user != null) {
         sessionStorage.setItem('userid', user.uid);
-        initializeDatabase();
+        wraperFunc();
       } else {
         sessionStorage.clear();
       }
-      /*
-        When u refresh the page (or it is initially loaded), this code waits 4 seconds
-        to make sure that data is loaded in from firebase and put in the store.
-        TODO: See [DEV-61] - fix this.
-      */
-      setTimeout(() => {
-        setPending(false);
-      }, 4000);
     });
   }, []);
 
