@@ -43,8 +43,8 @@ function ShiftCalendar({ vigil }) {
     end: 'prev,next',
   };
   const validRange = {
-    start: startTime, // TODO: This will need to be changed to be endTime
-    end: endTime, // TODO: This will need to be changed to be endTime, also add one to the date.
+    start: startTime,
+    end: endTime,
   };
   return (
     <FullCalendar

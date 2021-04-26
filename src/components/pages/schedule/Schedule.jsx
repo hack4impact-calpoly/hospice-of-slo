@@ -15,9 +15,6 @@ export default function Schedule(props) {
   // Gets Vigil Data from redux store
   const storeVigils = useSelector((state) => state.vigils.vigils);
 
-  // Come back to this based off of desired
-  // start/end time format. This isnt set up for recurring,
-  // If this is desired functionalilty. swap array structure for a start/end timestamp structure.
   const getVigilInfo = () => {
     const vigilsData = [];
     storeVigils.forEach((v) => {
