@@ -89,7 +89,7 @@ function CreateVigil({ curEvent }) {
   // React Component
   return (
     <PaddedDiv>
-      <HeaderWithBackArrow>{isEditing ? 'Edit Shift' : 'Create Shift'}</HeaderWithBackArrow>
+      <HeaderWithBackArrow>{isEditing ? 'Edit Vigil' : 'Create Vigil'}</HeaderWithBackArrow>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <Form.Group>
           <Form.Label>Location</Form.Label>
@@ -152,7 +152,7 @@ function CreateVigil({ curEvent }) {
           <Form.Row>
             <Col><CancelButton onClick={() => history.push('/schedule')}>Cancel</CancelButton></Col>
             <Col xs={1} />
-            <Col><SubmitButton type="submit">{isEditing ? 'Update Shift' : 'Add Shift'}</SubmitButton></Col>
+            <Col><SubmitButton type="submit">{isEditing ? 'Update Vigil' : 'Add Vigil'}</SubmitButton></Col>
           </Form.Row>
         </Form.Group>
       </Form>
