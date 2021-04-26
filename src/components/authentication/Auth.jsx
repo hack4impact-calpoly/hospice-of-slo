@@ -162,7 +162,7 @@ export default function AuthProvider({ children }) {
   if (pending) {
     return (
       <LoaderContainer>
-        <ClassicSpinner size={30} color="#84C0C9" />
+        <ClassicSpinner size={48} color="#60becc" />
       </LoaderContainer>
     );
   }
