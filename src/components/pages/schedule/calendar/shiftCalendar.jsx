@@ -3,13 +3,10 @@ import FullCalendar from '@fullcalendar/react';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import { useSelector } from 'react-redux';
 import interactionPlugin from '@fullcalendar/interaction';
-import eventPropType from '../../../../dataStructures/propTypes';
+import { vigilPropType } from '../../../../dataStructures/propTypes';
 
 function ShiftCalendar({ vigil }) {
-  const {
-    /* eslint-disable-next-line */
-    dates, startTime, endTime, // TODO: Update imports to reflect DEV-63
-  } = vigil;
+  const { startTime, endTime } = vigil;
 
   const [eventData, setEventData] = useState([]);
 
@@ -46,14 +43,14 @@ function ShiftCalendar({ vigil }) {
     end: 'prev,next',
   };
   const validRange = {
-    start: dates[0], // TODO: This will need to be changed to be endTime
-    end: dates[(dates.length - 1)], // TODO: This will need to be changed to be endTime, also add one to the date.
+    start: startTime, // TODO: This will need to be changed to be endTime
+    end: endTime, // TODO: This will need to be changed to be endTime, also add one to the date.
   };
   return (
     <FullCalendar
       initialView="timeGridDay"
       plugins={[timeGridPlugin, interactionPlugin]}
-      initialDate={dates[0]}
+      initialDate={startTime}
       validRange={validRange}
       events={[...eventData]}
       headerToolbar={volunteerCalendarHeader}
@@ -66,7 +63,7 @@ function ShiftCalendar({ vigil }) {
 }
 
 ShiftCalendar.propTypes = {
-  vigil: eventPropType.isRequired,
+  vigil: vigilPropType.isRequired,
 };
 
 export default ShiftCalendar;

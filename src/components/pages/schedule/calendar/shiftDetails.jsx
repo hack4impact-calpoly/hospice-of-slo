@@ -14,6 +14,7 @@ import { useHistory } from 'react-router-dom';
 import moment from 'moment';
 import actions from '../../../../actions';
 import ShiftCalendar from './shiftCalendar';
+import { vigilPropType } from '../../../../dataStructures/propTypes';
 
 const StyledCard = styled(Card)`
   border: none;
@@ -70,26 +71,22 @@ const LessPadedText = styled(Card.Text)`
   margin-bottom: 5px;
 `;
 
-export default function ShiftDetails(props) {
+export default function ShiftDetails({ vigil, setSelectVigil }) {
   const {
-    id, address, dates, startTime, endTime, notes, setSelectVigil,
-  } = props;
+    id, address, startTime, endTime, notes,
+  } = vigil;
   const isAdmin = useSelector((state) => state.user.user.isAdmin);
   const [show, setShow] = useState(false);
   const history = useHistory();
   const dispatch = useDispatch();
-  const vigil = {
-    id, address, dates, startTime, endTime, notes,
-  };
 
   const dateFormat = 'dddd, MMM D';
-  const formattedDate = dates.length === 1
-    ? moment(dates[0]).format(dateFormat)
-    : `${moment(dates[0]).format(dateFormat)} to ${moment(dates[dates.length - 1]).format(dateFormat)}`;
+  const formattedDate = moment(startTime).isSame(endTime, 'day')
+    ? moment(startTime).format(dateFormat)
+    : `${moment(startTime).format(dateFormat)} to ${moment(endTime).format(dateFormat)}`;
 
-  const curFormat = 'HH:mm';
   const timeFormat = 'h:mma';
-  const formattedTime = `${moment(startTime, curFormat).format(timeFormat)} to ${moment(endTime, curFormat).format(timeFormat)}`;
+  const formattedTime = `${moment(startTime).format(timeFormat)} to ${moment(endTime).format(timeFormat)}`;
   const [shiftStartTime, setShiftStart] = useState('');
   const [shiftEndTime, setShiftEnd] = useState('');
 
@@ -131,7 +128,6 @@ export default function ShiftDetails(props) {
     setSelectVigil({
       id,
       address,
-      dates,
       startTime,
       endTime,
       notes,
@@ -205,10 +201,6 @@ export default function ShiftDetails(props) {
 }
 
 ShiftDetails.propTypes = {
-  id: PropTypes.string.isRequired,
-  address: PropTypes.string.isRequired,
-  dates: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
-  startTime: PropTypes.string.isRequired,
-  endTime: PropTypes.string.isRequired,
-  notes: PropTypes.string.isRequired,
+  vigil: vigilPropType.isRequired,
+  setSelectVigil: PropTypes.func.isRequired,
 };

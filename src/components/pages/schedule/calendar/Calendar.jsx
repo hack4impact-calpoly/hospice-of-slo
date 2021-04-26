@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap/Modal';
 import ShiftDetails from './shiftDetails';
+import { vigilPropType } from '../../../../dataStructures/propTypes';
 
 export default function Calendar(props) {
   const { eventData, setSelectVigil } = props;
@@ -38,7 +39,7 @@ export default function Calendar(props) {
 
   const [showModal, setShowModal] = useState(false);
   const [clickedInfo, setClickedInfo] = useState({
-    id: '', address: '', dates: [], endTime: '', startTime: '', notes: '',
+    id: '', address: '', endTime: new Date(), startTime: new Date(), notes: '',
   });
 
   const adminCalendarHeader = {
@@ -62,9 +63,8 @@ export default function Calendar(props) {
     setClickedInfo({
       id: info.event.id,
       address: info.event.title,
-      dates: info.event.extendedProps.dates,
-      endTime: info.event.extendedProps.eTime,
-      startTime: info.event.extendedProps.sTime,
+      endTime: info.event.end,
+      startTime: info.event.start,
       notes: info.event.extendedProps.notes,
     });
     setShowModal(true);
@@ -106,12 +106,7 @@ export default function Calendar(props) {
         <Modal.Header className="font-weight-bold" closeButton>{clickedInfo.address}</Modal.Header>
         <Modal.Body>
           <ShiftDetails
-            id={clickedInfo.id}
-            address={clickedInfo.address}
-            dates={clickedInfo.dates}
-            startTime={clickedInfo.startTime}
-            endTime={clickedInfo.endTime}
-            notes={clickedInfo.notes}
+            vigil={clickedInfo}
             setSelectVigil={setSelectVigil}
           />
         </Modal.Body>
@@ -121,5 +116,5 @@ export default function Calendar(props) {
 }
 
 Calendar.propTypes = {
-  eventData: PropTypes.arrayOf(PropTypes.object).isRequired,
+  eventData: PropTypes.arrayOf(vigilPropType).isRequired,
 };

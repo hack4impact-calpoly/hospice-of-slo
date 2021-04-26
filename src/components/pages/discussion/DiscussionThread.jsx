@@ -2,12 +2,13 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import 'firebase/firestore';
 import firebase from 'firebase/app';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { Modal, Form } from 'react-bootstrap';
 import { FloatingActionButton } from '../../../styled-components/discussion-components';
 import HeaderWithBackArrow from '../../navigation/back-header';
 import DiscussionPost from './DiscussionPost';
+import actions from '../../../actions';
 
 const PostWrapper = styled.div`
   padding: 0 15%;
@@ -49,7 +50,7 @@ export default function DiscussionThread() {
       discussion = d;
     }
   });
-
+  const dispatch = useDispatch();
   const [title, setTitle] = useState('');
   const [posts, setPosts] = useState([]);
   // Get Messages
@@ -80,7 +81,6 @@ export default function DiscussionThread() {
     setPosts(populatedMessages);
   }
   const displayEmptySignal = () => {
-    console.log(messages.length);
     /* only display empty message if there
          * are no messages */
     if (messages.length <= 0) {
@@ -89,6 +89,16 @@ export default function DiscussionThread() {
     // return dummy div, ESlint needs map() to have a default return
     return <div />;
   };
+
+  function compare(a, b) { // sorts in alphabetical order
+    if (a.timeSent.valueOf() < b.timeSent.valueOf()) {
+      return 1;
+    }
+    if (a.timeSent.valueOf() > b.timeSent.valueOf()) {
+      return -1;
+    }
+    return 0;
+  }
 
   const postMessage = async () => {
     const db = firebase.firestore();
@@ -100,13 +110,17 @@ export default function DiscussionThread() {
       timeSent: firebase.firestore.FieldValue.serverTimestamp(),
       userRef,
     };
-    messageRef.add(messageData);
-    handleClose();
+    messageRef.add(messageData).then(() => {
+      handleClose();
+      const theTime = (firebase.firestore.Timestamp.now());
+      const newMessages = [...(discussion.messages), { message, timeSent: theTime, userRef }];
+      dispatch(actions.discussions.editDiscussion(discussion.id, { ...discussion, messages: newMessages }));
+    });
   };
 
   useEffect(() => {
     getPosts();
-  }, []);
+  }, [discussions]);
 
   return (
     <div>
@@ -141,7 +155,7 @@ export default function DiscussionThread() {
         </Modal.Footer>
       </Modal>
       <PostWrapper>
-        {posts.map((post) => <DiscussionPost key={post.timeSent} author={post.user.name} timeSent={post.timeSent.toDate()} message={post.message} />)}
+        {posts.sort(compare).map((post) => <DiscussionPost key={post.timeSent} author={post.user.name} timeSent={post.timeSent.toDate()} message={post.message} />)}
       </PostWrapper>
     </div>
   );
