@@ -1,8 +1,19 @@
 import React, { useEffect, useState } from 'react';
+import { ClassicSpinner } from 'react-spinners-kit';
+import styled from 'styled-components';
 import firebase from 'firebase/app';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import actions from '../../actions/index';
+
+const LoaderContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+`;
 
 const retrieveUser = async (dbRef) => {
   const currentUser = (sessionStorage.getItem('userid'));
@@ -150,7 +161,9 @@ export default function AuthProvider({ children }) {
 
   if (pending) {
     return (
-      <>Loading...</>
+      <LoaderContainer>
+        <ClassicSpinner size={30} color="#84C0C9" />
+      </LoaderContainer>
     );
   }
 
