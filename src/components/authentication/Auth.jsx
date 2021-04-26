@@ -49,15 +49,14 @@ const retrieveVigils = async (dbRef) => {
 
   vigilsSnapshot.forEach((doc) => {
     const {
-      address, dates, startTime, endTime, notes,
+      address, startTime, endTime, notes,
     } = doc.data();
 
     vigils.push({
       id: doc.id,
       address,
-      dates,
-      startTime,
-      endTime,
+      startTime: startTime.toDate(),
+      endTime: endTime.toDate(),
       notes, // TODO: Add Shifts Array
     });
   });

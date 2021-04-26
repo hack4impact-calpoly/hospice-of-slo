@@ -23,14 +23,11 @@ export default function Schedule(props) {
     storeVigils.forEach((v) => {
       vigilsData.push({
         title: v.address,
-        start: `${v.dates[0]}T${v.startTime}`,
-        end: `${v.dates[v.dates.length - 1]}T${v.endTime}`,
+        start: v.startTime,
+        end: v.endTime,
         backgroundColor: '#8FCBD4',
         notes: v.notes,
         id: v.id,
-        dates: v.dates,
-        sTime: v.startTime,
-        eTime: v.endTime,
       });
     });
     setEventData(vigilsData);

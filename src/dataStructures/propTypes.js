@@ -1,11 +1,10 @@
 import PropTypes from 'prop-types';
 
-const eventPropType = PropTypes.shape({
+const vigilPropType = PropTypes.shape({
   id: PropTypes.string,
   address: PropTypes.string,
-  dates: PropTypes.arrayOf(PropTypes.string),
-  startTime: PropTypes.string,
-  endTime: PropTypes.string,
+  startTime: PropTypes.instanceOf(Date),
+  endTime: PropTypes.instanceOf(Date),
   notes: PropTypes.string,
 });
 
@@ -17,5 +16,4 @@ const discussionPropType = PropTypes.shape({
   messages: PropTypes.arrayOf(PropTypes.object),
 });
 
-export default eventPropType;
-export { discussionPropType };
+export { vigilPropType, discussionPropType };
