@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { BiChevronRight } from 'react-icons/bi';
 import { AiFillPushpin } from 'react-icons/ai';
+import { IconContext } from 'react-icons';
 import Edit from './EditDiscussion';
 
 const ForumBox = styled.button`
@@ -55,7 +56,9 @@ export default function Forum(props) {
         <ForumLink to={discussionLink} style={{ width: '100%' }}>
           {title}
         </ForumLink>
-        {isPinned ? <Pin /> : null }
+        <IconContext.Provider value={{ color: '#84C0C9' }}>
+          {isPinned ? <Pin /> : null }
+        </IconContext.Provider>
         {isAdmin ? <Dots docId={docId} /> : <Arrow />}
 
       </ForumBox>
