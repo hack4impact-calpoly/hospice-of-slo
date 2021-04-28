@@ -7,9 +7,8 @@ import CreateThread from './createThread';
 import EditHelper from './editDiscussionHelper';
 
 const StyledDropdown = styled(Dropdown)`
-  position: absolute;
+  margin-left: auto;
   align-self: center;
-  right: 25px;
   font-size: 30px;
 `;
 
