@@ -25,7 +25,6 @@ const discussionsReducer = (state = initialState, action) => {
     }
     case DELETE_DISCUSSION: {
       const discussionsCopy = state.discussions.filter((d) => d.id !== action.payload.oldDiscussionId);
-      console.log(action.payload.oldDiscussionId);
       return { discussions: discussionsCopy };
     }
     default:

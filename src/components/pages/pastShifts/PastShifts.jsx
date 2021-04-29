@@ -1,3 +1,4 @@
+// Root for all Things realted to viewing Past Shifts
 import React from 'react';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
@@ -22,7 +23,6 @@ export default function Contacts() {
     prevShifts.forEach((shift) => {
       shift.get().then((doc) => {
         setShifts((oldShifts) => [...oldShifts, doc.data()]);
-        console.log(doc.data());
       });
     });
   }

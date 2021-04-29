@@ -41,7 +41,6 @@ function CreateVigil({ curEvent }) {
 
   async function onSubmit(data, event) {
     event.preventDefault();
-    console.log(data);
     const {
       address, startDate, startTime, endDate, endTime, notes,
     } = data;

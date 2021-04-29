@@ -80,7 +80,6 @@ export default function CreateThread(props) {
           name: title,
         })
         .then(() => {
-          console.log('Document successfully updated');
           handleClose();
           dispatch(actions.discussions.editDiscussion(discussion.id, { ...discussion, name: title }));
         })
@@ -95,7 +94,6 @@ export default function CreateThread(props) {
       };
       discussions.add(newDiscussion)
         .then((backRef) => {
-          console.log('Document successfully written!');
           dispatch(actions.discussions.addDiscussion({ ...newDiscussion, id: backRef.id, messages: [] }));
           handleClose();
         })
@@ -118,7 +116,6 @@ export default function CreateThread(props) {
               defaultValue={isEditing ? discussion.name : ''}
               onChange={(e) => {
                 setTitle(e.target.value);
-                console.log(title);
               }}
             />
             <StyledRow className="mt-3">

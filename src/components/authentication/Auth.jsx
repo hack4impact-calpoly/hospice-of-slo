@@ -1,3 +1,4 @@
+// This is where the loading of our app occurs, redux, firebase, render frontend components, ...
 import React, { useEffect, useState } from 'react';
 import { ClassicSpinner } from 'react-spinners-kit';
 import styled from 'styled-components';
@@ -21,7 +22,7 @@ const retrieveUser = async (dbRef) => {
   const temp = await userRef.get();
   const ps = [];
   temp.data().prevShifts.forEach((shift) => {
-    ps.push(shift); // instead of ps.push(shift.path)
+    ps.push(shift);
   });
 
   const user = {
@@ -168,15 +169,13 @@ export default function AuthProvider({ children }) {
       await dispatch(actions.vigils.initalizeVigils(vigils));
       await dispatch(actions.discussions.initializeDiscussions(discussions));
       await dispatch(actions.history.initializeHistory(historyShifts));
-      // navigation.navigate('Root');
     };
 
     const wraperFunc = async () => {
       await initializeDatabase().then(() => {
         setTimeout(() => {
           setPending(false);
-        }, 1000);
-        console.log(pending);
+        }, 1500);
       });
     };
 

@@ -20,7 +20,6 @@ export default function EditHelper(props) {
           pinned: !(discussion.pinned),
         })
         .then(() => {
-          console.log('Document successfully updated');
           dispatch(actions.discussions.editDiscussion(discussion.id, { ...discussion, pinned: !(discussion.pinned) }));
         })
         .catch((error) => {
@@ -31,7 +30,6 @@ export default function EditHelper(props) {
       discussions.doc(discussion.id)
         .delete()
         .then(() => {
-          console.log('Document successfully deleted');
           dispatch(actions.discussions.deleteDiscussion(discussion.id));
         })
         .catch((error) => {

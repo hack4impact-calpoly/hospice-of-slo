@@ -73,9 +73,8 @@ export default function SignUp() {
   const [email, setEmail] = useState('');
   const [showErr, setShowErr] = useState(false);
   const [errMessage, setErrMessage] = useState('');
-  /* eslint-disable no-unused-vars */
-  const [isAdmin, setIsAdmin] = React.useState(false);
-  const [prevShifts, setprevShifts] = React.useState([]);
+  const [isAdmin] = React.useState(false);
+  const [prevShifts] = React.useState([]);
 
   const history = useHistory();
 
@@ -138,13 +137,12 @@ export default function SignUp() {
                 });
             })
             .catch((error) => {
-              console.log('Display name not set.'); // feedback should be put on frontend
-              console.log(error);
+              console.error(error, 'Display name not set.'); // feedback should be put on frontend
             });
         })
         .catch((error) => {
           const errorMessage = error.message;
-          console.log('Error:', errorMessage); // feedback should be put on frontend
+          console.error('Error:', errorMessage); // feedback should be put on frontend
         });
     }
   }

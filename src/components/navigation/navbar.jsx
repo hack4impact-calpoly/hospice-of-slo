@@ -11,7 +11,6 @@ import {
 import firebase from 'firebase/app';
 import 'firebase/auth';
 
-/* Styled Components */
 const SpacedDiv = styled.div`
   display: flex;
   align-items: center;
