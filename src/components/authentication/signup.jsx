@@ -1,4 +1,4 @@
-/* eslint-disable */
+/* eslint-disable object-shorthand */
 import React, { useState } from 'react';
 import {
   Container, Row, Col, Form,
@@ -229,7 +229,7 @@ export default function SignUp() {
                       placeholder="password"
                       value={rePassword}
                       onChange={(e) => setRePassword(e.target.value)}
-                      onBlur={(e) => validatePass()}
+                      onBlur={() => validatePass()}
                       required
                     />
                   </Form.Group>

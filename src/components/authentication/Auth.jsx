@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 // This is where the loading of our app occurs, redux, firebase, render frontend components, ...
 import React, { useEffect, useState } from 'react';
 import { ClassicSpinner } from 'react-spinners-kit';
