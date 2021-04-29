@@ -10,7 +10,6 @@ import Login from './components/authentication/login';
 import Signup from './components/authentication/signup';
 import ForgotPassword from './components/authentication/forgotPassword';
 import ResetPassword from './components/authentication/resetPassword';
-import SuccessPage from './components/authentication/successPage';
 import Discussion from './components/pages/discussion/Discussion';
 import PastShifts from './components/pages/pastShifts/PastShifts';
 import Contacts from './components/pages/contacts/Contacts';
@@ -55,9 +54,6 @@ export default function App() {
           </Route>
           <Route path="/reset-password">
             <ResetPassword />
-          </Route>
-          <Route path="/success">
-            <SuccessPage />
           </Route>
           <PrivateRoute path="/schedule">
             <ScheduleManager />

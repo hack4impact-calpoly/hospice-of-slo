@@ -12,7 +12,6 @@
     "@testing-library/user-event": "^12.8.3",
     "babel-eslint": "^10.1.0",
     "bootstrap": "^4.6.0",
-    "express": "^4.17.1",
     "firebase": "^8.3.0",
     "jquery": "^3.6.0",
     "json-2-csv": "^3.10.2",
@@ -33,7 +32,6 @@
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
     "styled-components": "^5.2.1",
-    "typescript": "^4.2.3",
     "web-vitals": "^1.1.0"
   },
   "scripts": {

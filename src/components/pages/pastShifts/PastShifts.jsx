@@ -22,7 +22,6 @@ export default function Contacts() {
     prevShifts.forEach((shift) => {
       shift.get().then((doc) => {
         setShifts((oldShifts) => [...oldShifts, doc.data()]);
-        console.log(doc.data());
       });
     });
   }

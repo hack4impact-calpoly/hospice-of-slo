@@ -109,10 +109,10 @@ export default function Login() {
             history.push('/');
           } else {
             // user.data() will be undefined in this case
-            console.log('user does not exist');
+            alert('user does not exist');
           }
         }).catch((error) => {
-          console.log('Error getting user', error);
+          console.error('Error getting user', error);
         });
       })
       .catch(() => {

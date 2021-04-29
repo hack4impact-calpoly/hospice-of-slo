@@ -92,7 +92,7 @@ export default function ResetPassword() {
     if (!showErr) {
       auth.confirmPasswordReset(oobCode, password)
         .catch((error) => {
-          console.log(`error: ${error}`);
+          console.error(`error: ${error}`);
         });
       alert('Your password has been successfully changed!');
       history.push('/');

@@ -168,15 +168,13 @@ export default function AuthProvider({ children }) {
       await dispatch(actions.vigils.initalizeVigils(vigils));
       await dispatch(actions.discussions.initializeDiscussions(discussions));
       await dispatch(actions.history.initializeHistory(historyShifts));
-      // navigation.navigate('Root');
     };
 
     const wraperFunc = async () => {
       await initializeDatabase().then(() => {
         setTimeout(() => {
           setPending(false);
-        }, 1000);
-        console.log(pending);
+        }, 1500);
       });
     };
 

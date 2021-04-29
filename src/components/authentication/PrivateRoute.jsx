@@ -9,7 +9,6 @@ export default function PrivateRoute({
 
   const checkAccess = () => {
     if (currentUser === null) {
-      console.log('user is null');
       return (<Redirect to="/login" />);
     }
     if (adminOnly) {
