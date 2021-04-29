@@ -129,7 +129,7 @@ export default function ResetPassword() {
                       placeholder="password"
                       value={rePassword}
                       onChange={(e) => setRePassword(e.target.value)}
-                      onBlur={(e) => validatePass(password, e.target.value)}
+                      onBlur={() => validatePass()}
                       required
                     />
                   </Form.Group>

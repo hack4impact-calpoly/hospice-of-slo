@@ -147,7 +147,7 @@ const retrieveHistoryShifts = async (dbRef) => {
 };
 
 export default function AuthProvider({ children }) {
-  const [pending, setPending] = useState(true);
+  const [pending, setPending] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {

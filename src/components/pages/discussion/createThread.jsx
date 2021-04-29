@@ -122,7 +122,7 @@ export default function CreateThread(props) {
               <StyledCancel onClick={handleClose}>Cancel</StyledCancel>
               <StyledCreate
                 type="submit"
-                onClick={isEditing ? discussionPress : discussionPress}
+                onClick={discussionPress}
               >
                 {isEditing ? 'Done' : 'Create'}
               </StyledCreate>
