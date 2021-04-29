@@ -1,3 +1,4 @@
+// Root for entire app
 import React from 'react';
 import {
   Route,

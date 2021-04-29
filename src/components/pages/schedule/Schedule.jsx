@@ -1,3 +1,4 @@
+// Root for all Things Schedule
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';

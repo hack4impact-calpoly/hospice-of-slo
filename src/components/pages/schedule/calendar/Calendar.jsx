@@ -1,3 +1,4 @@
+// Root for Calendar, which is a part of Schedule
 import React, { useState, useEffect } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import timeGridPlugin from '@fullcalendar/timegrid';
