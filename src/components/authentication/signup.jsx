@@ -1,4 +1,4 @@
-/* eslint-disable object-shorthand */
+/* eslint-disable */
 import React, { useState } from 'react';
 import {
   Container, Row, Col, Form,
@@ -189,7 +189,7 @@ export default function SignUp() {
                       placeholder="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      onBlur={() => validateEmail(email)}
+                      onBlur={() => validateEmail()}
                       required
                     />
                   </Form.Group>
@@ -202,7 +202,7 @@ export default function SignUp() {
                       placeholder="phone"
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
-                      onBlur={() => validatePhone(phone)}
+                      onBlur={() => validatePhone()}
                       required
                     />
                   </Form.Group>
@@ -229,7 +229,7 @@ export default function SignUp() {
                       placeholder="password"
                       value={rePassword}
                       onChange={(e) => setRePassword(e.target.value)}
-                      onBlur={(e) => validatePass(password, e.target.value)}
+                      onBlur={(e) => validatePass()}
                       required
                     />
                   </Form.Group>

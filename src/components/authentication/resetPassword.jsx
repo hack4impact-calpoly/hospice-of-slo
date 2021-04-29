@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import {
@@ -129,7 +131,7 @@ export default function ResetPassword() {
                       placeholder="password"
                       value={rePassword}
                       onChange={(e) => setRePassword(e.target.value)}
-                      onBlur={(e) => validatePass(password, e.target.value)}
+                      onBlur={(e) => validatePass()}
                       required
                     />
                   </Form.Group>
