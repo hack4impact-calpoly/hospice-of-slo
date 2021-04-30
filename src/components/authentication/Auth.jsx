@@ -147,7 +147,7 @@ const retrieveHistoryShifts = async (dbRef) => {
 };
 
 export default function AuthProvider({ children }) {
-  const [pending, setPending] = useState(false);
+  const [pending, setPending] = useState(true);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -175,20 +175,21 @@ export default function AuthProvider({ children }) {
       await initializeDatabase().then(() => {
         setTimeout(() => {
           setPending(false);
-        }, 1500);
+        }, 2000); // Allow frontend to render
       });
     };
 
     firebase.auth().onAuthStateChanged((user) => {
       if (user != null) {
+        setPending(true);
         sessionStorage.setItem('userid', user.uid);
         wraperFunc();
       } else {
+        setPending(false);
         sessionStorage.clear();
       }
     });
   }, []);
-
   if (pending) {
     return (
       <LoaderContainer>
