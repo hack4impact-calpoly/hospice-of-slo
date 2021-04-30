@@ -3,9 +3,11 @@ import FullCalendar from '@fullcalendar/react';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import { useSelector } from 'react-redux';
 import interactionPlugin from '@fullcalendar/interaction';
+import PropTypes from 'prop-types';
+import moment from 'moment';
 import { vigilPropType } from '../../../../dataStructures/propTypes';
 
-function ShiftCalendar({ vigil }) {
+function ShiftCalendar({ vigil, isSingleDay }) {
   const { startTime, endTime } = vigil;
 
   const [eventData, setEventData] = useState([]);
@@ -40,7 +42,7 @@ function ShiftCalendar({ vigil }) {
 
   const volunteerCalendarHeader = {
     center: '',
-    end: 'prev,next',
+    end: isSingleDay ? '' : 'prev,next',
   };
   const validRange = {
     start: startTime,
@@ -51,6 +53,7 @@ function ShiftCalendar({ vigil }) {
       initialView="timeGridDay"
       plugins={[timeGridPlugin, interactionPlugin]}
       initialDate={startTime}
+      scrollTime={moment(startTime).format('HH:mm')}
       validRange={validRange}
       events={[...eventData]}
       headerToolbar={volunteerCalendarHeader}
@@ -64,6 +67,7 @@ function ShiftCalendar({ vigil }) {
 
 ShiftCalendar.propTypes = {
   vigil: vigilPropType.isRequired,
+  isSingleDay: PropTypes.bool.isRequired,
 };
 
 export default ShiftCalendar;

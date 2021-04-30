@@ -109,6 +109,7 @@ export default function Calendar(props) {
           <ShiftDetails
             vigil={clickedInfo}
             setSelectVigil={setSelectVigil}
+            setShowModal={setShowModal}
           />
         </Modal.Body>
       </Modal>

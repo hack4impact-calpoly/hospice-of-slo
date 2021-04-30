@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import {
-  Row, Col, Container, Card,
+  Row, Col, Container, Card, Form,
 } from 'react-bootstrap';
-import Select from 'react-select';
 import { BiTrash, BiPencil } from 'react-icons/bi';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
@@ -15,6 +14,7 @@ import moment from 'moment';
 import actions from '../../../../actions';
 import ShiftCalendar from './shiftCalendar';
 import { vigilPropType } from '../../../../dataStructures/propTypes';
+import { combineDateAndTime } from '../createVigil/CreateVigilHelper';
 
 const StyledCard = styled(Card)`
   border: none;
@@ -62,33 +62,32 @@ const StyledModal = styled(Modal)`
   background-color: rgba(0,0,0,0.4);
 `;
 
-const StyledSelect = styled(Select)`
-  fontFamily: Roboto;
-  padding-bottom: 15px;
-`;
-
 const LessPadedText = styled(Card.Text)`
   margin-bottom: 5px;
 `;
 
-export default function ShiftDetails({ vigil, setSelectVigil }) {
+export default function ShiftDetails({ vigil, setSelectVigil, setShowModal }) {
   const {
     id, address, startTime, endTime, notes,
   } = vigil;
   const isAdmin = useSelector((state) => state.user.user.isAdmin);
+  const isSingleDay = moment(startTime).isSame(endTime, 'day');
   const [show, setShow] = useState(false);
   const history = useHistory();
   const dispatch = useDispatch();
 
   const dateFormat = 'dddd, MMM D';
-  const formattedDate = moment(startTime).isSame(endTime, 'day')
+  const formattedDate = isSingleDay
     ? moment(startTime).format(dateFormat)
     : `${moment(startTime).format(dateFormat)} to ${moment(endTime).format(dateFormat)}`;
 
   const timeFormat = 'h:mma';
   const formattedTime = `${moment(startTime).format(timeFormat)} to ${moment(endTime).format(timeFormat)}`;
-  const [shiftStartTime, setShiftStart] = useState('');
-  const [shiftEndTime, setShiftEnd] = useState('');
+  const [shiftStartTime, setShiftStartTime] = useState('');
+  const [shiftEndTime, setShiftEndTime] = useState('');
+  const formStartDate = moment(startTime).format('YYYY-MM-DD');
+  const [shiftStartDate, setShiftStartDate] = useState(isSingleDay ? formStartDate : '');
+  const [shiftEndDate, setShiftEndDate] = useState(isSingleDay ? formStartDate : '');
 
   async function addShiftPress() {
     // creates a new shift and adds it to a specific vigil
@@ -97,10 +96,16 @@ export default function ShiftDetails({ vigil, setSelectVigil }) {
     const vigilRef = db.collection('vigils').doc(id);
     vigilRef.collection('shifts').add({
       address: vigil.address,
-      shiftStartTime, // TODO: This will need to be put into firebase as a timeStamp
-      shiftEndTime, // TODO: This will need to be put into firebase as a timeStamp
+      shiftStartTime: combineDateAndTime(shiftStartDate, shiftStartTime),
+      shiftEndTime: combineDateAndTime(shiftEndDate, shiftEndTime),
       userRef: db.doc(`users/${currentUser}`),
-    }) // TODO: Once the shift is added to the vigil, the vigilRef needs to be put into the prevShift Array in the users collection
+    })
+      .then((ref) => {
+        const userRef = db.collection('users').doc(currentUser);
+        return userRef.update({
+          prevShifts: firebase.firestore.FieldValue.arrayUnion(ref),
+        });
+      })
       .then(() => {
         console.log('Document successfully written!');
         // TODO: Redux changes should be added here instead of the console.log
@@ -116,14 +121,6 @@ export default function ShiftDetails({ vigil, setSelectVigil }) {
     setShow(false);
   }
 
-  const times = [ // TODO: remove this once select is converted to a dateTime
-    { value: '8:00', label: '8:00 A.M.' },
-    { value: '8:30', label: '8:30 A.M.' },
-    { value: '9:00', label: '9:00 A.M.' },
-    { value: '9:30', label: '9:30 A.M.' },
-    { value: '10:00', label: '10:00 A.M.' },
-  ];
-
   const editShift = () => {
     setSelectVigil({
       id,
@@ -135,13 +132,25 @@ export default function ShiftDetails({ vigil, setSelectVigil }) {
     history.push('/schedule/edit-shift');
   };
 
+  // Form Stuff
+  const handleInputChange = (event, stateSetter) => {
+    event.preventDefault();
+    stateSetter(event.target.value);
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    addShiftPress();
+    setShowModal(false);
+  };
+
   return (
     <Container>
       <Row>
         <Col xs={12} sm={12} md={12} lg={6} className="mb-4">
           <div>
             <Card.Title className="font-weight-bold">Schedule</Card.Title>
-            <ShiftCalendar vigil={vigil} />
+            <ShiftCalendar vigil={vigil} isSingleDay={isSingleDay} />
           </div>
         </Col>
         <Col xs={12} sm={12} md={12} lg={6}>
@@ -160,30 +169,59 @@ export default function ShiftDetails({ vigil, setSelectVigil }) {
             <Card.Subtitle className="font-weight-bold">Notes</Card.Subtitle>
             <Card.Text>{notes}</Card.Text>
             <Card.Subtitle className="font-weight-bold pb-2">Sign up for a Shift</Card.Subtitle>
-            <Row>
-              <Col>
-                {/* TODO: Make this select a DateTime */}
-                <StyledSelect
-                  onChange={(e) => setShiftStart(e.value)}
-                  options={times}
-                  components={{ DropdownIndicator: () => null, IndicatorSeparator: () => null }}
-                  maxMenuHeight={250}
-                />
-              </Col>
-              <p className="pt-1">to</p>
-              <Col>
-                {/* TODO: Make this select a DateTime */}
-                <StyledSelect
-                  onChange={(e) => setShiftEnd(e.value)}
-                  options={times}
-                  components={{ DropdownIndicator: () => null, IndicatorSeparator: () => null }}
-                  maxMenuHeight={250}
-                />
-              </Col>
-            </Row>
-            <Card.Text>
-              <SignUpButton onClick={addShiftPress}>Sign Up</SignUpButton>
-            </Card.Text>
+            <Form onSubmit={handleSubmit}>
+              {!isSingleDay && (
+                <Form.Row>
+                  <Col>
+                    <Form.Group>
+                      <Form.Label>Start Date</Form.Label>
+                      <Form.Control
+                        type="date"
+                        value={shiftStartDate}
+                        onChange={(e) => handleInputChange(e, setShiftStartDate)}
+                        required
+                      />
+                    </Form.Group>
+                  </Col>
+                  <Col>
+                    <Form.Group>
+                      <Form.Label>End Date</Form.Label>
+                      <Form.Control
+                        type="date"
+                        value={shiftEndDate}
+                        onChange={(e) => handleInputChange(e, setShiftEndDate)}
+                        required
+                      />
+                    </Form.Group>
+                  </Col>
+                </Form.Row>
+              )}
+              <Form.Row>
+                <Col>
+                  <Form.Group>
+                    <Form.Label>Start Time</Form.Label>
+                    <Form.Control
+                      type="time"
+                      value={shiftStartTime}
+                      onChange={(e) => handleInputChange(e, setShiftStartTime)}
+                      required
+                    />
+                  </Form.Group>
+                </Col>
+                <Col>
+                  <Form.Group>
+                    <Form.Label>End Time</Form.Label>
+                    <Form.Control
+                      type="time"
+                      value={shiftEndTime}
+                      onChange={(e) => handleInputChange(e, setShiftEndTime)}
+                      required
+                    />
+                  </Form.Group>
+                </Col>
+              </Form.Row>
+              <SignUpButton type="submit">Sign Up</SignUpButton>
+            </Form>
             <StyledModal show={show} centered>
               <Modal.Body>
                 Are you sure you want delete this Vigil?
@@ -203,4 +241,5 @@ export default function ShiftDetails({ vigil, setSelectVigil }) {
 ShiftDetails.propTypes = {
   vigil: vigilPropType.isRequired,
   setSelectVigil: PropTypes.func.isRequired,
+  setShowModal: PropTypes.func.isRequired,
 };
