@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 import firebase from 'firebase/app';
 import 'firebase/firestore';
 import { useDispatch } from 'react-redux';
-import HeaderWithBackArrow from '../../../navigation/back-header';
+import HeaderWithBackArrow from '../../../navigation/HeaderWithBackArrow';
 import { SubmitButton, CancelButton } from '../../../../styled-components/form-components';
 import {
   timeComesBefore, eventDataToFront, combineDateAndTime, dateComesBefore,

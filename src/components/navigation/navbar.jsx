@@ -39,11 +39,6 @@ NavLink.propTypes = {
   to: PropTypes.string.isRequired,
   Icon: PropTypes.func.isRequired,
   children: PropTypes.string.isRequired,
-  handleClick: PropTypes.func,
-};
-
-NavLink.defaultProps = {
-  handleClick: () => {},
 };
 
 export default function Navbar() {

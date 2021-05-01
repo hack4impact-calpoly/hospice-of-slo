@@ -69,7 +69,7 @@ const retrieveVigils = async (dbRef) => {
       address,
       startTime: startTime.toDate(),
       endTime: endTime.toDate(),
-      notes, // TODO: Add Shifts Array
+      notes,
     });
   });
   return vigils;
@@ -80,7 +80,6 @@ const retrieveDiscussions = async (dbRef) => {
   const discussionsRef = dbRef.collection('discussions');
   const discussionsSnapshot = await discussionsRef.get();
 
-  const discussionsIds = [];
   discussionsSnapshot.forEach(async (doc) => {
     const messages = [];
 
@@ -108,8 +107,6 @@ const retrieveDiscussions = async (dbRef) => {
       pinned,
       messages,
     });
-
-    discussionsIds.push(doc.id);
   });
   return discussions;
 };
