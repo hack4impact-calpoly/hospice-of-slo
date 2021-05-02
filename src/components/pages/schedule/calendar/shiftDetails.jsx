@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Row, Col, Container, Card, Form,
 } from 'react-bootstrap';
@@ -133,15 +133,53 @@ export default function ShiftDetails({ vigil, setSelectVigil, setShowModal }) {
   };
 
   // Form Stuff
+  const [validated, setValidated] = useState(false);
+
+  // Checks that the end date comes before the start date
+  const endDateRef = React.createRef();
+  useEffect(() => {
+    if (endDateRef.current) {
+      if (moment(shiftEndDate).isBefore(moment(shiftStartDate))) {
+        endDateRef.current.setCustomValidity('End Date cannot come before Start Date');
+      } else {
+        endDateRef.current.setCustomValidity('');
+      }
+    }
+  }, [shiftEndDate]);
+
+  // Checks that the end time comes before the start time
+  const endTimeRef = React.createRef();
+  useEffect(() => {
+    const tFormat = 'HH:mm';
+    if (moment(shiftStartDate).isSame(moment(shiftEndDate))
+      && moment(shiftEndTime, tFormat).isBefore(moment(shiftStartTime, tFormat))) {
+      endTimeRef.current.setCustomValidity('End Time cannot come before Start Time');
+    } else {
+      endTimeRef.current.setCustomValidity('');
+    }
+  }, [shiftEndTime, shiftEndDate, shiftStartDate, shiftStartTime]);
+
   const handleInputChange = (event, stateSetter) => {
     event.preventDefault();
     stateSetter(event.target.value);
   };
 
+  const validate = (event) => {
+    const form = event.currentTarget;
+    setValidated(true);
+    if (form.checkValidity() === false) {
+      event.stopPropagation();
+      return false;
+    }
+    return true;
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    addShiftPress();
-    setShowModal(false);
+    if (validate(event)) {
+      addShiftPress();
+      setShowModal(false);
+    }
   };
 
   return (
@@ -169,7 +207,7 @@ export default function ShiftDetails({ vigil, setSelectVigil, setShowModal }) {
             <Card.Subtitle className="font-weight-bold">Notes</Card.Subtitle>
             <Card.Text>{notes}</Card.Text>
             <Card.Subtitle className="font-weight-bold pb-2">Sign up for a Shift</Card.Subtitle>
-            <Form onSubmit={handleSubmit}>
+            <Form noValidate validated={validated} onSubmit={handleSubmit}>
               {!isSingleDay && (
                 <Form.Row>
                   <Col>
@@ -177,10 +215,14 @@ export default function ShiftDetails({ vigil, setSelectVigil, setShowModal }) {
                       <Form.Label>Start Date</Form.Label>
                       <Form.Control
                         type="date"
+                        name="startDate"
                         value={shiftStartDate}
                         onChange={(e) => handleInputChange(e, setShiftStartDate)}
                         required
                       />
+                      <Form.Control.Feedback type="invalid">
+                        Please provide a starting date
+                      </Form.Control.Feedback>
                     </Form.Group>
                   </Col>
                   <Col>
@@ -188,10 +230,17 @@ export default function ShiftDetails({ vigil, setSelectVigil, setShowModal }) {
                       <Form.Label>End Date</Form.Label>
                       <Form.Control
                         type="date"
+                        name="endDate"
                         value={shiftEndDate}
                         onChange={(e) => handleInputChange(e, setShiftEndDate)}
                         required
+                        ref={endDateRef}
                       />
+                      <Form.Control.Feedback type="invalid">
+                        {shiftEndDate === ''
+                          ? 'Please provide an ending date'
+                          : 'End date should not come before Start Date'}
+                      </Form.Control.Feedback>
                     </Form.Group>
                   </Col>
                 </Form.Row>
@@ -202,10 +251,14 @@ export default function ShiftDetails({ vigil, setSelectVigil, setShowModal }) {
                     <Form.Label>Start Time</Form.Label>
                     <Form.Control
                       type="time"
+                      name="startTime"
                       value={shiftStartTime}
                       onChange={(e) => handleInputChange(e, setShiftStartTime)}
                       required
                     />
+                    <Form.Control.Feedback type="invalid">
+                      Please provide a starting time
+                    </Form.Control.Feedback>
                   </Form.Group>
                 </Col>
                 <Col>
@@ -213,10 +266,17 @@ export default function ShiftDetails({ vigil, setSelectVigil, setShowModal }) {
                     <Form.Label>End Time</Form.Label>
                     <Form.Control
                       type="time"
+                      name="endTime"
                       value={shiftEndTime}
                       onChange={(e) => handleInputChange(e, setShiftEndTime)}
                       required
+                      ref={endTimeRef}
                     />
+                    <Form.Control.Feedback type="invalid">
+                      {shiftEndTime === ''
+                        ? 'Please provide an ending time'
+                        : 'End Time should not come before Start Time'}
+                    </Form.Control.Feedback>
                   </Form.Group>
                 </Col>
               </Form.Row>
