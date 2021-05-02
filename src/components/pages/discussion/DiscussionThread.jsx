@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { Modal, Form } from 'react-bootstrap';
 import { FloatingActionButton } from '../../../styled-components/discussion-components';
-import HeaderWithBackArrow from '../../navigation/back-header';
+import HeaderWithBackArrow from '../../navigation/HeaderWithBackArrow';
 import DiscussionPost from './DiscussionPost';
 import actions from '../../../actions';
 

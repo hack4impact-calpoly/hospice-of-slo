@@ -13,7 +13,7 @@ const ListWrapper = styled.div`
   margin: 0 auto;
 `;
 
-export default function Contacts() {
+export default function PastShifts() {
   const dayNames = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
   // Gets User Data from redux store
   const prevShifts = useSelector((state) => state.user.user.prevShifts);
