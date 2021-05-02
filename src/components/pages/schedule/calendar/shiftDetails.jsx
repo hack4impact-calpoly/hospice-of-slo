@@ -97,12 +97,13 @@ export default function ShiftDetails({ vigil, setSelectVigil }) {
     const vigilRef = db.collection('vigils').doc(id);
     vigilRef.collection('shifts').add({
       address: vigil.address,
-      shiftStartTime,
-      shiftEndTime,
+      shiftStartTime, // TODO: This will need to be put into firebase as a timeStamp
+      shiftEndTime, // TODO: This will need to be put into firebase as a timeStamp
       userRef: db.doc(`users/${currentUser}`),
-    })
+    }) // TODO: Once the shift is added to the vigil, the vigilRef needs to be put into the prevShift Array in the users collection
       .then(() => {
         console.log('Document successfully written!');
+        // TODO: Redux changes should be added here instead of the console.log
       })
       .catch((error) => {
         console.error('Error writing document: ', error);
