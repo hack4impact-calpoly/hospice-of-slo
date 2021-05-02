@@ -39,7 +39,7 @@ export default function Discussion() {
     if (d.pinned) {
       return ([
         <Row key={d.name} className="justify-content-md-center">
-          <Forum title={d.name} docId={d.id} />
+          <Forum title={d.name} docId={d.id} isPinned />
         </Row>,
       ]);
     }
