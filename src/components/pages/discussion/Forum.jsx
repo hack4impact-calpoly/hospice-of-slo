@@ -69,5 +69,9 @@ export default function Forum(props) {
 Forum.propTypes = {
   title: PropTypes.string.isRequired,
   docId: PropTypes.string.isRequired,
-  isPinned: PropTypes.bool.isRequired,
+  isPinned: PropTypes.bool,
+};
+
+Forum.defaultProps = {
+  isPinned: false,
 };
