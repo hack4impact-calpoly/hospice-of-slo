@@ -151,8 +151,12 @@ function ShiftCalendar({ vigil, isSingleDay }) {
         <Modal.Body>
           <Col>
             <Row>{clickedInfo.title}</Row>
-            <Row>{contactInfo.email}</Row>
-            <Row>{contactInfo.phone}</Row>
+            <a href={`mailto:${contactInfo.email}`}>
+              <Row>{contactInfo.email}</Row>
+            </a>
+            <a href={`sms:+1-${contactInfo.phone}`}>
+              <Row>{contactInfo.phone}</Row>
+            </a>
           </Col>
         </Modal.Body>
         { contactInfo.userId === thisUser
