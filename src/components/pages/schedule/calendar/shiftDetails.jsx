@@ -93,22 +93,33 @@ export default function ShiftDetails({ vigil, setSelectVigil, setShowModal }) {
     // creates a new shift and adds it to a specific vigil
     const currentUser = firebase.auth().currentUser.uid;
     const db = firebase.firestore();
-    const vigilRef = db.collection('vigils').doc(id);
-    vigilRef.collection('shifts').add({
+    const vigilRef = await db.collection('vigils').doc(id);
+    const userRef = await db.collection('users').doc(currentUser);
+    const user = await userRef.get();
+    const { name } = await user.data();
+    const newShift = {
       address: vigil.address,
       shiftStartTime: combineDateAndTime(shiftStartDate, shiftStartTime),
       shiftEndTime: combineDateAndTime(shiftEndDate, shiftEndTime),
       userRef: db.doc(`users/${currentUser}`),
-    })
+    };
+    vigilRef.collection('shifts').add(newShift)
       .then((ref) => {
-        const userRef = db.collection('users').doc(currentUser);
+        dispatch(actions.history.addHistoryShift({
+          ...newShift,
+          id: ref.id,
+          shiftStartTime: firebase.firestore.Timestamp.fromDate(combineDateAndTime(shiftStartDate, shiftStartTime)),
+          shiftEndTime: firebase.firestore.Timestamp.fromDate(combineDateAndTime(shiftEndDate, shiftEndTime)),
+          name,
+          userId: currentUser,
+          vigilId: vigilRef.id,
+        }));
         return userRef.update({
           prevShifts: firebase.firestore.FieldValue.arrayUnion(ref),
         });
       })
       .then(() => {
-        console.log('Document successfully written!');
-        // TODO: Redux changes should be added here instead of the console.log
+        dispatch(actions.user.addShift({ ...newShift }));
       })
       .catch((error) => {
         console.error('Error writing document: ', error);
