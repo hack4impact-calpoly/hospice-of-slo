@@ -115,6 +115,17 @@ function ShiftCalendar({ vigil, isSingleDay }) {
       .catch((error) => {
         console.error('Error deleting document: ', error);
       });
+    const currentUser = (sessionStorage.getItem('userid'));
+    const userRef = db.collection('users').doc(currentUser);
+    userRef.update({
+      prevShifts: firebase.firestore.FieldValue.arrayRemove(shiftRef),
+    })
+      .then(() => {
+        dispatch(actions.user.deleteShift(clickedInfo.shiftId));
+      })
+      .catch((error) => {
+        console.error('Error deleting document: ', error);
+      });
     handleCloseClick();
   };
 
