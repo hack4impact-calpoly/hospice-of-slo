@@ -13,11 +13,11 @@ const ForumBox = styled.button`
   text-align: left; 
   width: 100%;
   border: none;
-  opacity: 80%;
+  background-color: #f2f2f2;
   font-size: 18px;
 
   :hover{
-    opacity: 100%;
+    background-color: #efefef;
   }
 `;
 
