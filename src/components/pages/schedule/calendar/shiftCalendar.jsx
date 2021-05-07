@@ -24,11 +24,17 @@ function ShiftCalendar({ vigil }) {
   const getShifts = () => {
     const vigilsData = [];
     vigilShifts.forEach((shift) => {
+      let color = '#8FCBD4';
+      let label = shift.name;
+      if (shift.isAdmin) {
+        color = '#C4C4C4';
+        label = 'Blocked Off';
+      }
       vigilsData.push({
-        title: shift.name,
+        title: label,
         start: shift.shiftStartTime.toDate().toISOString(),
         end: shift.shiftEndTime.toDate().toISOString(),
-        backgroundColor: '#8FCBD4',
+        backgroundColor: color,
       });
     });
     setEventData(vigilsData);

@@ -15,9 +15,21 @@ export default function Schedule(props) {
 
   // Gets Vigil Data from redux store
   const storeVigils = useSelector((state) => state.vigils.vigils);
+  const storeHistoryShifts = useSelector((state) => state.historyShifts.historyShifts);
 
   const getVigilInfo = () => {
     const vigilsData = [];
+    storeHistoryShifts.forEach((s) => {
+      if (s.isAdmin) {
+        vigilsData.push({
+          title: 'Blocked Off',
+          start: s.shiftStartTime.toDate(),
+          end: s.shiftEndTime.toDate(),
+          backgroundColor: '#C4C4C4',
+          id: s.id,
+        });
+      }
+    });
     storeVigils.forEach((v) => {
       vigilsData.push({
         title: v.address,
