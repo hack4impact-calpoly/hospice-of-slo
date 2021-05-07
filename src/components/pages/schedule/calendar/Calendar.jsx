@@ -61,16 +61,14 @@ export default function Calendar(props) {
   };
 
   const handleEventClick = (info) => {
-    if (info.event.title !== 'Blocked Off') {
-      setClickedInfo({
-        id: info.event.id,
-        address: info.event.title,
-        endTime: info.event.end,
-        startTime: info.event.start,
-        notes: info.event.extendedProps.notes,
-      });
-      setShowModal(true);
-    }
+    setClickedInfo({
+      id: info.event.id,
+      address: info.event.title,
+      endTime: info.event.end,
+      startTime: info.event.start,
+      notes: info.event.extendedProps.notes,
+    });
+    setShowModal(true);
   };
 
   const handleCloseClick = () => setShowModal(false);
