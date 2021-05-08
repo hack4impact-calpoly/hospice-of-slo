@@ -3,7 +3,7 @@ import { Col } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { BiChevronRight } from 'react-icons/bi';
 import { AiFillPushpin } from 'react-icons/ai';
 import { IconContext } from 'react-icons';
@@ -54,6 +54,8 @@ export default function Forum(props) {
   const isAdmin = useSelector((state) => state.user.user.isAdmin);
   const { title, docId, isPinned } = props;
   const discussionLink = `/discussion/${docId}`;
+  const history = useHistory();
+
   return (
     <Col md={9} lg={8} xl={7}>
       <ForumBox className="mt-3">
@@ -63,7 +65,7 @@ export default function Forum(props) {
         <IconContext.Provider value={{ color: '#84C0C9' }}>
           {isPinned ? <Pin /> : null }
         </IconContext.Provider>
-        {isAdmin ? <Dots docId={docId} /> : <Arrow />}
+        {isAdmin ? <Dots docId={docId} /> : <Arrow onClick={() => history.push(discussionLink)} />}
       </ForumBox>
     </Col>
   );

@@ -10,7 +10,8 @@ const Author = styled.span`
   font-weight: bold;
 
   @media screen and (max-width: 768px) {
-    font-size: 16px;  
+    font-size: 16px;
+    display: block;  
   }
 `;
 
