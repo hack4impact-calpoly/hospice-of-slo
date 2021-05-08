@@ -26,6 +26,7 @@ const Time = styled.span`
 
 const Message = styled.p`
   margin-top: 6px;
+  overflow: hidden;
 `;
 
 export default function DiscussionPost({

@@ -15,6 +15,7 @@ const ForumBox = styled.button`
   border: none;
   background-color: #f2f2f2;
   font-size: 18px;
+  display: flex;
 
   :hover{
     background-color: #efefef;
@@ -23,6 +24,11 @@ const ForumBox = styled.button`
 
 const ForumLink = styled(Link)`
   padding: 20px;
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
   :hover{
     text-decoration: none; 
   }
@@ -36,13 +42,11 @@ const Dots = styled(Edit)`
 const Arrow = styled(BiChevronRight)`
   font-size: 30px;
   align-self: center;
-  margin-left: auto;
 `;
 
 const Pin = styled(AiFillPushpin)`
   color: 'blue';
   font-size: 30px;
-  margin-left: auto;
   align-self: center;
 `;
 
@@ -52,15 +56,14 @@ export default function Forum(props) {
   const discussionLink = `/discussion/${docId}`;
   return (
     <Col md={9} lg={8} xl={7}>
-      <ForumBox className="mt-3 d-flex">
-        <ForumLink to={discussionLink} style={{ width: '100%' }}>
+      <ForumBox className="mt-3">
+        <ForumLink to={discussionLink}>
           {title}
         </ForumLink>
         <IconContext.Provider value={{ color: '#84C0C9' }}>
           {isPinned ? <Pin /> : null }
         </IconContext.Provider>
         {isAdmin ? <Dots docId={docId} /> : <Arrow />}
-
       </ForumBox>
     </Col>
   );

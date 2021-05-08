@@ -19,6 +19,7 @@ const FloatingActionButton = styled(Button)`
   right: 25px;
   top: 25px;
   background-color: #84C0C9;
+  z-index: 1;
 
   font-size: 20px;
   &:hover{
