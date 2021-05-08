@@ -8,7 +8,7 @@ const Name = styled.span`
   padding-right: 30px;
   color: #424242;
   font-weight: bold;
-
+  overflow-wrap:break-word;
   @media screen and (max-width: 768px) {
     font-size: 16px;  
   }
@@ -17,6 +17,7 @@ const Name = styled.span`
 const Email = styled.p`
   font-size: 18px;
   margin: 4px 0px 0px 0px;
+  overflow-wrap:break-word;
   @media screen and (max-width: 768px) {
     font-size: 12px;  
   }
