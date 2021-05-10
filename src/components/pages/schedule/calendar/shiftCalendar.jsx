@@ -45,11 +45,17 @@ function ShiftCalendar({ vigil, isSingleDay }) {
   const getShifts = () => {
     const vigilsData = [];
     vigilShifts.forEach((shift) => {
+      let color = '#8FCBD4';
+      let label = shift.name;
+      if (shift.isAdmin) {
+        color = '#C4C4C4';
+        label = 'Blocked Off';
+      }
       vigilsData.push({
-        title: shift.name,
+        title: label,
         start: shift.shiftStartTime.toDate().toISOString(),
         end: shift.shiftEndTime.toDate().toISOString(),
-        backgroundColor: '#8FCBD4',
+        backgroundColor: color,
         id: shift.id,
         groupId: shift.vigilId,
         userId: shift.userId,
@@ -94,10 +100,11 @@ function ShiftCalendar({ vigil, isSingleDay }) {
       shiftId: info.event.id,
       userId: info.event.extendedProps.userId,
       vigilId: info.event.groupId,
-
     });
-    getContact(info.event.extendedProps.userId);
-    setShowModal(true);
+    if (info.event.title !== 'Blocked Off') {
+      getContact(info.event.extendedProps.userId);
+      setShowModal(true);
+    }
   };
 
   const handleCloseClick = () => setShowModal(false);

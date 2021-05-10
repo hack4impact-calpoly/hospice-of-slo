@@ -63,7 +63,6 @@ const retrieveVigils = async (dbRef) => {
     const {
       address, startTime, endTime, notes,
     } = doc.data();
-
     vigils.push({
       id: doc.id,
       address,
@@ -127,7 +126,7 @@ const retrieveHistoryShifts = async (dbRef) => {
       const userSnapshot = await userRef.get();
 
       const {
-        name,
+        name, isAdmin,
       } = userSnapshot.data();
 
       const thisShift = {
@@ -136,6 +135,7 @@ const retrieveHistoryShifts = async (dbRef) => {
         shiftEndTime,
         shiftStartTime,
         name,
+        isAdmin,
         userId: userSnapshot.id,
         vigilId: doc.id,
       };
