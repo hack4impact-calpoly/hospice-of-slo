@@ -130,12 +130,14 @@ const retrieveHistoryShifts = async (dbRef) => {
       } = userSnapshot.data();
 
       const thisShift = {
-        id: doc.id,
+        id: shift.id,
         address,
         shiftEndTime,
         shiftStartTime,
         name,
         isAdmin,
+        userId: userSnapshot.id,
+        vigilId: doc.id,
       };
       historyShifts.push(thisShift);
     });
