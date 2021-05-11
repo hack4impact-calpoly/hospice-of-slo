@@ -37,7 +37,16 @@ export default function PastShifts() {
           const time = `${shift.shiftStartTime.toDate().toLocaleTimeString()} to ${shift.shiftEndTime.toDate().toLocaleTimeString()}`;
           const date = `${dayNames[shift.shiftStartTime.toDate().getDay()]} ${shift.shiftStartTime.toDate().getMonth() + 1}/${
             shift.shiftStartTime.toDate().getDate()}/${shift.shiftStartTime.toDate().getFullYear()}`;
-          return <PastShiftCard address={shift.address} date={date} time={time} color="#333333" />;
+          const theKey = JSON.stringify(shift);
+          return (
+            <PastShiftCard
+              key={theKey}
+              address={shift.address}
+              date={date}
+              time={time}
+              color="#333333"
+            />
+          );
         })}
       </ListWrapper>
     </div>
