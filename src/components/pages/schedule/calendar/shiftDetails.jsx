@@ -119,7 +119,11 @@ export default function ShiftDetails({ vigil, setSelectVigil, setShowModal }) {
         });
       })
       .then(() => {
-        dispatch(actions.user.addShift({ ...newShift }));
+        dispatch(actions.user.addShift({
+          ...newShift,
+          shiftStartTime: firebase.firestore.Timestamp.fromDate(combineDateAndTime(shiftStartDate, shiftStartTime)),
+          shiftEndTime: firebase.firestore.Timestamp.fromDate(combineDateAndTime(shiftEndDate, shiftEndTime)),
+        }));
       })
       .catch((error) => {
         console.error('Error writing document: ', error);

@@ -22,7 +22,9 @@ const retrieveUser = async (dbRef) => {
   const temp = await userRef.get();
   const ps = [];
   temp.data().prevShifts.forEach((shift) => {
-    ps.push(shift);
+    shift.get()
+      .then((doc) => doc.data())
+      .then((shiftData) => ps.push(shiftData));
   });
 
   const user = {

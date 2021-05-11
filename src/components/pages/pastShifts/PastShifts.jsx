@@ -21,9 +21,7 @@ export default function PastShifts() {
 
   async function getPastShifts() {
     prevShifts.forEach((shift) => {
-      shift.get().then((doc) => {
-        setShifts((oldShifts) => [...oldShifts, doc.data()]);
-      });
+      setShifts((oldShifts) => [...oldShifts, shift]);
     });
   }
 
