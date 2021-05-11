@@ -37,7 +37,8 @@ export default function PastShifts() {
           const time = `${shift.shiftStartTime.toDate().toLocaleTimeString()} to ${shift.shiftEndTime.toDate().toLocaleTimeString()}`;
           const date = `${dayNames[shift.shiftStartTime.toDate().getDay()]} ${shift.shiftStartTime.toDate().getMonth() + 1}/${
             shift.shiftStartTime.toDate().getDate()}/${shift.shiftStartTime.toDate().getFullYear()}`;
-          const theKey = JSON.stringify(shift);
+          const theKey = shift.id;
+          console.log(shift.id);
           return (
             <PastShiftCard
               key={theKey}

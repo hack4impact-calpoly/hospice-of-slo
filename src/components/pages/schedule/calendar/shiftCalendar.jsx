@@ -117,6 +117,7 @@ function ShiftCalendar({ vigil, isSingleDay }) {
     shiftRef.delete()
       .then(() => {
         dispatch(actions.history.deleteHistoryShift(clickedInfo.shiftId));
+        console.log(clickedInfo.shiftId);
         dispatch(actions.user.deleteShift(clickedInfo.shiftId));
       })
       .catch((error) => {
