@@ -25,6 +25,16 @@ export default function PastShifts() {
     });
   }
 
+  function compare(a, b) { // sorts in chronological order
+    if (a.shiftStartTime.valueOf() < b.shiftStartTime.valueOf()) {
+      return 1;
+    }
+    if (a.shiftStartTime.valueOf() > b.shiftStartTime.valueOf()) {
+      return -1;
+    }
+    return 0;
+  }
+
   React.useEffect(() => {
     getPastShifts();
   }, []);
@@ -33,15 +43,13 @@ export default function PastShifts() {
     <div>
       <HeaderWithNav>Past Shifts</HeaderWithNav>
       <ListWrapper>
-        {shifts.map((shift) => {
+        {shifts.sort(compare).map((shift) => {
           const time = `${shift.shiftStartTime.toDate().toLocaleTimeString()} to ${shift.shiftEndTime.toDate().toLocaleTimeString()}`;
           const date = `${dayNames[shift.shiftStartTime.toDate().getDay()]} ${shift.shiftStartTime.toDate().getMonth() + 1}/${
             shift.shiftStartTime.toDate().getDate()}/${shift.shiftStartTime.toDate().getFullYear()}`;
-          const theKey = shift.id;
-          console.log(shift.id);
           return (
             <PastShiftCard
-              key={theKey}
+              key={shift.id}
               address={shift.address}
               date={date}
               time={time}
