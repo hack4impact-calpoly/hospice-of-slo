@@ -114,11 +114,11 @@ export default function SignUp() {
     const db = firebase.firestore();
     const userRef = db.collection('users').doc(user.uid);
     const userData = {
-      email: email,
-      name: name,
-      phone: phone,
-      isAdmin: isAdmin,
-      prevShifts: prevShifts,
+      email,
+      name,
+      phone,
+      isAdmin,
+      prevShifts,
     };
     userRef.set(userData);
   };
