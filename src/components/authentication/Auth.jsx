@@ -18,11 +18,24 @@ const LoaderContainer = styled.div`
 
 const retrieveUser = async (dbRef) => {
   const currentUser = (sessionStorage.getItem('userid'));
-  const userRef = dbRef.collection('users').doc(currentUser);
-  const temp = await userRef.get();
+  const thisUserRef = dbRef.collection('users').doc(currentUser);
+  const temp = await thisUserRef.get();
   const ps = [];
   temp.data().prevShifts.forEach((shift) => {
-    ps.push(shift);
+    shift.get()
+      .then((doc) => {
+        const {
+          address, shiftEndTime, shiftStartTime, userRef,
+        } = doc.data();
+
+        ps.push({
+          id: doc.id,
+          address,
+          shiftEndTime,
+          shiftStartTime,
+          userRef,
+        });
+      });
   });
 
   const user = {

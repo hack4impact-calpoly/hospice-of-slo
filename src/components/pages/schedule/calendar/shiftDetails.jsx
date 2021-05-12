@@ -105,11 +105,19 @@ export default function ShiftDetails({ vigil, setSelectVigil, setShowModal }) {
     };
     vigilRef.collection('shifts').add(newShift)
       .then((ref) => {
+        const reduxStartTime = firebase.firestore.Timestamp.fromDate(combineDateAndTime(shiftStartDate, shiftStartTime));
+        const reduxEndTime = firebase.firestore.Timestamp.fromDate(combineDateAndTime(shiftEndDate, shiftEndTime));
+        dispatch(actions.user.addShift({
+          ...newShift,
+          shiftStartTime: reduxStartTime,
+          shiftEndTime: reduxEndTime,
+          id: ref.id,
+        }));
         dispatch(actions.history.addHistoryShift({
           ...newShift,
           id: ref.id,
-          shiftStartTime: firebase.firestore.Timestamp.fromDate(combineDateAndTime(shiftStartDate, shiftStartTime)),
-          shiftEndTime: firebase.firestore.Timestamp.fromDate(combineDateAndTime(shiftEndDate, shiftEndTime)),
+          shiftStartTime: reduxStartTime,
+          shiftEndTime: reduxEndTime,
           name,
           userId: currentUser,
           vigilId: vigilRef.id,
@@ -117,9 +125,6 @@ export default function ShiftDetails({ vigil, setSelectVigil, setShowModal }) {
         return userRef.update({
           prevShifts: firebase.firestore.FieldValue.arrayUnion(ref),
         });
-      })
-      .then(() => {
-        dispatch(actions.user.addShift({ ...newShift }));
       })
       .catch((error) => {
         console.error('Error writing document: ', error);
