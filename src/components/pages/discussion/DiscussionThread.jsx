@@ -4,7 +4,7 @@ import 'firebase/firestore';
 import firebase from 'firebase/app';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { Modal, Form } from 'react-bootstrap';
+import { Modal, Form, Button } from 'react-bootstrap';
 import { FloatingActionButton } from '../../../styled-components/discussion-components';
 import HeaderWithBackArrow from '../../navigation/HeaderWithBackArrow';
 import DiscussionPost from './DiscussionPost';
@@ -30,6 +30,29 @@ const StyledPost = styled.button`
   padding: 6px 0px;
 
   &:hover{
+    background-color: #558E97;
+  }
+`;
+
+const StyledButton = styled(Button)`
+  color: white;
+  margin-bottom: 12px;
+  background-color: #558E97;
+  border-radius: 5px;
+  padding: 6px 10px; 
+  border: none;
+  width: 25%;
+  font-size: 14px;
+  fontFamily: Roboto;
+  outline: none !important;
+  box-shadow: none !important;
+
+  &:hover{
+    color: white;
+    background-color: #84C0C9;
+  }
+
+  &:focus, &:active {
     background-color: #558E97;
   }
 `;
@@ -134,6 +157,9 @@ export default function DiscussionThread() {
         </Modal.Header>
         <Modal.Body>
           <Form>
+            <StyledButton style={{ float: 'left' }} onClick={() => setMessage('Vigil Under Care')}> Under Care</StyledButton>
+            <StyledButton style={{ marginLeft: '12.5%' }} onClick={() => setMessage('Vigil On Hold')}>Vigil On Hold</StyledButton>
+            <StyledButton style={{ float: 'right' }} onClick={() => setMessage('Vigil Complete')}> Vigil Complete</StyledButton>
             <Form.Group controlId="exampleForm.ControlTextarea1">
               <Form.Control
                 as="textarea"

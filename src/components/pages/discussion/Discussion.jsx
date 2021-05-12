@@ -15,6 +15,10 @@ const FormS = styled(Form.Control)`
   width: 100%;
 `;
 
+const PaddedContainer = styled(Container)`
+  padding: 15px;
+`;
+
 export default function Discussion() {
   const isAdmin = useSelector((state) => state.user.user.isAdmin);
   const [searchTerm, setSearchTerm] = useState('');
@@ -63,7 +67,7 @@ export default function Discussion() {
     <div>
       <HeaderWithNav>Discussions</HeaderWithNav>
       {isAdmin ? <CreateThread /> : null}
-      <Container fluid>
+      <PaddedContainer fluid>
         <Row className="justify-content-md-center">
           <Col className="search" md={9} lg={8} xl={7}>
             <FormS
@@ -78,7 +82,7 @@ export default function Discussion() {
 
         {forumsPinned}
         {forumsNotPinned}
-      </Container>
+      </PaddedContainer>
     </div>
   );
 }

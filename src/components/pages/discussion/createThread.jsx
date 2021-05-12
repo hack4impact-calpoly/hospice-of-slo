@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-  Row, Col, Button, Modal, Form,
+  Row, Col, Modal, Form,
 } from 'react-bootstrap';
 import styled from 'styled-components';
 import firebase from 'firebase';
@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import { discussionPropType } from '../../../dataStructures/propTypes';
 import actions from '../../../actions';
+import { FloatingActionButton } from '../../../styled-components/discussion-components';
 
 const StyledCreate = styled.button`
   color: white;
@@ -42,21 +43,6 @@ const StyledRow = styled(Row)`
 
 const StyledCol = styled(Col)`
   padding: 5%;
-`;
-
-const AddThread = styled(Button)`
-  border-radius: 50%;
-  border: none;
-  padding: 1ex 1em;
-  position:fixed;
-  right: 25px;
-  top: 25px;
-  background-color: #84C0C9;
-
-  font-size: 20px;
-  &:hover{
-    background-color: #558E97;
-  }
 `;
 
 export default function CreateThread(props) {
@@ -105,7 +91,7 @@ export default function CreateThread(props) {
 
   return (
     <div>
-      {isEditing ? <div role="button" tabIndex={0} onKeyPress={handleShow} onClick={handleShow}>edit</div> : <AddThread size="sm" onClick={handleShow}>+</AddThread>}
+      {isEditing ? <div role="button" tabIndex={0} onKeyPress={handleShow} onClick={handleShow}>edit</div> : <FloatingActionButton onClick={handleShow}>+</FloatingActionButton>}
       <Modal show={show} onEscapeKeyDown={handleClose} onHide={handleClose} centered>
         <Modal.Body>
           <StyledCol>
