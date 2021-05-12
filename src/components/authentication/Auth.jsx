@@ -97,6 +97,7 @@ const retrieveDiscussions = async (dbRef) => {
         message,
         timeSent,
         userRef,
+        messageId: msg.id,
       });
     });
     discussions.push({

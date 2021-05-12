@@ -95,7 +95,7 @@ export default function DiscussionThread() {
     let usersData = messages.map((m) => m.userRef.get());
     usersData = await Promise.all(usersData);
     const users = [];
-    usersData.forEach((user) => users.push(user.data()));
+    usersData.forEach((user) => users.push({ ...(user.data()), userId: user.id }));
     // Combine each message with its populated user ref
     const populatedMessages = [];
     for (let i = 0; i < messages.length; i += 1) {
@@ -133,11 +133,19 @@ export default function DiscussionThread() {
       timeSent: firebase.firestore.FieldValue.serverTimestamp(),
       userRef,
     };
-    messageRef.add(messageData).then(() => {
+    messageRef.add(messageData).then((msgRef) => {
       handleClose();
       const theTime = (firebase.firestore.Timestamp.now());
-      const newMessages = [...(discussion.messages), { message, timeSent: theTime, userRef }];
-      dispatch(actions.discussions.editDiscussion(discussion.id, { ...discussion, messages: newMessages }));
+      const newMessages = [...(discussion.messages), {
+        message,
+        timeSent: theTime,
+        userRef,
+        messageId: msgRef.id,
+      }];
+      dispatch(actions.discussions.editDiscussion(discussion.id, {
+        ...discussion,
+        messages: newMessages,
+      }));
     });
   };
 
@@ -181,7 +189,7 @@ export default function DiscussionThread() {
         </Modal.Footer>
       </Modal>
       <PostWrapper>
-        {posts.sort(compare).map((post) => <DiscussionPost key={post.timeSent} author={post.user.name} timeSent={post.timeSent.toDate()} message={post.message} />)}
+        {posts.sort(compare).map((post) => <DiscussionPost key={post.messageId} discussion={discussion} author={post.user.name} userId={post.user.userId} timeSent={post.timeSent.toDate()} message={post.message} messageId={post.messageId} />)}
       </PostWrapper>
     </div>
   );
