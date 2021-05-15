@@ -66,7 +66,12 @@ const LessPadedText = styled(Card.Text)`
   margin-bottom: 5px;
 `;
 
-export default function ShiftDetails({ vigil, setSelectVigil, setShowModal }) {
+export default function ShiftDetails({
+  vigil,
+  setSelectVigil,
+  setShowModal,
+  curDate,
+}) {
   const {
     id, address, startTime, endTime, notes,
   } = vigil;
@@ -204,7 +209,7 @@ export default function ShiftDetails({ vigil, setSelectVigil, setShowModal }) {
         <Col xs={12} sm={12} md={12} lg={6} className="mb-4">
           <div>
             <Card.Title className="font-weight-bold">Schedule</Card.Title>
-            <ShiftCalendar vigil={vigil} isSingleDay={isSingleDay} />
+            <ShiftCalendar vigil={vigil} isSingleDay={isSingleDay} curDate={curDate} />
           </div>
         </Col>
         <Col xs={12} sm={12} md={12} lg={6}>
@@ -318,4 +323,5 @@ ShiftDetails.propTypes = {
   vigil: vigilPropType.isRequired,
   setSelectVigil: PropTypes.func.isRequired,
   setShowModal: PropTypes.func.isRequired,
+  curDate: PropTypes.instanceOf(Date).isRequired,
 };

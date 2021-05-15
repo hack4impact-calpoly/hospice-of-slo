@@ -25,7 +25,7 @@ const StyledDrop = styled.button`
   }
 `;
 
-function ShiftCalendar({ vigil, isSingleDay }) {
+function ShiftCalendar({ vigil, isSingleDay, curDate }) {
   const { startTime, endTime } = vigil;
   const [showModal, setShowModal] = useState(false);
   const [eventData, setEventData] = useState([]);
@@ -76,6 +76,7 @@ function ShiftCalendar({ vigil, isSingleDay }) {
     start: startTime,
     end: endTime,
   };
+  const scrollTime = startTime.getTime() === curDate.getTime() ? moment(startTime).format('HH:mm') : '06:00';
 
   const [contactInfo, setContact] = useState({});
 
@@ -142,8 +143,8 @@ function ShiftCalendar({ vigil, isSingleDay }) {
         initialView="timeGridDay"
         selectable
         plugins={[timeGridPlugin, interactionPlugin]}
-        initialDate={startTime}
-        scrollTime={moment(startTime).format('HH:mm')}
+        initialDate={curDate}
+        scrollTime={scrollTime}
         validRange={validRange}
         events={[...eventData]}
         headerToolbar={volunteerCalendarHeader}
@@ -181,6 +182,7 @@ function ShiftCalendar({ vigil, isSingleDay }) {
 ShiftCalendar.propTypes = {
   vigil: vigilPropType.isRequired,
   isSingleDay: PropTypes.bool.isRequired,
+  curDate: PropTypes.instanceOf(Date).isRequired,
 };
 
 export default ShiftCalendar;
