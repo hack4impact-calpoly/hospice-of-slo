@@ -169,10 +169,10 @@ export default function SignUp() {
                 </Col>
                 <Col xs={12} md={6}>
                   <Form.Group className="mt-2">
-                    <Form.Label>Name</Form.Label>
+                    <Form.Label>Full Name</Form.Label>
                     <Form.Control
                       type="text"
-                      placeholder="firstName lastName"
+                      placeholder="John Doe"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       required
