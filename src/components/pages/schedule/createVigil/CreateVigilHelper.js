@@ -12,7 +12,8 @@ function dateComesBefore(date1, date2) {
 
 // On Submit Helpers
 function combineDateAndTime(date, time) {
-  return new Date(`${date} ${time}`);
+  const format = date.replace(/-/g, '/');
+  return new Date(`${format} ${time}`);
 }
 
 // Editing Helper
