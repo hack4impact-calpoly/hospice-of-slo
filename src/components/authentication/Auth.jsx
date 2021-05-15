@@ -24,17 +24,19 @@ const retrieveUser = async (dbRef) => {
   temp.data().prevShifts.forEach((shift) => {
     shift.get()
       .then((doc) => {
-        const {
-          address, shiftEndTime, shiftStartTime, userRef,
-        } = doc.data();
+        if (doc.data() !== undefined) {
+          const {
+            address, shiftEndTime, shiftStartTime, userRef,
+          } = doc.data();
 
-        ps.push({
-          id: doc.id,
-          address,
-          shiftEndTime,
-          shiftStartTime,
-          userRef,
-        });
+          ps.push({
+            id: doc.id,
+            address,
+            shiftEndTime,
+            shiftStartTime,
+            userRef,
+          });
+        }
       });
   });
 
