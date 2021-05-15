@@ -172,7 +172,7 @@ export default function SignUp() {
                     <Form.Label>Name</Form.Label>
                     <Form.Control
                       type="text"
-                      placeholder="name"
+                      placeholder="firstName lastName"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       required
