@@ -137,12 +137,13 @@ export default function SignUp() {
                 });
             })
             .catch((error) => {
-              console.error(error, 'Display name not set.'); // feedback should be put on frontend
+              setErrMessage(error.message);
+              setShowErr(true);
             });
         })
         .catch((error) => {
-          const errorMessage = error.message;
-          console.error('Error:', errorMessage); // feedback should be put on frontend
+          setErrMessage(error.message);
+          setShowErr(true);
         });
     }
   }
@@ -151,7 +152,10 @@ export default function SignUp() {
     validateEmail();
     validatePhone();
     validatePass();
-    signupPress();
+    if (showErr === false) {
+      signupPress();
+      setShowErr(true);
+    }
   };
 
   return (

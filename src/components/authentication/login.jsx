@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import {
   Container, Row, Col, Form, Image,
@@ -89,12 +89,18 @@ const FLink = styled(Link)`
   }
 `;
 
+const StyledError = styled.div`
+  color: red;
+`;
+
 export default function Login() {
   const history = useHistory();
 
   const [email, setEmail] = React.useState('');
   /* eslint-disable-next-line */
   const [password, setPassword] = React.useState('');
+  const [showErr, setShowErr] = useState(false);
+  const [errMessage, setErrMessage] = useState('');
 
   const loginPress = () => {
     // sign in to firebase with email and password
@@ -109,15 +115,19 @@ export default function Login() {
             history.push('/');
           } else {
             // user.data() will be undefined in this case
-            alert('user does not exist');
+            setErrMessage('Cannot Find User');
+            setShowErr(true);
           }
         }).catch((error) => {
-          console.error('Error getting user', error);
+          // console.error('Error getting user', error);
+          setErrMessage(error);
+          setShowErr(true);
         });
       })
       .catch(() => {
         // unable to sign in
-        alert('The email account or password is incorrect');
+        setErrMessage('Email account or password is incorrect');
+        setShowErr(true);
       });
   };
 
@@ -131,14 +141,23 @@ export default function Login() {
               className="mt-3"
               type="email"
               placeholder="email"
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                setShowErr(false);
+              }}
             />
             <Form.Control
               className="mt-3 mb-3"
               type="password"
               placeholder="password"
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                setShowErr(false);
+              }}
             />
+            {showErr
+              ? <StyledError>{errMessage}</StyledError>
+              : (null)}
             <Row>
               <Col>
                 <Link to="/signup">
