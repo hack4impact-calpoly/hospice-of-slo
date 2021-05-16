@@ -7,6 +7,7 @@ import { useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap/Modal';
+import moment from 'moment';
 import ShiftDetails from './shiftDetails';
 import { vigilPropType } from '../../../../dataStructures/propTypes';
 
@@ -42,6 +43,7 @@ export default function Calendar(props) {
   const [clickedInfo, setClickedInfo] = useState({
     id: '', address: '', endTime: new Date(), startTime: new Date(), notes: '',
   });
+  const [curDate, setCurDate] = useState(new Date());
 
   const adminCalendarHeader = {
     start: 'title',
@@ -60,6 +62,22 @@ export default function Calendar(props) {
     click: () => history.push('/schedule/create-shift'),
   };
 
+  const updateCurDate = (info) => {
+    if (info.view.type === 'timeGridDay') { // Mobile Logic
+      setCurDate(info.view.currentStart);
+      return;
+    }
+
+    const classes = info.el.classList;
+    if (classes.contains('isStart')) { // Desktop Logic
+      setCurDate(info.event.start);
+    } else if (classes.contains('isEnd')) {
+      setCurDate(info.event.end);
+    } else {
+      setCurDate(moment(info.event.start).add(1, 'day').toDate());
+    }
+  };
+
   const handleEventClick = (info) => {
     setClickedInfo({
       id: info.event.id,
@@ -68,7 +86,18 @@ export default function Calendar(props) {
       startTime: info.event.start,
       notes: info.event.extendedProps.notes,
     });
+    updateCurDate(info);
     setShowModal(true);
+  };
+
+  const getClassNames = (info) => {
+    if (info.isStart) {
+      return ['isStart'];
+    }
+    if (info.isEnd) {
+      return ['isEnd'];
+    }
+    return [];
   };
 
   const handleCloseClick = () => setShowModal(false);
@@ -84,6 +113,7 @@ export default function Calendar(props) {
             selectable
             events={eventData}
             eventClick={handleEventClick}
+            eventClassNames={getClassNames}
             headerToolbar={adminCalendarHeader}
             customButtons={{ addEventButton }}
             height="85vh"
@@ -98,6 +128,7 @@ export default function Calendar(props) {
             selectable
             events={eventData}
             eventClick={handleEventClick}
+            eventClassNames={getClassNames}
             headerToolbar={volunteerCalendarHeader}
             height="80vh"
             allDaySlot={false}
@@ -110,6 +141,7 @@ export default function Calendar(props) {
             vigil={clickedInfo}
             setSelectVigil={setSelectVigil}
             setShowModal={setShowModal}
+            curDate={curDate}
           />
         </Modal.Body>
       </Modal>
