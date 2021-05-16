@@ -66,7 +66,7 @@ const LessPadedText = styled(Card.Text)`
   margin-bottom: 5px;
 `;
 
-export default function ShiftDetails({ vigil, setSelectVigil, setShowModal }) {
+export default function ShiftDetails({ vigil, setSelectVigil }) {
   const {
     id, address, startTime, endTime, notes,
   } = vigil;
@@ -88,6 +88,7 @@ export default function ShiftDetails({ vigil, setSelectVigil, setShowModal }) {
   const formStartDate = moment(startTime).format('YYYY-MM-DD');
   const [shiftStartDate, setShiftStartDate] = useState(isSingleDay ? formStartDate : '');
   const [shiftEndDate, setShiftEndDate] = useState(isSingleDay ? formStartDate : '');
+  const [showDateFeedback, setShowDateFeedback] = useState(false);
 
   async function addShiftPress() {
     // creates a new shift and adds it to a specific vigil
@@ -97,22 +98,29 @@ export default function ShiftDetails({ vigil, setSelectVigil, setShowModal }) {
     const userRef = await db.collection('users').doc(currentUser);
     const user = await userRef.get();
     const { name } = await user.data();
+    const start = combineDateAndTime(shiftStartDate, shiftStartTime);
+    const end = combineDateAndTime(shiftEndDate, shiftEndTime);
     const newShift = {
       address: vigil.address,
-      shiftStartTime: combineDateAndTime(shiftStartDate, shiftStartTime),
-      shiftEndTime: combineDateAndTime(shiftEndDate, shiftEndTime),
+      shiftStartTime: start,
+      shiftEndTime: end,
       userRef: db.doc(`users/${currentUser}`),
     };
+
+    setShowDateFeedback(false);
+
     vigilRef.collection('shifts').add(newShift)
       .then((ref) => {
         const reduxStartTime = firebase.firestore.Timestamp.fromDate(combineDateAndTime(shiftStartDate, shiftStartTime));
         const reduxEndTime = firebase.firestore.Timestamp.fromDate(combineDateAndTime(shiftEndDate, shiftEndTime));
+
         dispatch(actions.user.addShift({
           ...newShift,
           shiftStartTime: reduxStartTime,
           shiftEndTime: reduxEndTime,
           id: ref.id,
         }));
+
         dispatch(actions.history.addHistoryShift({
           ...newShift,
           id: ref.id,
@@ -122,7 +130,7 @@ export default function ShiftDetails({ vigil, setSelectVigil, setShowModal }) {
           userId: currentUser,
           vigilId: vigilRef.id,
         }));
-        return userRef.update({
+        userRef.update({
           prevShifts: firebase.firestore.FieldValue.arrayUnion(ref),
         });
       })
@@ -181,6 +189,13 @@ export default function ShiftDetails({ vigil, setSelectVigil, setShowModal }) {
   };
 
   const validate = (event) => {
+    const start = (combineDateAndTime(shiftStartDate, shiftStartTime));
+    const end = (combineDateAndTime(shiftStartDate, shiftStartTime));
+
+    if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) {
+      setShowDateFeedback(true);
+      return false;
+    }
     const form = event.currentTarget;
     setValidated(true);
     if (form.checkValidity() === false) {
@@ -194,7 +209,6 @@ export default function ShiftDetails({ vigil, setSelectVigil, setShowModal }) {
     event.preventDefault();
     if (validate(event)) {
       addShiftPress();
-      setShowModal(false);
     }
   };
 
@@ -232,6 +246,7 @@ export default function ShiftDetails({ vigil, setSelectVigil, setShowModal }) {
                       <Form.Control
                         type="date"
                         name="startDate"
+                        placeholder="yyyy/mm/dd"
                         value={shiftStartDate}
                         onChange={(e) => handleInputChange(e, setShiftStartDate)}
                         required
@@ -247,6 +262,7 @@ export default function ShiftDetails({ vigil, setSelectVigil, setShowModal }) {
                       <Form.Control
                         type="date"
                         name="endDate"
+                        placeholder="yyyy/mm/dd"
                         value={shiftEndDate}
                         onChange={(e) => handleInputChange(e, setShiftEndDate)}
                         required
@@ -268,6 +284,7 @@ export default function ShiftDetails({ vigil, setSelectVigil, setShowModal }) {
                     <Form.Control
                       type="time"
                       name="startTime"
+                      placeholder="24-hour time"
                       value={shiftStartTime}
                       onChange={(e) => handleInputChange(e, setShiftStartTime)}
                       required
@@ -283,6 +300,7 @@ export default function ShiftDetails({ vigil, setSelectVigil, setShowModal }) {
                     <Form.Control
                       type="time"
                       name="endTime"
+                      placeholder="ex. 18:00"
                       value={shiftEndTime}
                       onChange={(e) => handleInputChange(e, setShiftEndTime)}
                       required
@@ -296,11 +314,19 @@ export default function ShiftDetails({ vigil, setSelectVigil, setShowModal }) {
                   </Form.Group>
                 </Col>
               </Form.Row>
+              {showDateFeedback
+                ? (
+                  <Form.Row>
+                    <Col>
+                      <div style={{ color: '#ff0000' }}>Please enter the correct date and time format.</div>
+                    </Col>
+                  </Form.Row>
+                ) : null}
               <SignUpButton type="submit">Sign Up</SignUpButton>
             </Form>
             <StyledModal show={show} centered>
               <Modal.Body>
-                Are you sure you want delete this Vigil?
+                Are you sure you want to delete this Vigil?
               </Modal.Body>
               <Modal.Footer>
                 <StyledButton onClick={() => setShow(false)}>Cancel</StyledButton>
@@ -317,5 +343,4 @@ export default function ShiftDetails({ vigil, setSelectVigil, setShowModal }) {
 ShiftDetails.propTypes = {
   vigil: vigilPropType.isRequired,
   setSelectVigil: PropTypes.func.isRequired,
-  setShowModal: PropTypes.func.isRequired,
 };
