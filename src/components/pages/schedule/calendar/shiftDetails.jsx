@@ -66,7 +66,7 @@ const LessPadedText = styled(Card.Text)`
   margin-bottom: 5px;
 `;
 
-export default function ShiftDetails({ vigil, setSelectVigil }) {
+export default function ShiftDetails({ vigil, setSelectVigil, setShowModal }) {
   const {
     id, address, startTime, endTime, notes,
   } = vigil;
@@ -209,6 +209,7 @@ export default function ShiftDetails({ vigil, setSelectVigil }) {
     event.preventDefault();
     if (validate(event)) {
       addShiftPress();
+      setShowModal(false);
     }
   };
 
@@ -343,4 +344,5 @@ export default function ShiftDetails({ vigil, setSelectVigil }) {
 ShiftDetails.propTypes = {
   vigil: vigilPropType.isRequired,
   setSelectVigil: PropTypes.func.isRequired,
+  setShowModal: PropTypes.func.isRequired,
 };
