@@ -80,7 +80,7 @@ function ShiftCalendar({ vigil, isSingleDay }) {
   const [contactInfo, setContact] = useState({});
 
   const getContact = async (userId) => {
-    const userRef = await db.collection('users').doc(userId);
+    const userRef = db.collection('users').doc(userId);
     const user = await userRef.get();
     const { email, phone } = user.data();
     setContact({
@@ -112,8 +112,8 @@ function ShiftCalendar({ vigil, isSingleDay }) {
   const dispatch = useDispatch();
 
   const handleDrop = async () => {
-    const vigilRef = await db.collection('vigils').doc(clickedInfo.vigilId);
-    const shiftRef = await vigilRef.collection('shifts').doc(clickedInfo.shiftId);
+    const vigilRef = db.collection('vigils').doc(clickedInfo.vigilId);
+    const shiftRef = vigilRef.collection('shifts').doc(clickedInfo.shiftId);
     shiftRef.delete()
       .then(() => {
         dispatch(actions.history.deleteHistoryShift(clickedInfo.shiftId));
