@@ -18,18 +18,18 @@ const SpacedDiv = styled.div`
 `;
 
 const LinkLabel = styled.span`
-  font-size: 26px;
+  font-size: ${(props) => props.fontSize || '26px'};
   padding-left: 10px;
 `;
 
 function NavLink({
-  to, Icon, children, handleClick,
+  to, Icon, children, handleClick, fontSize,
 }) {
   return (
     <Link to={to}>
       <SpacedDiv onClick={handleClick}>
         <Icon size={32} />
-        <LinkLabel>{children}</LinkLabel>
+        <LinkLabel fontSize={fontSize}>{children}</LinkLabel>
       </SpacedDiv>
     </Link>
   );
@@ -39,6 +39,11 @@ NavLink.propTypes = {
   to: PropTypes.string.isRequired,
   Icon: PropTypes.func.isRequired,
   children: PropTypes.string.isRequired,
+  fontSize: PropTypes.string,
+};
+
+NavLink.defaultProps = {
+  fontSize: '26px',
 };
 
 export default function Navbar() {
@@ -56,7 +61,9 @@ export default function Navbar() {
     <Menu>
       <NavLink to="/discussion" Icon={BiChat}>Discussions</NavLink>
       <NavLink to="/schedule" Icon={BiCalendarAlt}>Schedule</NavLink>
-      <NavLink to="/past-shifts" Icon={BiClipboard}>Past Shifts</NavLink>
+      { isAdmin
+        ? <NavLink to="/past-shifts" Icon={BiClipboard} fontSize="20px">Blocked Off Shifts</NavLink>
+        : <NavLink to="/past-shifts" Icon={BiClipboard}>Past Shifts</NavLink>}
       <NavLink to="/contacts" Icon={BiPhone}>Contacts</NavLink>
       { isAdmin
         ? <NavLink to="/history" Icon={BiTime}>History</NavLink>

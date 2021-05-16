@@ -99,10 +99,10 @@ export default function ShiftDetails({
     // creates a new shift and adds it to a specific vigil
     const currentUser = firebase.auth().currentUser.uid;
     const db = firebase.firestore();
-    const vigilRef = await db.collection('vigils').doc(id);
-    const userRef = await db.collection('users').doc(currentUser);
+    const vigilRef = db.collection('vigils').doc(id);
+    const userRef = db.collection('users').doc(currentUser);
     const user = await userRef.get();
-    const { name } = await user.data();
+    const { name } = user.data();
     const start = combineDateAndTime(shiftStartDate, shiftStartTime);
     const end = combineDateAndTime(shiftEndDate, shiftEndTime);
     const newShift = {
@@ -132,6 +132,7 @@ export default function ShiftDetails({
           shiftStartTime: reduxStartTime,
           shiftEndTime: reduxEndTime,
           name,
+          isAdmin,
           userId: currentUser,
           vigilId: vigilRef.id,
         }));
@@ -252,7 +253,7 @@ export default function ShiftDetails({
             <Card.Text>{formattedTime}</Card.Text>
             <Card.Subtitle className="font-weight-bold">Notes</Card.Subtitle>
             <Card.Text>{notes}</Card.Text>
-            <Card.Subtitle className="font-weight-bold pb-2">Sign up for a Shift</Card.Subtitle>
+            <Card.Subtitle className="font-weight-bold pb-2">{isAdmin ? 'Block off a Shift' : 'Sign up for a Shift'}</Card.Subtitle>
             <Form noValidate validated={validated} onSubmit={handleSubmit}>
               {!isSingleDay && (
                 <Form.Row>
@@ -338,7 +339,7 @@ export default function ShiftDetails({
                     </Col>
                   </Form.Row>
                 ) : null}
-              <SignUpButton type="submit">Sign Up</SignUpButton>
+              <SignUpButton type="submit">{isAdmin ? 'Block off' : 'Sign Up'}</SignUpButton>
             </Form>
             <StyledModal show={show} centered>
               <Modal.Body>

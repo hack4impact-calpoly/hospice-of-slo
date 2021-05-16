@@ -13,10 +13,17 @@ const ListWrapper = styled.div`
   margin: 0 auto;
 `;
 
+const StyledText = styled.p`
+  text-align: center;
+  font-size: 16px;
+  color: #6C6B6B;
+`;
+
 export default function PastShifts() {
   const dayNames = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
   // Gets User Data from redux store
   const prevShifts = useSelector((state) => state.user.user.prevShifts);
+  const isAdmin = useSelector((state) => state.user.user.isAdmin);
   const [shifts, setShifts] = React.useState([]);
 
   async function getPastShifts() {
@@ -41,7 +48,8 @@ export default function PastShifts() {
 
   return (
     <div>
-      <HeaderWithNav>Past Shifts</HeaderWithNav>
+      <HeaderWithNav>{isAdmin ? 'Blocked Off Shifts' : 'Past Shifts'}</HeaderWithNav>
+      {shifts.length === 0 && <StyledText>You currently have no shifts</StyledText>}
       <ListWrapper>
         {shifts.sort(compare).map((shift) => {
           const time = `${shift.shiftStartTime.toDate().toLocaleTimeString()} to ${shift.shiftEndTime.toDate().toLocaleTimeString()}`;
