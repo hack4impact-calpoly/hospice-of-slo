@@ -65,7 +65,18 @@ function CreateVigil({ curEvent }) {
     const db = firebase.firestore();
 
     if (isEditing) { // Editing current event
+      // Changes the address of the vigil
       await db.collection('vigils').doc(curEvent.id).set(shift);
+      // Changes the address of each shift inside of the vigil
+      await db.collection('vigils').doc(curEvent.id).collection('shifts').get()
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            doc.ref.update({
+              address: shift.address,
+            });
+          });
+        });
+
       dispatch(actions.vigils.editVigil(curEvent.id, { ...shift, id: curEvent.id }));
     } else { // Creating new event
       const backRef = await db.collection('vigils').add(shift);
