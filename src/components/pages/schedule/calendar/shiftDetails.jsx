@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
-  Row, Col, Container, Card, Form,
+  Row, Col, Container, Card, Form, Alert,
 } from 'react-bootstrap';
 import { BiTrash, BiPencil } from 'react-icons/bi';
 import styled from 'styled-components';
@@ -136,6 +136,10 @@ export default function ShiftDetails({
       });
   }
 
+  const [showDateWarning, setShowDateWarning] = useState(
+    moment(curDate).isBetween(startTime, endTime, 'day', '()'),
+  ); // This warning displays when we can't garuntee that curDate matches the date the user clicked
+
   async function deleteVigilDocument() {
     await firebase.firestore().collection('vigils').doc(id).delete();
     dispatch(actions.vigils.deleteVigil(id));
@@ -208,6 +212,12 @@ export default function ShiftDetails({
       <Row>
         <Col xs={12} sm={12} md={12} lg={6} className="mb-4">
           <div>
+            {showDateWarning
+              && (
+              <Alert variant="primary" onClose={() => setShowDateWarning(false)} dismissible>
+                Check that this date is correct
+              </Alert>
+              )}
             <Card.Title className="font-weight-bold">Schedule</Card.Title>
             <ShiftCalendar vigil={vigil} isSingleDay={isSingleDay} curDate={curDate} />
           </div>
