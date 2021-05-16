@@ -63,17 +63,18 @@ export default function Calendar(props) {
   };
 
   const updateCurDate = (info) => {
-    if (info.view.type === 'timeGridDay') {
+    if (info.view.type === 'timeGridDay') { // Mobile Logic
       setCurDate(info.view.currentStart);
+      return;
+    }
+
+    const classes = info.el.classList;
+    if (classes.contains('isStart')) { // Desktop Logic
+      setCurDate(info.event.start);
+    } else if (classes.contains('isEnd')) {
+      setCurDate(info.event.end);
     } else {
-      const classes = info.el.classList;
-      if (classes.contains('isStart')) {
-        setCurDate(info.event.start);
-      } else if (classes.contains('isEnd')) {
-        setCurDate(info.event.end);
-      } else {
-        setCurDate(moment(info.event.start).add(1, 'day').toDate());
-      }
+      setCurDate(moment(info.event.start).add(1, 'day').toDate());
     }
   };
 
