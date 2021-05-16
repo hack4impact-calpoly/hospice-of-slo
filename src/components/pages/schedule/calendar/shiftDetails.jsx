@@ -190,7 +190,7 @@ export default function ShiftDetails({ vigil, setSelectVigil, setShowModal }) {
 
   const validate = (event) => {
     const start = (combineDateAndTime(shiftStartDate, shiftStartTime));
-    const end = (combineDateAndTime(shiftStartDate, shiftStartTime));
+    const end = (combineDateAndTime(shiftEndDate, shiftEndTime));
 
     if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) {
       setShowDateFeedback(true);

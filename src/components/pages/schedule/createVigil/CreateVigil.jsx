@@ -39,15 +39,27 @@ function CreateVigil({ curEvent }) {
   } = useForm({ defaultValues: defaultVals });
   const history = useHistory();
 
+  const [showDateFeedback, setShowDateFeedback] = React.useState(false);
+
   async function onSubmit(data, event) {
     event.preventDefault();
     const {
       address, startDate, startTime, endDate, endTime, notes,
     } = data;
+
+    const start = (combineDateAndTime(startDate, startTime));
+    const end = (combineDateAndTime(endDate, endTime));
+
+    if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) {
+      setShowDateFeedback(true);
+      return;
+    }
+    setShowDateFeedback(false);
+
     const shift = {
       address,
-      startTime: combineDateAndTime(startDate, startTime),
-      endTime: combineDateAndTime(endDate, endTime),
+      startTime: start,
+      endTime: end,
       notes,
     };
     const db = firebase.firestore();
@@ -100,12 +112,24 @@ function CreateVigil({ curEvent }) {
           <Form.Label>Start</Form.Label>
           <Form.Row>
             <Col>
-              <Form.Control type="date" name="startDate" ref={register({ required: true })} isInvalid={!!errors.startDate} />
+              <Form.Control
+                type="date"
+                name="startDate"
+                placeholder="yyyy/mm/dd"
+                ref={register({ required: true })}
+                isInvalid={!!errors.startDate}
+              />
               <Form.Control.Feedback type="invalid">Please provide a starting date</Form.Control.Feedback>
             </Col>
             <CenterCol xs={2} md={1} />
             <Col>
-              <Form.Control type="time" name="startTime" ref={register({ required: true })} isInvalid={!!errors.startTime} />
+              <Form.Control
+                type="time"
+                name="startTime"
+                placeholder="24-hour time"
+                ref={register({ required: true })}
+                isInvalid={!!errors.startTime}
+              />
               <Form.Control.Feedback type="invalid">Please provide a starting time</Form.Control.Feedback>
             </Col>
           </Form.Row>
@@ -118,6 +142,7 @@ function CreateVigil({ curEvent }) {
               <Form.Control
                 type="date"
                 name="endDate"
+                placeholder="yyyy/mm/dd"
                 ref={register({ required: true, validate: endDateAfterStart })}
                 isInvalid={!!errors.endDate}
               />
@@ -131,6 +156,7 @@ function CreateVigil({ curEvent }) {
               <Form.Control
                 type="time"
                 name="endTime"
+                placeholder="ex. 18:00"
                 isInvalid={!!errors.endTime}
                 ref={register({ required: true, validate: endTimeAfterStart })}
               />
@@ -140,6 +166,16 @@ function CreateVigil({ curEvent }) {
               </Form.Control.Feedback>
             </Col>
           </Form.Row>
+        </Form.Group>
+        <Form.Group>
+          {showDateFeedback
+            ? (
+              <Form.Row>
+                <Col>
+                  <div style={{ color: '#ff0000' }}>Please enter the correct date and time format.</div>
+                </Col>
+              </Form.Row>
+            ) : null}
         </Form.Group>
 
         <Form.Group>
