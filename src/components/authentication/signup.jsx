@@ -196,7 +196,7 @@ export default function SignUp() {
                       onBlur={() => validateEmail()}
                       required
                     />
-                    <Form.Text className="text-muted">This email will be public to all other doulas</Form.Text>
+                    <Form.Text className="text-muted">Note: This email can be seen to by other Hospice of San Luis Obispo doulas</Form.Text>
                   </Form.Group>
                 </Col>
                 <Col xs={12} md={6}>
@@ -210,7 +210,7 @@ export default function SignUp() {
                       onBlur={() => validatePhone()}
                       required
                     />
-                    <Form.Text className="text-muted">This phone number will be public to all other doulas</Form.Text>
+                    <Form.Text className="text-muted">Note: This phone number can be seen by other Hospice of San Luis Obispo doulas</Form.Text>
                   </Form.Group>
                 </Col>
               </Row>
