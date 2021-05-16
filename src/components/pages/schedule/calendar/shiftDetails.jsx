@@ -111,8 +111,8 @@ export default function ShiftDetails({ vigil, setSelectVigil, setShowModal }) {
 
     vigilRef.collection('shifts').add(newShift)
       .then((ref) => {
-        const reduxStartTime = firebase.firestore.Timestamp.fromDate(combineDateAndTime(shiftStartDate, shiftStartTime));
-        const reduxEndTime = firebase.firestore.Timestamp.fromDate(combineDateAndTime(shiftEndDate, shiftEndTime));
+        const reduxStartTime = firebase.firestore.Timestamp.fromDate(start);
+        const reduxEndTime = firebase.firestore.Timestamp.fromDate(end);
 
         dispatch(actions.user.addShift({
           ...newShift,
