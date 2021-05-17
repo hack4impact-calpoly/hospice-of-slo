@@ -27,6 +27,15 @@ export default function EditHelper(props) {
         });
     }
     if (isDeleting) {
+      // Deletes Messages Subcollection
+      const messages = await discussions.doc(discussion.id).collection('messages');
+      messages.get().then((querySnapshot) => {
+        querySnapshot.docs.forEach((doc) => {
+          discussions.doc(discussion.id).collection('messages').doc(doc.id).delete();
+        });
+      });
+
+      // Deletes the discussion collection
       discussions.doc(discussion.id)
         .delete()
         .then(() => {
