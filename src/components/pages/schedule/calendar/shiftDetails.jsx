@@ -75,7 +75,7 @@ export default function ShiftDetails({ vigil, setSelectVigil, setShowModal }) {
   const [show, setShow] = useState(false);
   const history = useHistory();
   const dispatch = useDispatch();
-
+  // console.log(startTime);
   const dateFormat = 'dddd, MMM D';
   const formattedDate = isSingleDay
     ? moment(startTime).format(dateFormat)
@@ -165,15 +165,63 @@ export default function ShiftDetails({ vigil, setSelectVigil, setShowModal }) {
 
   // Checks that the end time comes before the start time
   const endTimeRef = React.createRef();
+  // var below tracks whch error msg to display
+  let shiftEndBeforeStart = true;
+
   useEffect(() => {
+    console.log('old use effect');
     const tFormat = 'HH:mm';
     if (moment(shiftStartDate).isSame(moment(shiftEndDate))
       && moment(shiftEndTime, tFormat).isBefore(moment(shiftStartTime, tFormat))) {
+      console.log('End Time cannot come before Start Time');
+      shiftEndBeforeStart = true;
       endTimeRef.current.setCustomValidity('End Time cannot come before Start Time');
     } else {
+      console.log('set to false');
+      shiftEndBeforeStart = false;
       endTimeRef.current.setCustomValidity('');
     }
   }, [shiftEndTime, shiftEndDate, shiftStartDate, shiftStartTime]);
+
+  const timeOfDay = (date) => date.minutes() + (date.hours() * 60);
+
+  const startTimeRef = React.createRef();
+  // vars below control which error msgs are displayed
+  // right now messages will display if initially set true, but wont display fi initially set false
+  let beforeStart = true;
+  let afterEnd = true;
+
+  useEffect(() => {
+    const tFormat = 'HH:mm';
+    console.log('NEW USEEFFECT');
+    console.log('shiftEndBeforeStart');
+    console.log(shiftEndBeforeStart);
+    if (timeOfDay(moment(shiftStartTime, tFormat)) < timeOfDay(moment(startTime))) {
+      console.log('It is invalid, before');
+      beforeStart = true;
+      startTimeRef.current.setCustomValidity('Start time cannot come before Shift Start Time');
+    } else {
+      console.log('set to false');
+      beforeStart = false;
+      startTimeRef.current.setCustomValidity('');
+    }
+
+    if (timeOfDay(moment(shiftEndTime, tFormat)) > timeOfDay(moment(endTime))) {
+      console.log('It is invalid after');
+      afterEnd = true;
+      endTimeRef.current.setCustomValidity('End time cannot come after Shift End Time');
+    } else if (!shiftEndBeforeStart) {
+      console.log('set to false');
+      afterEnd = false;
+      endTimeRef.current.setCustomValidity('');
+    } else {
+      afterEnd = false;
+      endTimeRef.current.setCustomValidity('Only End Time Before Start Time Should Display');
+    }
+
+    console.log(beforeStart);
+    console.log(afterEnd);
+  }, [shiftEndTime, shiftStartTime]);
 
   const handleInputChange = (event, stateSetter) => {
     event.preventDefault();
@@ -197,7 +245,6 @@ export default function ShiftDetails({ vigil, setSelectVigil, setShowModal }) {
       setShowModal(false);
     }
   };
-
   return (
     <Container>
       <Row>
@@ -271,9 +318,15 @@ export default function ShiftDetails({ vigil, setSelectVigil, setShowModal }) {
                       value={shiftStartTime}
                       onChange={(e) => handleInputChange(e, setShiftStartTime)}
                       required
+                      ref={startTimeRef}
                     />
                     <Form.Control.Feedback type="invalid">
-                      Please provide a starting time
+                      {shiftStartTime === ''
+                        ? 'Please provide a starting time '
+                        : null }
+                      {beforeStart
+                        ? 'Start time should not come before Shift Starts'
+                        : null }
                     </Form.Control.Feedback>
                   </Form.Group>
                 </Col>
@@ -291,7 +344,13 @@ export default function ShiftDetails({ vigil, setSelectVigil, setShowModal }) {
                     <Form.Control.Feedback type="invalid">
                       {shiftEndTime === ''
                         ? 'Please provide an ending time'
-                        : 'End Time should not come before Start Time'}
+                        : null}
+                      {shiftEndBeforeStart
+                        ? 'End time should not come before Start Time '
+                        : null}
+                      {afterEnd
+                        ? 'End time should not come after Shift Ends'
+                        : null}
                     </Form.Control.Feedback>
                   </Form.Group>
                 </Col>
