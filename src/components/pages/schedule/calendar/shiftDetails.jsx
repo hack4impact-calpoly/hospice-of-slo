@@ -180,7 +180,7 @@ export default function ShiftDetails({ vigil, setSelectVigil, setShowModal }) {
     if (moment(shiftStartDate).isSame(moment(shiftEndDate))
       && moment(shiftEndTime, tFormat).isBefore(moment(shiftStartTime, tFormat))) {
       setEndsBeforeStarts(true);
-      endTimeRef.current.setCustomValidity('End Time cannot come before Start Time');
+      endTimeRef.current.setCustomValidity('End time cannot come after a vigil has ended.');
     } else {
       firstCheckGood = true;
       setEndsBeforeStarts(false);
@@ -190,7 +190,7 @@ export default function ShiftDetails({ vigil, setSelectVigil, setShowModal }) {
     // Check if selection is before shift starts
     if (timeOfDay(moment(shiftStartTime, tFormat)) < timeOfDay(moment(startTime))) {
       setBeforeStart(true);
-      startTimeRef.current.setCustomValidity('Start time cannot come before Shift Start Time');
+      startTimeRef.current.setCustomValidity('Start time cannot come before a vigil has started');
     } else {
       setBeforeStart(false);
       startTimeRef.current.setCustomValidity('');
@@ -199,7 +199,7 @@ export default function ShiftDetails({ vigil, setSelectVigil, setShowModal }) {
     // Check if selection is after shift ends
     if (timeOfDay(moment(shiftEndTime, tFormat)) > timeOfDay(moment(endTime))) {
       setAfterEnd(true);
-      endTimeRef.current.setCustomValidity('End time cannot come after Shift End Time');
+      endTimeRef.current.setCustomValidity('End time cannot come after a vigil has ended.');
     } else if (firstCheckGood) {
       setAfterEnd(false);
       endTimeRef.current.setCustomValidity('');
@@ -311,7 +311,7 @@ export default function ShiftDetails({ vigil, setSelectVigil, setShowModal }) {
                         ? 'Please provide a starting time'
                         : null }
                       {beforeStart
-                        ? 'Start time should not come before Shift Starts'
+                        ? 'Start time cannot come before a vigil has started'
                         : null }
                     </Form.Control.Feedback>
                   </Form.Group>
@@ -335,7 +335,7 @@ export default function ShiftDetails({ vigil, setSelectVigil, setShowModal }) {
                         ? 'End time should not come before Start Time '
                         : null}
                       {afterEnd
-                        ? 'End time should not come after Shift Ends'
+                        ? 'End time cannot be after a vigil has ended.'
                         : null}
                     </Form.Control.Feedback>
                   </Form.Group>
