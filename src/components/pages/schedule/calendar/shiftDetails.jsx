@@ -163,19 +163,21 @@ export default function ShiftDetails({ vigil, setSelectVigil, setShowModal }) {
     } else {
       setDatesInverted(false);
     }
-    if (moment(shiftEndDate).isAfter(moment(endTime))) {
-      setDatesAfterVigilEnd(true);
-      endDateRef.current.setCustomValidity('End Date cannot come after Vigil Ends');
-    } else if (!datesInverted) {
-      setDatesAfterVigilEnd(false);
-      endDateRef.current.setCustomValidity('');
-    }
-    if (moment(shiftStartDate).isBefore(moment(startTime), 'day')) {
-      setDateBeforeVigilStarts(true);
-      startDateRef.current.setCustomValidity('Start date should not come before Vigil Starts');
-    } else {
-      setDateBeforeVigilStarts(false);
-      startDateRef.current.setCustomValidity('');
+    if (endDateRef.current) {
+      if (moment(shiftEndDate).isAfter(moment(endTime))) {
+        setDatesAfterVigilEnd(true);
+        endDateRef.current.setCustomValidity('End Date cannot come after Vigil Ends');
+      } else if (!datesInverted) {
+        setDatesAfterVigilEnd(false);
+        endDateRef.current.setCustomValidity('');
+      }
+      if (moment(shiftStartDate).isBefore(moment(startTime), 'day')) {
+        setDateBeforeVigilStarts(true);
+        startDateRef.current.setCustomValidity('Start date should not come before Vigil Starts');
+      } else {
+        setDateBeforeVigilStarts(false);
+        startDateRef.current.setCustomValidity('');
+      }
     }
   }, [shiftEndDate, shiftStartDate]);
 
