@@ -149,14 +149,24 @@ export default function ShiftDetails({ vigil, setSelectVigil, setShowModal }) {
 
   // Form Stuff
   const [validated, setValidated] = useState(false);
-
   // Checks that the end date comes before the start date
   const endDateRef = React.createRef();
+  const [datesInverted, setDatesInverted] = useState(false);
+  const [dateAfterVigilEnd, setDatesAfterVigilEnd] = useState(false);
+
   useEffect(() => {
     if (endDateRef.current) {
       if (moment(shiftEndDate).isBefore(moment(shiftStartDate))) {
+        setDatesInverted(true);
         endDateRef.current.setCustomValidity('End Date cannot come before Start Date');
       } else {
+        setDatesInverted(false);
+      }
+      if (moment(shiftEndDate).isAfter(moment(endTime))) {
+        setDatesAfterVigilEnd(true);
+        endDateRef.current.setCustomValidity('End Date cannot come after Vigil Ends');
+      } else if (!datesInverted) {
+        setDatesAfterVigilEnd(false);
         endDateRef.current.setCustomValidity('');
       }
     }
@@ -288,7 +298,13 @@ export default function ShiftDetails({ vigil, setSelectVigil, setShowModal }) {
                       <Form.Control.Feedback type="invalid">
                         {shiftEndDate === ''
                           ? 'Please provide an ending date'
-                          : 'End date should not come before Start Date'}
+                          : null }
+                        {datesInverted
+                          ? 'End date should not come before Start Date'
+                          : null }
+                        {dateAfterVigilEnd
+                          ? 'End date should not come after Vigil Ends'
+                          : null }
                       </Form.Control.Feedback>
                     </Form.Group>
                   </Col>
