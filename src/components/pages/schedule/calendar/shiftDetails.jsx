@@ -99,10 +99,10 @@ export default function ShiftDetails({
     // creates a new shift and adds it to a specific vigil
     const currentUser = firebase.auth().currentUser.uid;
     const db = firebase.firestore();
-    const vigilRef = db.collection('vigils').doc(id);
-    const userRef = db.collection('users').doc(currentUser);
+    const vigilRef = await db.collection('vigils').doc(id);
+    const userRef = await db.collection('users').doc(currentUser);
     const user = await userRef.get();
-    const { name } = user.data();
+    const { name } = await user.data();
     const start = combineDateAndTime(shiftStartDate, shiftStartTime);
     const end = combineDateAndTime(shiftEndDate, shiftEndTime);
     const newShift = {
@@ -150,8 +150,26 @@ export default function ShiftDetails({
   ); // This warning displays when we can't garuntee that curDate matches the date the user clicked
 
   async function deleteVigilDocument() {
-    await firebase.firestore().collection('vigils').doc(id).delete();
+    const db = firebase.firestore();
+    const vigilRef = await db.collection('vigils').doc(id);
+    const currentUser = firebase.auth().currentUser.uid;
+
+    // delete the Shifts in a vigil (No need to put in redux)
+    const shifts = await vigilRef.collection('shifts');
+    shifts.get().then((querySnapshot) => {
+      querySnapshot.docs.forEach((doc) => {
+        const userRef = db.collection('users').doc(currentUser);
+        userRef.update({
+          prevShifts: firebase.firestore.FieldValue.arrayRemove(shifts.doc(doc.id)),
+        });
+        vigilRef.collection('shifts').doc(doc.id).delete();
+      });
+    });
+
+    // Delete Vigil
+    await vigilRef.doc(id).delete();
     dispatch(actions.vigils.deleteVigil(id));
+
     setShow(false);
   }
 
