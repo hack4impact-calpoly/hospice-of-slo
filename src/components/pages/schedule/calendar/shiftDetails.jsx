@@ -290,7 +290,7 @@ export default function ShiftDetails({ vigil, setSelectVigil, setShowModal }) {
                           ? 'Please provide a starting date '
                           : null}
                         {dateBeforeVigilStarts
-                          ? 'Start date should not come before Vigil Starts'
+                          ? 'Start date cannot come before vigil starts'
                           : null}
                       </Form.Control.Feedback>
                     </Form.Group>
@@ -311,10 +311,10 @@ export default function ShiftDetails({ vigil, setSelectVigil, setShowModal }) {
                           ? 'Please provide an ending date '
                           : null }
                         {datesInverted
-                          ? 'End date should not come before Start Date '
+                          ? 'End date cannot come before start date '
                           : null }
                         {dateAfterVigilEnd
-                          ? 'End date should not come after Vigil Ends'
+                          ? 'End date cannot come after vigil ends'
                           : null }
                       </Form.Control.Feedback>
                     </Form.Group>
@@ -359,7 +359,7 @@ export default function ShiftDetails({ vigil, setSelectVigil, setShowModal }) {
                         ? 'Please provide an ending time '
                         : null}
                       {endsBeforeStarts
-                        ? 'End time should not come before Start Time '
+                        ? 'End time cannot not come before start time '
                         : null}
                       {afterEnd
                         ? 'End time cannot be after a vigil has ended.'
