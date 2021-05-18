@@ -287,7 +287,7 @@ export default function ShiftDetails({ vigil, setSelectVigil, setShowModal }) {
                       />
                       <Form.Control.Feedback type="invalid">
                         {shiftStartDate === ''
-                          ? 'Please provide a starting date'
+                          ? 'Please provide a starting date '
                           : null}
                         {dateBeforeVigilStarts
                           ? 'Start date should not come before Vigil Starts'
@@ -308,10 +308,10 @@ export default function ShiftDetails({ vigil, setSelectVigil, setShowModal }) {
                       />
                       <Form.Control.Feedback type="invalid">
                         {shiftEndDate === ''
-                          ? 'Please provide an ending date'
+                          ? 'Please provide an ending date '
                           : null }
                         {datesInverted
-                          ? 'End date should not come before Start Date'
+                          ? 'End date should not come before Start Date '
                           : null }
                         {dateAfterVigilEnd
                           ? 'End date should not come after Vigil Ends'
@@ -335,7 +335,7 @@ export default function ShiftDetails({ vigil, setSelectVigil, setShowModal }) {
                     />
                     <Form.Control.Feedback type="invalid">
                       {shiftStartTime === ''
-                        ? 'Please provide a starting time'
+                        ? 'Please provide a starting time '
                         : null }
                       {beforeStart
                         ? 'Start time cannot come before a vigil has started'
@@ -356,7 +356,7 @@ export default function ShiftDetails({ vigil, setSelectVigil, setShowModal }) {
                     />
                     <Form.Control.Feedback type="invalid">
                       {shiftEndTime === ''
-                        ? 'Please provide an ending time'
+                        ? 'Please provide an ending time '
                         : null}
                       {endsBeforeStarts
                         ? 'End time should not come before Start Time '
