@@ -75,7 +75,6 @@ export default function ShiftDetails({ vigil, setSelectVigil, setShowModal }) {
   const [show, setShow] = useState(false);
   const history = useHistory();
   const dispatch = useDispatch();
-  // console.log(startTime);
   const dateFormat = 'dddd, MMM D';
   const formattedDate = isSingleDay
     ? moment(startTime).format(dateFormat)
@@ -167,66 +166,48 @@ export default function ShiftDetails({ vigil, setSelectVigil, setShowModal }) {
   const endTimeRef = React.createRef();
   const [endsBeforeStarts, setEndsBeforeStarts] = useState(false);
 
-  useEffect(() => {
-    console.log('old use effect');
-    console.log('endsbeforestarts entering func');
-    console.log(endsBeforeStarts);
-    const tFormat = 'HH:mm';
-    if (moment(shiftStartDate).isSame(moment(shiftEndDate))
-      && moment(shiftEndTime, tFormat).isBefore(moment(shiftStartTime, tFormat))) {
-      console.log('End Time cannot come before Start Time');
-      setEndsBeforeStarts(true);
-      endTimeRef.current.setCustomValidity('End Time cannot come before Start Time');
-      console.log('it read all the lines...');
-    } else {
-      console.log('set to false');
-      setEndsBeforeStarts(false);
-      endTimeRef.current.setCustomValidity('');
-    }
-    console.log('endsbeforestarts leaving func');
-    console.log(endsBeforeStarts);
-  }, [shiftEndTime, shiftEndDate, shiftStartDate, shiftStartTime]);
-
-  const timeOfDay = (date) => date.minutes() + (date.hours() * 60);
-
+  // Checks that selected start is within vigil time
   const startTimeRef = React.createRef();
-  // vars below control which error msgs are displayed
-  // right now messages will display if initially set true, but wont display fi initially set false
   const [beforeStart, setBeforeStart] = useState(false);
   const [afterEnd, setAfterEnd] = useState(false);
 
+  const timeOfDay = (date) => date.minutes() + (date.hours() * 60);
+
   useEffect(() => {
     const tFormat = 'HH:mm';
-    console.log('NEW USEEFFECT');
-    console.log('endsbeforestarts entering func');
-    console.log(endsBeforeStarts);
+    let firstCheckGood = false;
+
+    if (moment(shiftStartDate).isSame(moment(shiftEndDate))
+      && moment(shiftEndTime, tFormat).isBefore(moment(shiftStartTime, tFormat))) {
+      setEndsBeforeStarts(true);
+      endTimeRef.current.setCustomValidity('End Time cannot come before Start Time');
+    } else {
+      firstCheckGood = true;
+      setEndsBeforeStarts(false);
+      endTimeRef.current.setCustomValidity('');
+    }
+
+    // Check if selection is before shift starts
     if (timeOfDay(moment(shiftStartTime, tFormat)) < timeOfDay(moment(startTime))) {
-      console.log('It is invalid, before');
       setBeforeStart(true);
       startTimeRef.current.setCustomValidity('Start time cannot come before Shift Start Time');
     } else {
-      console.log('set to false');
       setBeforeStart(false);
       startTimeRef.current.setCustomValidity('');
     }
 
+    // Check if selection is after shift ends
     if (timeOfDay(moment(shiftEndTime, tFormat)) > timeOfDay(moment(endTime))) {
-      console.log('It is invalid after');
       setAfterEnd(true);
       endTimeRef.current.setCustomValidity('End time cannot come after Shift End Time');
-    } else if (!endsBeforeStarts) {
-      console.log('set to false');
+    } else if (firstCheckGood) {
       setAfterEnd(false);
       endTimeRef.current.setCustomValidity('');
     } else {
-      console.log('set to false but ensure it is still invalid');
       setAfterEnd(false);
       endTimeRef.current.setCustomValidity('Only End Time Before Start Time Should Display');
     }
-
-    console.log(beforeStart);
-    console.log(afterEnd);
-  }, [shiftEndTime, shiftStartTime]);
+  }, [shiftEndTime, shiftEndDate, shiftStartDate, shiftStartTime]);
 
   const handleInputChange = (event, stateSetter) => {
     event.preventDefault();
