@@ -151,26 +151,33 @@ export default function ShiftDetails({ vigil, setSelectVigil, setShowModal }) {
   const [validated, setValidated] = useState(false);
   // Checks that the end date comes before the start date
   const endDateRef = React.createRef();
+  const startDateRef = React.createRef();
   const [datesInverted, setDatesInverted] = useState(false);
   const [dateAfterVigilEnd, setDatesAfterVigilEnd] = useState(false);
+  const [dateBeforeVigilStarts, setDateBeforeVigilStarts] = useState(false);
 
   useEffect(() => {
-    if (endDateRef.current) {
-      if (moment(shiftEndDate).isBefore(moment(shiftStartDate))) {
-        setDatesInverted(true);
-        endDateRef.current.setCustomValidity('End Date cannot come before Start Date');
-      } else {
-        setDatesInverted(false);
-      }
-      if (moment(shiftEndDate).isAfter(moment(endTime))) {
-        setDatesAfterVigilEnd(true);
-        endDateRef.current.setCustomValidity('End Date cannot come after Vigil Ends');
-      } else if (!datesInverted) {
-        setDatesAfterVigilEnd(false);
-        endDateRef.current.setCustomValidity('');
-      }
+    if (moment(shiftEndDate).isBefore(moment(shiftStartDate))) {
+      setDatesInverted(true);
+      endDateRef.current.setCustomValidity('End Date cannot come before Start Date');
+    } else {
+      setDatesInverted(false);
     }
-  }, [shiftEndDate]);
+    if (moment(shiftEndDate).isAfter(moment(endTime))) {
+      setDatesAfterVigilEnd(true);
+      endDateRef.current.setCustomValidity('End Date cannot come after Vigil Ends');
+    } else if (!datesInverted) {
+      setDatesAfterVigilEnd(false);
+      endDateRef.current.setCustomValidity('');
+    }
+    if (moment(shiftStartDate).isBefore(moment(startTime), 'day')) {
+      setDateBeforeVigilStarts(true);
+      startDateRef.current.setCustomValidity('Start date should not come before Vigil Starts');
+    } else {
+      setDateBeforeVigilStarts(false);
+      startDateRef.current.setCustomValidity('');
+    }
+  }, [shiftEndDate, shiftStartDate]);
 
   // Checks that the end time comes before the start time
   const endTimeRef = React.createRef();
@@ -180,8 +187,6 @@ export default function ShiftDetails({ vigil, setSelectVigil, setShowModal }) {
   const startTimeRef = React.createRef();
   const [beforeStart, setBeforeStart] = useState(false);
   const [afterEnd, setAfterEnd] = useState(false);
-
-  const timeOfDay = (date) => date.minutes() + (date.hours() * 60);
 
   useEffect(() => {
     const tFormat = 'HH:mm';
@@ -198,7 +203,7 @@ export default function ShiftDetails({ vigil, setSelectVigil, setShowModal }) {
     }
 
     // Check if selection is before shift starts
-    if (timeOfDay(moment(shiftStartTime, tFormat)) < timeOfDay(moment(startTime))) {
+    if (moment(combineDateAndTime(shiftStartDate, shiftStartTime)).isBefore(startTime)) {
       setBeforeStart(true);
       startTimeRef.current.setCustomValidity('Start time cannot come before a vigil has started');
     } else {
@@ -207,7 +212,7 @@ export default function ShiftDetails({ vigil, setSelectVigil, setShowModal }) {
     }
 
     // Check if selection is after shift ends
-    if (timeOfDay(moment(shiftEndTime, tFormat)) > timeOfDay(moment(endTime))) {
+    if (moment(combineDateAndTime(shiftEndDate, shiftEndTime)).isAfter(endTime)) {
       setAfterEnd(true);
       endTimeRef.current.setCustomValidity('End time cannot come after a vigil has ended.');
     } else if (firstCheckGood) {
@@ -278,9 +283,15 @@ export default function ShiftDetails({ vigil, setSelectVigil, setShowModal }) {
                         value={shiftStartDate}
                         onChange={(e) => handleInputChange(e, setShiftStartDate)}
                         required
+                        ref={startDateRef}
                       />
                       <Form.Control.Feedback type="invalid">
-                        Please provide a starting date
+                        {shiftStartDate === ''
+                          ? 'Please provide a starting date'
+                          : null}
+                        {dateBeforeVigilStarts
+                          ? 'Start date should not come before Vigil Starts'
+                          : null}
                       </Form.Control.Feedback>
                     </Form.Group>
                   </Col>
