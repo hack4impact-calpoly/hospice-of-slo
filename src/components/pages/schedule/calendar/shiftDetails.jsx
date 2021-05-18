@@ -165,22 +165,26 @@ export default function ShiftDetails({ vigil, setSelectVigil, setShowModal }) {
 
   // Checks that the end time comes before the start time
   const endTimeRef = React.createRef();
-  // var below tracks whch error msg to display
-  let shiftEndBeforeStart = true;
+  const [endsBeforeStarts, setEndsBeforeStarts] = useState(false);
 
   useEffect(() => {
     console.log('old use effect');
+    console.log('endsbeforestarts entering func');
+    console.log(endsBeforeStarts);
     const tFormat = 'HH:mm';
     if (moment(shiftStartDate).isSame(moment(shiftEndDate))
       && moment(shiftEndTime, tFormat).isBefore(moment(shiftStartTime, tFormat))) {
       console.log('End Time cannot come before Start Time');
-      shiftEndBeforeStart = true;
+      setEndsBeforeStarts(true);
       endTimeRef.current.setCustomValidity('End Time cannot come before Start Time');
+      console.log('it read all the lines...');
     } else {
       console.log('set to false');
-      shiftEndBeforeStart = false;
+      setEndsBeforeStarts(false);
       endTimeRef.current.setCustomValidity('');
     }
+    console.log('endsbeforestarts leaving func');
+    console.log(endsBeforeStarts);
   }, [shiftEndTime, shiftEndDate, shiftStartDate, shiftStartTime]);
 
   const timeOfDay = (date) => date.minutes() + (date.hours() * 60);
@@ -188,34 +192,35 @@ export default function ShiftDetails({ vigil, setSelectVigil, setShowModal }) {
   const startTimeRef = React.createRef();
   // vars below control which error msgs are displayed
   // right now messages will display if initially set true, but wont display fi initially set false
-  let beforeStart = true;
-  let afterEnd = true;
+  const [beforeStart, setBeforeStart] = useState(false);
+  const [afterEnd, setAfterEnd] = useState(false);
 
   useEffect(() => {
     const tFormat = 'HH:mm';
     console.log('NEW USEEFFECT');
-    console.log('shiftEndBeforeStart');
-    console.log(shiftEndBeforeStart);
+    console.log('endsbeforestarts entering func');
+    console.log(endsBeforeStarts);
     if (timeOfDay(moment(shiftStartTime, tFormat)) < timeOfDay(moment(startTime))) {
       console.log('It is invalid, before');
-      beforeStart = true;
+      setBeforeStart(true);
       startTimeRef.current.setCustomValidity('Start time cannot come before Shift Start Time');
     } else {
       console.log('set to false');
-      beforeStart = false;
+      setBeforeStart(false);
       startTimeRef.current.setCustomValidity('');
     }
 
     if (timeOfDay(moment(shiftEndTime, tFormat)) > timeOfDay(moment(endTime))) {
       console.log('It is invalid after');
-      afterEnd = true;
+      setAfterEnd(true);
       endTimeRef.current.setCustomValidity('End time cannot come after Shift End Time');
-    } else if (!shiftEndBeforeStart) {
+    } else if (!endsBeforeStarts) {
       console.log('set to false');
-      afterEnd = false;
+      setAfterEnd(false);
       endTimeRef.current.setCustomValidity('');
     } else {
-      afterEnd = false;
+      console.log('set to false but ensure it is still invalid');
+      setAfterEnd(false);
       endTimeRef.current.setCustomValidity('Only End Time Before Start Time Should Display');
     }
 
@@ -322,7 +327,7 @@ export default function ShiftDetails({ vigil, setSelectVigil, setShowModal }) {
                     />
                     <Form.Control.Feedback type="invalid">
                       {shiftStartTime === ''
-                        ? 'Please provide a starting time '
+                        ? 'Please provide a starting time'
                         : null }
                       {beforeStart
                         ? 'Start time should not come before Shift Starts'
@@ -345,7 +350,7 @@ export default function ShiftDetails({ vigil, setSelectVigil, setShowModal }) {
                       {shiftEndTime === ''
                         ? 'Please provide an ending time'
                         : null}
-                      {shiftEndBeforeStart
+                      {endsBeforeStarts
                         ? 'End time should not come before Start Time '
                         : null}
                       {afterEnd
