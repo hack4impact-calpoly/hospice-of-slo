@@ -167,7 +167,7 @@ export default function ShiftDetails({
     });
 
     // Delete Vigil
-    await vigilRef.doc(id).delete();
+    await vigilRef.delete();
     dispatch(actions.vigils.deleteVigil(id));
 
     setShow(false);
