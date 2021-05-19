@@ -25,6 +25,10 @@ const StyledDrop = styled.button`
   }
 `;
 
+const StyledModal = styled(Modal)`
+  background-color: rgba(0, 0, 0, 0.5) !important;
+`;
+
 function ShiftCalendar({ vigil, isSingleDay, curDate }) {
   const { startTime, endTime } = vigil;
   const [showModal, setShowModal] = useState(false);
@@ -102,10 +106,8 @@ function ShiftCalendar({ vigil, isSingleDay, curDate }) {
       userId: info.event.extendedProps.userId,
       vigilId: info.event.groupId,
     });
-    if (info.event.title !== 'Blocked Off') {
-      getContact(info.event.extendedProps.userId);
-      setShowModal(true);
-    }
+    getContact(info.event.extendedProps.userId);
+    setShowModal(true);
   };
 
   const handleCloseClick = () => setShowModal(false);
@@ -154,7 +156,7 @@ function ShiftCalendar({ vigil, isSingleDay, curDate }) {
         slotEventOverlap={false}
         eventClick={handleEventClick}
       />
-      <Modal show={showModal} onEscapeKeyDown={handleCloseClick} onHide={handleCloseClick} centered>
+      <StyledModal show={showModal} onEscapeKeyDown={handleCloseClick} onHide={handleCloseClick} centered>
         <Modal.Header className="font-weight-bold" closeButton>Contact Info</Modal.Header>
         <Modal.Body>
           <Col>
@@ -174,7 +176,7 @@ function ShiftCalendar({ vigil, isSingleDay, curDate }) {
             </Modal.Footer>
           )
           : null}
-      </Modal>
+      </StyledModal>
     </>
   );
 }
