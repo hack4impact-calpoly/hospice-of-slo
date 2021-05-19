@@ -63,10 +63,12 @@ export default function Discussion() {
     return null;
   });
 
+  const [show, setShow] = React.useState(false);
+
   return (
     <div>
       <HeaderWithNav>Discussions</HeaderWithNav>
-      {isAdmin ? <CreateThread /> : null}
+      {isAdmin ? <CreateThread show={show} setShow={setShow} /> : null}
       <PaddedContainer fluid>
         <Row className="justify-content-md-center">
           <Col className="search" md={9} lg={8} xl={7}>
