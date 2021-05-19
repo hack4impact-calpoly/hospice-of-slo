@@ -77,6 +77,7 @@ export default function App() {
           <PrivateRoute adminOnly path="/history">
             <History />
           </PrivateRoute>
+          <Route render={() => <Redirect to="/discussion" />} />
         </Switch>
       </AuthProvider>
     </div>
