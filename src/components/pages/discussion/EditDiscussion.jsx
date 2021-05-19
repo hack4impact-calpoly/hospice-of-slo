@@ -40,27 +40,34 @@ export default function Edit(props) {
     e.stopPropagation();
   };
 
-  return (
-    <StyledDropdown>
-      <Dropdown.Toggle as={CustomToggle} id="dropdown-basic" />
+  const [show, setShow] = React.useState(false);
+  const handleShow = () => setShow(true);
 
-      <Dropdown.Menu>
-        <Dropdown.Item
-          onSelect={(ek, e) => { handleChildClick(ek, e); }}
-        >
-          <EditHelper discussion={discussion} isPinning />
-        </Dropdown.Item>
-        <Dropdown.Item
-          onSelect={(ek, e) => { handleChildClick(ek, e); }}
-        >
-          <CreateThread discussion={discussion} isEditing />
-        </Dropdown.Item>
-        <Dropdown.Item
-          onSelect={(ek, e) => { handleChildClick(ek, e); }}
-        >
-          <EditHelper discussion={discussion} isDeleting />
-        </Dropdown.Item>
-      </Dropdown.Menu>
-    </StyledDropdown>
+  return (
+    <>
+      <StyledDropdown>
+        <Dropdown.Toggle as={CustomToggle} id="dropdown-basic" />
+
+        <Dropdown.Menu>
+          <Dropdown.Item
+            onSelect={(ek, e) => { handleChildClick(ek, e); }}
+          >
+            <EditHelper discussion={discussion} isPinning />
+          </Dropdown.Item>
+          <Dropdown.Item
+            onSelect={(ek, e) => { handleChildClick(ek, e); }}
+          >
+            <div role="button" tabIndex={0} onKeyPress={handleShow} onClick={handleShow}>edit</div>
+
+          </Dropdown.Item>
+          <Dropdown.Item
+            onSelect={(ek, e) => { handleChildClick(ek, e); }}
+          >
+            <EditHelper discussion={discussion} isDeleting />
+          </Dropdown.Item>
+        </Dropdown.Menu>
+      </StyledDropdown>
+      <CreateThread discussion={discussion} show={show} setShow={setShow} isEditing />
+    </>
   );
 }

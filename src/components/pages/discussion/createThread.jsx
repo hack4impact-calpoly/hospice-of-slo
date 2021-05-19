@@ -1,54 +1,17 @@
 import React, { useState } from 'react';
-import {
-  Row, Col, Modal, Form,
-} from 'react-bootstrap';
-import styled from 'styled-components';
 import firebase from 'firebase';
 import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import { discussionPropType } from '../../../dataStructures/propTypes';
 import actions from '../../../actions';
 import { FloatingActionButton } from '../../../styled-components/discussion-components';
-
-const StyledCreate = styled.button`
-  color: white;
-  background-color: #84C0C9;
-  border: none;
-  border-radius: 7px;
-  width: 25%;
-  padding: 6px 0px;
-
-  &:hover{
-    background-color: #558E97;
-  }
-`;
-
-const StyledCancel = styled.button`
-  color: #6C6B6B;
-  background: none;
-  border: none;
-  padding: 0 20px 
-`;
-
-const StyledHeading = styled.h4`
-  text-align: center;
-  margin-bottom: 30px;
-`;
-
-const StyledRow = styled(Row)`
-  display: flex;
-  justify-content: flex-end;
-  padding: 0 15px; 
-`;
-
-const StyledCol = styled(Col)`
-  padding: 5%;
-`;
+import DiscussionModal from './DiscussionModal';
 
 export default function CreateThread(props) {
-  const { discussion, isEditing } = props;
+  const {
+    discussion, show, setShow, isEditing,
+  } = props;
   const [title, setTitle] = useState('');
-  const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -90,33 +53,19 @@ export default function CreateThread(props) {
   }
 
   return (
-    <div>
-      {isEditing ? <div role="button" tabIndex={0} onKeyPress={handleShow} onClick={handleShow}>edit</div> : <FloatingActionButton onClick={handleShow}>+</FloatingActionButton>}
-      <Modal show={show} onEscapeKeyDown={handleClose} onHide={handleClose} centered>
-        <Modal.Body>
-          <StyledCol>
-            <StyledHeading>{isEditing ? 'Edit Discussion' : 'Create New Discussion'}</StyledHeading>
-            <Form.Control
-              className="mb-3"
-              placeholder={isEditing ? discussion.name : 'Discussion Name'}
-              defaultValue={isEditing ? discussion.name : ''}
-              onChange={(e) => {
-                setTitle(e.target.value);
-              }}
-            />
-            <StyledRow className="mt-3">
-              <StyledCancel onClick={handleClose}>Cancel</StyledCancel>
-              <StyledCreate
-                type="submit"
-                onClick={discussionPress}
-              >
-                {isEditing ? 'Done' : 'Create'}
-              </StyledCreate>
-            </StyledRow>
-          </StyledCol>
-        </Modal.Body>
-      </Modal>
-    </div>
+    <>
+      {isEditing
+        ? null
+        : <FloatingActionButton onClick={handleShow}>+</FloatingActionButton>}
+      <DiscussionModal
+        show={show}
+        handleClose={handleClose}
+        isEditing={isEditing}
+        setTitle={setTitle}
+        discussion={discussion}
+        discussionPress={discussionPress}
+      />
+    </>
   );
 }
 
