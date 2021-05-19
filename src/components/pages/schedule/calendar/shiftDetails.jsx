@@ -156,18 +156,34 @@ export default function ShiftDetails({ vigil, setSelectVigil, setShowModal }) {
   const [dateAfterVigilEnd, setDatesAfterVigilEnd] = useState(false);
   const [dateBeforeVigilStarts, setDateBeforeVigilStarts] = useState(false);
 
+  // Checks that the end time comes before the start time
+  const endTimeRef = React.createRef();
+  const [endsBeforeStarts, setEndsBeforeStarts] = useState(false);
+
+  // Checks that selected start is within vigil time
+  const startTimeRef = React.createRef();
+  const [beforeStart, setBeforeStart] = useState(false);
+  const [afterEnd, setAfterEnd] = useState(false);
+
   useEffect(() => {
+    let endDateHasError = false;
+    let endTimeHasError = false;
     if (moment(shiftEndDate).isBefore(moment(shiftStartDate))) {
+      endDateHasError = true;
       setDatesInverted(true);
       endDateRef.current.setCustomValidity('End Date cannot come before Start Date');
     } else {
       setDatesInverted(false);
     }
+
     if (endDateRef.current) {
       if (moment(shiftEndDate).isAfter(moment(endTime))) {
+        endDateHasError = true;
         setDatesAfterVigilEnd(true);
         endDateRef.current.setCustomValidity('End Date cannot come after Vigil Ends');
-      } else if (!datesInverted) {
+      } else if (endDateHasError) {
+        setDatesAfterVigilEnd(false);
+      } else {
         setDatesAfterVigilEnd(false);
         endDateRef.current.setCustomValidity('');
       }
@@ -179,27 +195,16 @@ export default function ShiftDetails({ vigil, setSelectVigil, setShowModal }) {
         startDateRef.current.setCustomValidity('');
       }
     }
-  }, [shiftEndDate, shiftStartDate]);
 
-  // Checks that the end time comes before the start time
-  const endTimeRef = React.createRef();
-  const [endsBeforeStarts, setEndsBeforeStarts] = useState(false);
-
-  // Checks that selected start is within vigil time
-  const startTimeRef = React.createRef();
-  const [beforeStart, setBeforeStart] = useState(false);
-  const [afterEnd, setAfterEnd] = useState(false);
-
-  useEffect(() => {
     const tFormat = 'HH:mm';
-    let firstCheckGood = false;
-
     if (moment(shiftStartDate).isSame(moment(shiftEndDate))
       && moment(shiftEndTime, tFormat).isBefore(moment(shiftStartTime, tFormat))) {
+      endTimeHasError = true;
       setEndsBeforeStarts(true);
       endTimeRef.current.setCustomValidity('End time cannot come after a vigil has ended.');
+    } else if (endTimeHasError) {
+      setEndsBeforeStarts(false);
     } else {
-      firstCheckGood = true;
       setEndsBeforeStarts(false);
       endTimeRef.current.setCustomValidity('');
     }
@@ -217,7 +222,7 @@ export default function ShiftDetails({ vigil, setSelectVigil, setShowModal }) {
     if (moment(combineDateAndTime(shiftEndDate, shiftEndTime)).isAfter(endTime)) {
       setAfterEnd(true);
       endTimeRef.current.setCustomValidity('End time cannot come after a vigil has ended.');
-    } else if (firstCheckGood) {
+    } else if (!endTimeHasError) {
       setAfterEnd(false);
       endTimeRef.current.setCustomValidity('');
     } else {
