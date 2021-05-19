@@ -74,7 +74,6 @@ export default function SignUp() {
   const [email, setEmail] = useState('');
   const [showErr, setShowErr] = useState(false);
   const [errMessage, setErrMessage] = useState('');
-  const [isAdmin] = React.useState(false);
   const [prevShifts] = React.useState([]);
 
   const history = useHistory();
@@ -118,7 +117,7 @@ export default function SignUp() {
       email: email,
       name: name,
       phone: phone,
-      isAdmin: isAdmin,
+      isAdmin: false,
       prevShifts: prevShifts,
     };
     userRef.set(userData);
