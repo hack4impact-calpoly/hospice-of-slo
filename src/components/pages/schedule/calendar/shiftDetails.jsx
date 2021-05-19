@@ -80,7 +80,6 @@ export default function ShiftDetails({
   const [show, setShow] = useState(false);
   const history = useHistory();
   const dispatch = useDispatch();
-
   const dateFormat = 'dddd, MMM D';
   const formattedDate = isSingleDay
     ? moment(startTime).format(dateFormat)
@@ -186,28 +185,85 @@ export default function ShiftDetails({
 
   // Form Stuff
   const [validated, setValidated] = useState(false);
-
   // Checks that the end date comes before the start date
   const endDateRef = React.createRef();
-  useEffect(() => {
-    if (endDateRef.current) {
-      if (moment(shiftEndDate).isBefore(moment(shiftStartDate))) {
-        endDateRef.current.setCustomValidity('End Date cannot come before Start Date');
-      } else {
-        endDateRef.current.setCustomValidity('');
-      }
-    }
-  }, [shiftEndDate]);
+  const startDateRef = React.createRef();
+  const [datesInverted, setDatesInverted] = useState(false);
+  const [dateAfterVigilEnd, setDatesAfterVigilEnd] = useState(false);
+  const [dateBeforeVigilStarts, setDateBeforeVigilStarts] = useState(false);
 
   // Checks that the end time comes before the start time
   const endTimeRef = React.createRef();
+  const [endsBeforeStarts, setEndsBeforeStarts] = useState(false);
+
+  // Checks that selected start is within vigil time
+  const startTimeRef = React.createRef();
+  const [beforeStart, setBeforeStart] = useState(false);
+  const [afterEnd, setAfterEnd] = useState(false);
+
   useEffect(() => {
+    let endDateHasError = false;
+    let endTimeHasError = false;
+    if (moment(shiftEndDate).isBefore(moment(shiftStartDate))) {
+      endDateHasError = true;
+      setDatesInverted(true);
+      endDateRef.current.setCustomValidity('End Date cannot come before Start Date');
+    } else {
+      setDatesInverted(false);
+    }
+
+    if (endDateRef.current) {
+      if (moment(shiftEndDate).isAfter(moment(endTime))) {
+        endDateHasError = true;
+        setDatesAfterVigilEnd(true);
+        endDateRef.current.setCustomValidity('End Date cannot come after Vigil Ends');
+      } else if (endDateHasError) {
+        setDatesAfterVigilEnd(false);
+      } else {
+        setDatesAfterVigilEnd(false);
+        endDateRef.current.setCustomValidity('');
+      }
+      if (moment(shiftStartDate).isBefore(moment(startTime), 'day')) {
+        setDateBeforeVigilStarts(true);
+        startDateRef.current.setCustomValidity('Start date should not come before Vigil Starts');
+      } else {
+        setDateBeforeVigilStarts(false);
+        startDateRef.current.setCustomValidity('');
+      }
+    }
+
     const tFormat = 'HH:mm';
     if (moment(shiftStartDate).isSame(moment(shiftEndDate))
       && moment(shiftEndTime, tFormat).isBefore(moment(shiftStartTime, tFormat))) {
-      endTimeRef.current.setCustomValidity('End Time cannot come before Start Time');
+      endTimeHasError = true;
+      setEndsBeforeStarts(true);
+      endTimeRef.current.setCustomValidity('End time cannot come after a vigil has ended.');
+    } else if (endTimeHasError) {
+      setEndsBeforeStarts(false);
     } else {
+      setEndsBeforeStarts(false);
       endTimeRef.current.setCustomValidity('');
+    }
+
+    // Check if selection is before shift starts
+    if (moment(combineDateAndTime(shiftStartDate, shiftStartTime)).isBefore(startTime)) {
+      setBeforeStart(true);
+      startTimeRef.current.setCustomValidity('Start time cannot come before a vigil has started');
+    } else {
+      setBeforeStart(false);
+      startTimeRef.current.setCustomValidity('');
+    }
+
+    // Check if selection is after shift ends
+    if (moment(combineDateAndTime(shiftEndDate, shiftEndTime)).isAfter(endTime)) {
+      setAfterEnd(true);
+      endTimeRef.current.setCustomValidity('End time cannot come after a vigil has ended.');
+    } else if (!endTimeHasError) {
+      setAfterEnd(false);
+      endTimeRef.current.setCustomValidity('');
+    } else {
+      setAfterEnd(false);
+      endTimeRef.current.setCustomValidity('Only End Time Before Start Time Should Display');
     }
   }, [shiftEndTime, shiftEndDate, shiftStartDate, shiftStartTime]);
 
@@ -240,7 +296,6 @@ export default function ShiftDetails({
       setShowModal(false);
     }
   };
-
   return (
     <Container>
       <Row>
@@ -285,9 +340,15 @@ export default function ShiftDetails({
                         value={shiftStartDate}
                         onChange={(e) => handleInputChange(e, setShiftStartDate)}
                         required
+                        ref={startDateRef}
                       />
                       <Form.Control.Feedback type="invalid">
-                        Please provide a starting date
+                        {shiftStartDate === ''
+                          ? 'Please provide a starting date '
+                          : null}
+                        {dateBeforeVigilStarts
+                          ? 'Start date cannot come before vigil starts'
+                          : null}
                       </Form.Control.Feedback>
                     </Form.Group>
                   </Col>
@@ -305,8 +366,14 @@ export default function ShiftDetails({
                       />
                       <Form.Control.Feedback type="invalid">
                         {shiftEndDate === ''
-                          ? 'Please provide an ending date'
-                          : 'End date should not come before Start Date'}
+                          ? 'Please provide an ending date '
+                          : null }
+                        {datesInverted
+                          ? 'End date cannot come before start date '
+                          : null }
+                        {dateAfterVigilEnd
+                          ? 'End date cannot come after vigil ends'
+                          : null }
                       </Form.Control.Feedback>
                     </Form.Group>
                   </Col>
@@ -323,9 +390,15 @@ export default function ShiftDetails({
                       value={shiftStartTime}
                       onChange={(e) => handleInputChange(e, setShiftStartTime)}
                       required
+                      ref={startTimeRef}
                     />
                     <Form.Control.Feedback type="invalid">
-                      Please provide a starting time
+                      {shiftStartTime === ''
+                        ? 'Please provide a starting time '
+                        : null }
+                      {beforeStart
+                        ? 'Start time cannot come before a vigil has started'
+                        : null }
                     </Form.Control.Feedback>
                   </Form.Group>
                 </Col>
@@ -343,8 +416,14 @@ export default function ShiftDetails({
                     />
                     <Form.Control.Feedback type="invalid">
                       {shiftEndTime === ''
-                        ? 'Please provide an ending time'
-                        : 'End Time should not come before Start Time'}
+                        ? 'Please provide an ending time '
+                        : null}
+                      {endsBeforeStarts
+                        ? 'End time cannot not come before start time '
+                        : null}
+                      {afterEnd
+                        ? 'End time cannot be after a vigil has ended.'
+                        : null}
                     </Form.Control.Feedback>
                   </Form.Group>
                 </Col>
