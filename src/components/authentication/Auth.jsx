@@ -21,24 +21,29 @@ const retrieveUser = async (dbRef) => {
   const thisUserRef = dbRef.collection('users').doc(currentUser);
   const temp = await thisUserRef.get();
   const ps = [];
-  temp.data().prevShifts.forEach((shift) => {
-    shift.get()
-      .then((doc) => {
-        if (doc.data() !== undefined) {
-          const {
-            address, shiftEndTime, shiftStartTime, userRef,
-          } = doc.data();
+  try {
+    temp.data().prevShifts.forEach((shift) => {
+      shift.get()
+        .then((doc) => {
+          if (doc.data() !== undefined) {
+            const {
+              address, shiftEndTime, shiftStartTime, userRef,
+            } = doc.data();
 
-          ps.push({
-            id: doc.id,
-            address,
-            shiftEndTime,
-            shiftStartTime,
-            userRef,
-          });
-        }
-      });
-  });
+            ps.push({
+              id: doc.id,
+              address,
+              shiftEndTime,
+              shiftStartTime,
+              userRef,
+            });
+          }
+        });
+    });
+    console.log('Had shifts');
+  } catch {
+    console.log('No shifts');
+  }
 
   const user = {
     id: currentUser,

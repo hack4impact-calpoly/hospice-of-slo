@@ -25,7 +25,6 @@ const vigilReducer = (state = initialState, action) => {
     }
     case DELETE_VIGIL: {
       const vigilsCopy = state.vigils.filter((v) => v.id !== action.payload.oldVigilId);
-      console.log(action.payload.oldVigilId);
       return { vigils: vigilsCopy };
     }
     default:
