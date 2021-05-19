@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import 'firebase/firestore';
 import firebase from 'firebase/app';
+import 'firebase/firestore';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { Modal, Form, Button } from 'react-bootstrap';

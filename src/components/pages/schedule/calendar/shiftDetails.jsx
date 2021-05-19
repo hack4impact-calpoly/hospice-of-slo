@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Modal from 'react-bootstrap/Modal';
 import firebase from 'firebase/app';
 import 'firebase/firestore';
+import 'firebase/auth';
 import { useHistory } from 'react-router-dom';
 import moment from 'moment';
 import actions from '../../../../actions';

@@ -4,7 +4,9 @@ import {
   Container, Row, Col, Form, Image,
 } from 'react-bootstrap';
 import { Link, useHistory } from 'react-router-dom';
-import firebase from 'firebase';
+import firebase from 'firebase/app';
+import 'firebase/firestore';
+import 'firebase/auth';
 import logoImage from '../../images/HospiceLogo.png';
 
 const StyledDiv = styled.div`

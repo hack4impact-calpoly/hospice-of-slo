@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap/Modal';
 import styled from 'styled-components';
 import firebase from 'firebase/app';
+import 'firebase/firestore';
 import { useDispatch } from 'react-redux';
 import { BiTrash } from 'react-icons/bi';
 import { GreyDiv } from '../../../styled-components/discussion-components';

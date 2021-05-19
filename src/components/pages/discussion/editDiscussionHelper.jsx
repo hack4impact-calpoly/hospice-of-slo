@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import firebase from 'firebase';
+import firebase from 'firebase/app';
+import 'firebase/firestore';
 import { useDispatch } from 'react-redux';
 import { discussionPropType } from '../../../dataStructures/propTypes';
 import actions from '../../../actions';

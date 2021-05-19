@@ -5,7 +5,8 @@ import {
 } from 'react-bootstrap';
 import { Link, useLocation, useHistory } from 'react-router-dom';
 import { BiArrowBack } from 'react-icons/bi';
-import firebase from 'firebase';
+import firebase from 'firebase/app';
+import 'firebase/auth';
 
 const StyledDiv = styled.div`
   height: 100vh;

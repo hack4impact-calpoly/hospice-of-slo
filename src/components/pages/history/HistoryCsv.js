@@ -1,5 +1,6 @@
 import { json2csvAsync } from 'json-2-csv';
 import firebase from 'firebase/app';
+import 'firebase/storage';
 
 async function generateCSV(shifts) {
   // Create CSV String

@@ -3,6 +3,9 @@ import React, { useEffect, useState } from 'react';
 import { ClassicSpinner } from 'react-spinners-kit';
 import styled from 'styled-components';
 import firebase from 'firebase/app';
+import 'firebase/firestore';
+import 'firebase/auth';
+
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import actions from '../../actions/index';

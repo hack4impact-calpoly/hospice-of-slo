@@ -3,15 +3,15 @@ import { Form, Col } from 'react-bootstrap';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
 import firebase from 'firebase/app';
 import 'firebase/firestore';
-import { useDispatch } from 'react-redux';
-import HeaderWithBackArrow from '../../../navigation/HeaderWithBackArrow';
-import { SubmitButton, CancelButton } from '../../../../styled-components/form-components';
 import {
   timeComesBefore, eventDataToFront, combineDateAndTime, dateComesBefore,
 } from './CreateVigilHelper';
 import { vigilPropType } from '../../../../dataStructures/propTypes';
+import HeaderWithBackArrow from '../../../navigation/HeaderWithBackArrow';
+import { SubmitButton, CancelButton } from '../../../../styled-components/form-components';
 import actions from '../../../../actions';
 
 // Styled Components

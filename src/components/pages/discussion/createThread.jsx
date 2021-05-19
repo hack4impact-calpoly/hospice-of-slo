@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import firebase from 'firebase';
 import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
+import firebase from 'firebase/app';
+import 'firebase/firestore';
 import { discussionPropType } from '../../../dataStructures/propTypes';
 import actions from '../../../actions';
-import { FloatingActionButton } from '../../../styled-components/discussion-components';
 import DiscussionModal from './DiscussionModal';
+import { FloatingActionButton } from '../../../styled-components/discussion-components';
 
 export default function CreateThread(props) {
   const {

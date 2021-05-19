@@ -8,6 +8,7 @@ import Modal from 'react-bootstrap/Modal';
 import { Row, Col } from 'react-bootstrap';
 import moment from 'moment';
 import firebase from 'firebase/app';
+import 'firebase/firestore';
 import styled from 'styled-components';
 import { vigilPropType } from '../../../../dataStructures/propTypes';
 import actions from '../../../../actions';
