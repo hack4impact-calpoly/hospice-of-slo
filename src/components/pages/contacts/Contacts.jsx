@@ -1,9 +1,10 @@
-/* eslint-disable */
 // Root for all Things Contacts
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
-import { Row, Col, Form, Modal } from 'react-bootstrap';
+import {
+  Row, Col, Form, Modal,
+} from 'react-bootstrap';
 import firebase from 'firebase/app';
 import 'firebase/firestore';
 import HeaderWithNav from '../../navigation/nav-header';
@@ -57,21 +58,27 @@ export default function Contacts() {
     return 0;
   }
 
-  function updateEmail() { 
+  function closeModal() {
+    setPhone('');
+    setEmail('');
+    setShowModal(false);
+  }
+
+  function updateEmail() {
     if (email !== '') {
-      var user = firebase.auth().currentUser;
-      user.updateEmail(email).then(function() {
+      const user = firebase.auth().currentUser;
+      user.updateEmail(email).then(() => {
         const db = firebase.firestore();
         const currentUser = (sessionStorage.getItem('userid'));
         db.collection('users').doc(currentUser).update({
-          email: email
+          email,
         });
-        alert('Email/Username successfully updated to: ' + email);
+        alert(`Email/Username successfully updated to: ${email}`);
         closeModal();
         // Update successful.
-      }).catch(function(error) {
+      }).catch((error) => {
         // An error happened.
-        alert('Email/Username WAS NOT updated.' + error.message);
+        alert(`Email/Username WAS NOT updated.${error.message}`);
       });
     }
   }
@@ -82,20 +89,15 @@ export default function Contacts() {
       const db = firebase.firestore();
       const currentUser = (sessionStorage.getItem('userid'));
       db.collection('users').doc(currentUser).update({
-        phone: myStr
+        phone: myStr,
       });
-      alert('Phone successfully updated to: ' + phone);
+      alert(`Phone successfully updated to: ${phone}`);
       closeModal();
     } else {
       alert('Phone WAS NOT updated. Please make sure it is in format 000-000-0000');
     }
   }
 
-  function closeModal() { // sorts in alphabetical order
-    setPhone('');
-    setEmail('');
-    setShowModal(false)
-  }
   return (
     <div>
       <HeaderWithNav>Contacts</HeaderWithNav>
@@ -111,8 +113,8 @@ export default function Contacts() {
             />
           </Col>
           <Col xs={12} sm={12} md={4}>
-              <StyledButton onClick={() => setShowModal(true)}>Update contact info</StyledButton>
-            </Col> 
+            <StyledButton onClick={() => setShowModal(true)}>Update contact info</StyledButton>
+          </Col>
           {isAdmin
             ? (
               <Col xs={12} sm={12} md={2}>
@@ -120,35 +122,39 @@ export default function Contacts() {
               </Col>
             )
             : null }
-            <StyledModal show={showModal} onHide={() => closeModal()} centered>
-              <Modal.Body>
+          <StyledModal show={showModal} onHide={() => closeModal()} centered>
+            <Modal.Body>
               Update Email (This will also be your new username)
-                <Form.Control
-                  className="mt-2 mb-3"
-                  type="email"
-                  placeholder="email"
-                  onChange={(e) => {
-                    setEmail(e.target.value);
-                  }}
-                />
-                <StyledButton onClick={() => updateEmail()}>Update Email</StyledButton>
-                <br /> <br />
-                <div className="mt-2 mb-4" style={{width: '100%', borderBottom: '2px solid #777'}}></div>
-                Update Phone
-                <Form.Control
-                  className="mt-2 mb-3"
-                  type="phone"
-                  placeholder="phone"
-                  onChange={(e) => {
-                    setPhone(e.target.value);
-                  }}
-                />
-                <StyledButton onClick={() => updatePhone()}>Update Phone</StyledButton>
-                <br /> <br />
-                <div className="mt-2 mb-3" style={{width: '100%', borderBottom: '2px solid #777'}}></div>
-                <StyledButton onClick={() => closeModal()}>Cancel</StyledButton>
-              </Modal.Body>
-            </StyledModal>
+              <Form.Control
+                className="mt-2 mb-3"
+                type="email"
+                placeholder="email"
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                }}
+              />
+              <StyledButton onClick={() => updateEmail()}>Update Email</StyledButton>
+              <br />
+              {' '}
+              <br />
+              <div className="mt-2 mb-4" style={{ width: '100%', borderBottom: '2px solid #777' }} />
+              Update Phone
+              <Form.Control
+                className="mt-2 mb-3"
+                type="phone"
+                placeholder="phone"
+                onChange={(e) => {
+                  setPhone(e.target.value);
+                }}
+              />
+              <StyledButton onClick={() => updatePhone()}>Update Phone</StyledButton>
+              <br />
+              {' '}
+              <br />
+              <div className="mt-2 mb-3" style={{ width: '100%', borderBottom: '2px solid #777' }} />
+              <StyledButton onClick={() => closeModal()}>Cancel</StyledButton>
+            </Modal.Body>
+          </StyledModal>
         </Row>
         {users.filter((user) => user.name.toLowerCase().includes(searchTerm.toLowerCase())).sort(compare).map((user) => <ContactCard key={user.id} name={user.name} email={user.email} phone={user.phone} color="#333333" />)}
       </ListWrapper>
