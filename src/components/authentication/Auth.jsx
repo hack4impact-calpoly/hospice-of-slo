@@ -47,10 +47,9 @@ const retrieveUser = async (dbRef) => {
   } catch {
     console.log('No shifts');
   }
-
   const user = {
     id: currentUser,
-    isAdmin: temp.data().isAdmin,
+    isAdmin: temp.data().isAdmin || false,
     prevShifts: ps,
   };
   sessionStorage.setItem('user', JSON.stringify(user));
