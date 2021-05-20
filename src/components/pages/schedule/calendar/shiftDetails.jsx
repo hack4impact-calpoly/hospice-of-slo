@@ -171,6 +171,7 @@ export default function ShiftDetails({
     dispatch(actions.vigils.deleteVigil(id));
 
     setShow(false);
+    setShowModal(false);
   }
 
   const editShift = () => {
