@@ -130,10 +130,7 @@ export default function SignUp() {
             displayName: name,
           })
             .then(() => {
-              logUserData(user.user) // creates a document for user with corresponding ID
-                .then(() => {
-                  history.push('/');
-                });
+              logUserData(user.user); // creates a document for user with corresponding ID
             })
             .catch((error) => {
               setErrMessage(error.message);
@@ -147,12 +144,13 @@ export default function SignUp() {
     }
   }
 
-  const validateAll = () => {
+  const validateAll = async () => {
     validateEmail();
     validatePhone();
     validatePass();
     if (showErr === false) {
-      signupPress();
+      await signupPress();
+      history.push('/');
       setShowErr(true);
     }
   };

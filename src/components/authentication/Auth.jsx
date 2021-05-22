@@ -21,37 +21,36 @@ const LoaderContainer = styled.div`
 
 const retrieveUser = async (dbRef) => {
   const currentUser = (sessionStorage.getItem('userid'));
-  const dbUserRef = await dbRef.collection('users').doc(currentUser).get();
-  const prevShiftArray = [];
-  let maybeAdmin = false;
+  const thisUserRef = dbRef.collection('users').doc(currentUser);
+  const temp = await thisUserRef.get();
+  const ps = [];
+  try {
+    temp.data().prevShifts.forEach((shift) => {
+      shift.get()
+        .then((doc) => {
+          if (doc.data() !== undefined) {
+            const {
+              address, shiftEndTime, shiftStartTime, userRef,
+            } = doc.data();
 
-  if (dbUserRef.data() !== null) {
-    maybeAdmin = dbUserRef.data().isAdmin;
-    dbUserRef.data().prevShifts.forEach((shift) => {
-      shift.get().then((s) => {
-        if (s.data() !== null) {
-          const {
-            address, shiftEndTime, shiftStartTime, userRef,
-          } = s.data();
-          prevShiftArray.push({
-            id: s.id,
-            address,
-            shiftEndTime,
-            shiftStartTime,
-            userRef,
-          });
-        } else {
-          console.log('shift undefined');
-        }
-      });
+            ps.push({
+              id: doc.id,
+              address,
+              shiftEndTime,
+              shiftStartTime,
+              userRef,
+            });
+          }
+        });
     });
-  } else {
-    console.log('doc undefined');
+    console.log('Had shifts');
+  } catch {
+    console.log('No shifts');
   }
   const user = {
     id: currentUser,
-    isAdmin: maybeAdmin,
-    prevShifts: prevShiftArray,
+    isAdmin: temp.data().isAdmin || false,
+    prevShifts: ps,
   };
   sessionStorage.setItem('user', JSON.stringify(user));
   return user;
