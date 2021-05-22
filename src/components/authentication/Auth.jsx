@@ -21,40 +21,38 @@ const LoaderContainer = styled.div`
 
 const retrieveUser = async (dbRef) => {
   const currentUser = (sessionStorage.getItem('userid'));
-  const thisUserRef = dbRef.collection('users').doc(currentUser);
-  let user = {};
-  const ps = [];
-  thisUserRef.get().then((doc) => {
-    if (doc.exists) {
-      doc.data();
-      console.log(doc.data);
-      doc.data().prevShifts.forEach((shift) => {
-        shift.get()
-          .then((doc2) => {
-            if (doc2.data() !== undefined) {
-              const {
-                address, shiftEndTime, shiftStartTime, userRef,
-              } = doc2.data();
+  const dbUserRef = await dbRef.collection('users').doc(currentUser).get();
+  const prevShiftArray = [];
+  let maybeAdmin = false;
 
-              ps.push({
-                id: doc2.id,
-                address,
-                shiftEndTime,
-                shiftStartTime,
-                userRef,
-              });
-            }
+  if (dbUserRef.data() !== null) {
+    maybeAdmin = dbUserRef.data().isAdmin;
+    dbUserRef.data().prevShifts.forEach((shift) => {
+      shift.get().then((s) => {
+        if (s.data() !== null) {
+          const {
+            address, shiftEndTime, shiftStartTime, userRef,
+          } = s.data();
+          prevShiftArray.push({
+            id: s.id,
+            address,
+            shiftEndTime,
+            shiftStartTime,
+            userRef,
           });
+        } else {
+          console.log('shift undefined');
+        }
       });
-      user = {
-        id: currentUser,
-        isAdmin: doc.data().isAdmin,
-        prevShifts: ps,
-      };
-    } else {
-      console.log('No doc exists');
-    }
-  });
+    });
+  } else {
+    console.log('doc undefined');
+  }
+  const user = {
+    id: currentUser,
+    isAdmin: maybeAdmin,
+    prevShifts: prevShiftArray,
+  };
   sessionStorage.setItem('user', JSON.stringify(user));
   return user;
 };
@@ -188,8 +186,6 @@ export default function AuthProvider({ children }) {
         retrieveHistoryShifts(dbRef),
       ]);
       const [user, users, vigils, discussions, historyShifts] = firestoreResponse;
-      console.log('user', user);
-
       // Initialize redux store
       await dispatch(actions.user.initializeUser(user));
       await dispatch(actions.users.initializeUsers(users));
@@ -201,7 +197,6 @@ export default function AuthProvider({ children }) {
     const wraperFunc = async () => {
       await initializeDatabase().then(() => {
         setTimeout(() => {
-          console.log('Here 2');
           setPending(false);
         }, 2000); // Allow frontend to render
       });
@@ -213,7 +208,6 @@ export default function AuthProvider({ children }) {
         sessionStorage.setItem('userid', user.uid);
         wraperFunc();
       } else {
-        console.log('Here 1');
         setPending(false);
         sessionStorage.clear();
       }
