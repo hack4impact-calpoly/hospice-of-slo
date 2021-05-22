@@ -10,8 +10,6 @@ import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import actions from '../../actions/index';
 
-const [color, setColor] = useState('yellow');
-
 const LoaderContainer = styled.div`
   width: 100%;
   height: 100%;
@@ -27,8 +25,6 @@ const retrieveUser = async (dbRef) => {
   const temp = await thisUserRef.get();
   const ps = [];
   try {
-    setColor('orange');
-
     temp.data().prevShifts.forEach((shift) => {
       shift.get()
         .then((doc) => {
@@ -61,8 +57,6 @@ const retrieveUser = async (dbRef) => {
 };
 
 const retrieveUsers = async (dbRef) => {
-  setColor('purple');
-
   const users = [];
   const usersRef = dbRef.collection('users');
   const usersSnapshot = await usersRef.get();
@@ -83,8 +77,6 @@ const retrieveUsers = async (dbRef) => {
 };
 
 const retrieveVigils = async (dbRef) => {
-  setColor('blue');
-
   const vigils = [];
   const vigilsRef = dbRef.collection('vigils');
   const vigilsSnapshot = await vigilsRef.get();
@@ -202,9 +194,7 @@ export default function AuthProvider({ children }) {
     };
 
     const wraperFunc = async () => {
-      setColor('green');
       await initializeDatabase().then(() => {
-        setColor('red');
         setTimeout(() => {
           setPending(false);
         }, 2000); // Allow frontend to render
@@ -215,7 +205,6 @@ export default function AuthProvider({ children }) {
       if (user != null) {
         setPending(true);
         sessionStorage.setItem('userid', user.uid);
-        setColor('blue');
         wraperFunc();
       } else {
         setPending(false);
@@ -226,7 +215,7 @@ export default function AuthProvider({ children }) {
   if (pending) {
     return (
       <LoaderContainer>
-        <ClassicSpinner size={48} color={color} />
+        <ClassicSpinner size={48} color="#60becc" />
       </LoaderContainer>
     );
   }
