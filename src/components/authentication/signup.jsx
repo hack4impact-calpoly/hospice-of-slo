@@ -72,6 +72,9 @@ export default function SignUp() {
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
   const [showErr, setShowErr] = useState(false);
+  const [noPassErrs, setNoPassErrs] = useState(false);
+  const [noEmailErrs, setNoEmailErrs] = useState(false);
+  const [noPhoneErrs, setNoPhoneErrs] = useState(false);
   const [errMessage, setErrMessage] = useState('');
 
   const history = useHistory();
@@ -85,6 +88,7 @@ export default function SignUp() {
       setErrMessage('Password must be at least 6 letters');
     } else {
       setShowErr(false);
+      setNoPassErrs(true);
     }
   };
 
@@ -92,9 +96,11 @@ export default function SignUp() {
     const emailFormat = /\S+@\S+\.\S+/;
     if (!emailFormat.test(email)) {
       setShowErr(true);
+      setNoEmailErrs(false);
       setErrMessage('Please enter a valid email address');
     } else {
       setShowErr(false);
+      setNoEmailErrs(true);
     }
   };
 
@@ -103,8 +109,10 @@ export default function SignUp() {
     if (myStr.length < 7 || myStr.length >= 13) { // checks if phone has at least 7 nums
       setShowErr(true);
       setErrMessage('Please enter a valid phone number');
+      setNoPhoneErrs(false);
     } else {
       setShowErr(false);
+      setNoPhoneErrs(true);
     }
   };
 
@@ -150,9 +158,9 @@ export default function SignUp() {
     validateEmail();
     validatePhone();
     validatePass();
-    if (showErr === false) {
+    if (noPassErrs && noEmailErrs && noPhoneErrs) {
       signupPress();
-      setShowErr(true);
+      setShowErr(false);
     }
   };
 
