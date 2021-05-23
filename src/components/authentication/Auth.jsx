@@ -24,6 +24,7 @@ const retrieveUser = async (dbRef) => {
   const thisUserRef = dbRef.collection('users').doc(currentUser);
   const temp = await thisUserRef.get();
   const ps = [];
+  let user = {};
   try {
     temp.data().prevShifts.forEach((shift) => {
       shift.get()
@@ -47,11 +48,15 @@ const retrieveUser = async (dbRef) => {
   } catch {
     console.log('No shifts');
   }
-  const user = {
-    id: currentUser,
-    isAdmin: temp.data().isAdmin || false,
-    prevShifts: ps,
-  };
+  try {
+    user = {
+      id: currentUser,
+      isAdmin: temp.data().isAdmin || false,
+      prevShifts: ps,
+    };
+  } catch {
+    console.log('not logged in');
+  }
   sessionStorage.setItem('user', JSON.stringify(user));
   return user;
 };

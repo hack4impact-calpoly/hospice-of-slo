@@ -50,7 +50,6 @@ const SubmitButton = styled.button`
   width: 100%;
   font-size: 14px;
   fontFamily: Roboto;
-
   &:hover{
     color: white;
     background-color: #558E97;
@@ -130,7 +129,10 @@ export default function SignUp() {
             displayName: name,
           })
             .then(() => {
-              logUserData(user.user); // creates a document for user with corresponding ID
+              logUserData(user.user) // creates a document for user with corresponding ID
+                .then(() => {
+                  history.push('/');
+                });
             })
             .catch((error) => {
               setErrMessage(error.message);
@@ -144,13 +146,12 @@ export default function SignUp() {
     }
   }
 
-  const validateAll = async () => {
+  const validateAll = () => {
     validateEmail();
     validatePhone();
     validatePass();
     if (showErr === false) {
-      await signupPress();
-      history.push('/');
+      signupPress();
       setShowErr(true);
     }
   };
