@@ -4,9 +4,9 @@ import firebase from 'firebase/app';
 import 'firebase/firestore';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { Modal, Form, Button } from 'react-bootstrap';
 import { FloatingActionButton } from '../../../styled-components/discussion-components';
 import HeaderWithBackArrow from '../../navigation/HeaderWithBackArrow';
+import CreateMessage from './CreateMessage';
 import DiscussionPost from './DiscussionPost';
 import actions from '../../../actions';
 
@@ -19,49 +19,6 @@ const StyledText = styled.p`
   text-align: center;
   font-size: 16px;
   color: #6C6B6B;
-`;
-
-const StyledPost = styled.button`
-  color: white;
-  background-color: #84C0C9;
-  border: none;
-  border-radius: 7px;
-  width: 25%;
-  padding: 6px 0px;
-
-  &:hover{
-    background-color: #558E97;
-  }
-`;
-
-const StyledButton = styled(Button)`
-  color: white;
-  margin-bottom: 12px;
-  background-color: #558E97;
-  border-radius: 5px;
-  padding: 6px 10px; 
-  border: none;
-  width: 25%;
-  font-size: 14px;
-  fontFamily: Roboto;
-  outline: none !important;
-  box-shadow: none !important;
-
-  &:hover{
-    color: white;
-    background-color: #84C0C9;
-  }
-
-  &:focus, &:active {
-    background-color: #558E97;
-  }
-`;
-
-const StyledCancel = styled.button`
-  color: #6C6B6B;
-  background: none;
-  border: none;
-  padding: 0 20px 
 `;
 
 export default function DiscussionThread() {
@@ -159,37 +116,27 @@ export default function DiscussionThread() {
       <FloatingActionButton>+</FloatingActionButton>
       {displayEmptySignal()}
       <FloatingActionButton onClick={handleShow}>+</FloatingActionButton>
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>{discussion.name}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
-            <StyledButton style={{ float: 'left' }} onClick={() => setMessage('Vigil Under Care')}> Under Care</StyledButton>
-            <StyledButton style={{ marginLeft: '12.5%' }} onClick={() => setMessage('Vigil On Hold')}>Vigil On Hold</StyledButton>
-            <StyledButton style={{ float: 'right' }} onClick={() => setMessage('Vigil Complete')}> Vigil Complete</StyledButton>
-            <Form.Group controlId="exampleForm.ControlTextarea1">
-              <Form.Control
-                as="textarea"
-                placeholder="Write a message here..."
-                rows={6}
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-              />
-            </Form.Group>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <StyledCancel variant="secondary" onClick={handleClose}>
-            Cancel
-          </StyledCancel>
-          <StyledPost variant="primary" onClick={postMessage}>
-            Post
-          </StyledPost>
-        </Modal.Footer>
-      </Modal>
+      <CreateMessage
+        show={show}
+        handleClose={handleClose}
+        discussion={discussion}
+        setMessage={setMessage}
+        message={message}
+        postMessage={postMessage}
+      />
       <PostWrapper>
-        {posts.sort(compare).map((post) => <DiscussionPost key={post.messageId} discussion={discussion} author={post.user.name} userId={post.user.userId} timeSent={post.timeSent.toDate()} message={post.message} messageId={post.messageId} />)}
+        {posts.sort(compare).map((post) => (
+          <DiscussionPost
+            key={post.messageId}
+            discussion={discussion}
+            author={post.user.name}
+            userId={post.user.userId}
+            timeSent={post.timeSent.toDate()}
+            message={post.message}
+            setMessage={setMessage}
+            messageId={post.messageId}
+          />
+        ))}
       </PostWrapper>
     </div>
   );
