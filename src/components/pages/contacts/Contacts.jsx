@@ -47,6 +47,7 @@ export default function Contacts() {
   const [showModal, setShowModal] = useState(false);
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
 
   function compare(a, b) { // sorts in alphabetical order
     if (a.name < b.name) {
@@ -73,7 +74,7 @@ export default function Contacts() {
         db.collection('users').doc(currentUser).update({
           email,
         });
-        alert(`Email/Username successfully updated to: ${email}`);
+        alert(`Email/Username successfully updated to: ${email}! Please refresh your page to see changes`);
         closeModal();
         // Update successful.
       }).catch((error) => {
@@ -91,10 +92,24 @@ export default function Contacts() {
       db.collection('users').doc(currentUser).update({
         phone: myStr,
       });
-      alert(`Phone successfully updated to: ${phone}`);
+      alert(`Phone successfully updated to: ${phone}! Please refresh your page to see changes`);
       closeModal();
     } else {
       alert('Phone WAS NOT updated. Please make sure it is in format 000-000-0000');
+    }
+  }
+
+  function updateName() { // sorts in alphabetical order
+    if (name.length >= 3) {
+      const db = firebase.firestore();
+      const currentUser = (sessionStorage.getItem('userid'));
+      db.collection('users').doc(currentUser).update({
+        name,
+      });
+      alert(`Name successfully updated to: ${name}! Please refresh your page to see changes`);
+      closeModal();
+    } else {
+      alert('Please input a longer name');
     }
   }
 
@@ -148,6 +163,20 @@ export default function Contacts() {
                 }}
               />
               <StyledButton onClick={() => updatePhone()}>Update Phone</StyledButton>
+              <br />
+              {' '}
+              <br />
+              <div className="mt-2 mb-3" style={{ width: '100%', borderBottom: '2px solid #777' }} />
+              Update Name
+              <Form.Control
+                className="mt-2 mb-3"
+                type="text"
+                placeholder="name"
+                onChange={(e) => {
+                  setName(e.target.value);
+                }}
+              />
+              <StyledButton onClick={() => updateName()}>Update Name</StyledButton>
               <br />
               {' '}
               <br />
