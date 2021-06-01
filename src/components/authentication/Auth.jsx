@@ -68,15 +68,18 @@ const retrieveUsers = async (dbRef) => {
 
   usersSnapshot.forEach((doc) => {
     const {
-      email, name, phone,
+      email, name, phone, isAdmin, isActiveAccount,
     } = doc.data();
 
-    users.push({
-      id: doc.id,
-      email,
-      name,
-      phone,
-    });
+    if (isActiveAccount !== false) {
+      users.push({
+        id: doc.id,
+        email,
+        name,
+        phone,
+        isAdminAccount: isAdmin,
+      });
+    }
   });
   return users;
 };

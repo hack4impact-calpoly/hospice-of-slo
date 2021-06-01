@@ -156,7 +156,7 @@ export default function Contacts() {
             </Modal.Body>
           </StyledModal>
         </Row>
-        {users.filter((user) => user.name.toLowerCase().includes(searchTerm.toLowerCase())).sort(compare).map((user) => <ContactCard key={user.id} name={user.name} email={user.email} phone={user.phone} color="#333333" />)}
+        {users.filter((user) => user.name.toLowerCase().includes(searchTerm.toLowerCase())).sort(compare).map((user) => <ContactCard key={user.id} userId={user.id} name={user.name} email={user.email} phone={user.phone} isAdminAccount={user.isAdminAccount} isAdmin={isAdmin} color="#333333" />)}
       </ListWrapper>
     </div>
   );

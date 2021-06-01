@@ -1,7 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import {
+  Container, Row, Col,
+} from 'react-bootstrap';
 import { GreyDiv } from '../../../styled-components/discussion-components';
+import Edit from './ContactOptions';
 
 const Name = styled.span`
   font-size: 18px;
@@ -32,20 +36,40 @@ const Phone = styled.p`
   }
 `;
 
+const Dots = styled(Edit)`
+  margin-left: auto;
+  align-self: center;
+`;
+
 export default function ContactCard({
   name,
   email,
   phone,
+  isAdminAccount,
+  isAdmin,
+  userId,
 }) {
   return (
     <GreyDiv>
-      <Name>{name}</Name>
-      <a href={`mailto:${email}`}>
-        <Email>{email}</Email>
-      </a>
-      <a href={`sms:+1-${phone}`}>
-        <Phone>{phone}</Phone>
-      </a>
+      <Container>
+        <Row>
+          <Col>
+            <Name>
+              {name}
+              {isAdminAccount ? (<span> (Admin) </span>) : (null)}
+            </Name>
+            <a href={`mailto:${email}`}>
+              <Email>{email}</Email>
+            </a>
+            <a href={`sms:+1-${phone}`}>
+              <Phone>{phone}</Phone>
+            </a>
+          </Col>
+          <Col xs={2} sm={1}>
+            {isAdmin ? <Dots isAdminAccount={isAdminAccount} userId={userId} /> : (null) }
+          </Col>
+        </Row>
+      </Container>
     </GreyDiv>
   );
 }
