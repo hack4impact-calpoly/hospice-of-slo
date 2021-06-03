@@ -114,7 +114,11 @@ export default function Login() {
         const userRef = db.collection('users').doc(currentUser);
         userRef.get().then((user) => {
           if (user.exists) {
-            history.push('/');
+            if (user.data().isActiveAccount !== false) {
+              history.push('/');
+            } else {
+              alert('Your account has been recently deleted. Please make sure that you wait 30 days before you create an account with the same email. ');
+            }
           } else {
             // user.data() will be undefined in this case
             setErrMessage('Cannot Find User');
