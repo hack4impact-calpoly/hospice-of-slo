@@ -20,7 +20,6 @@ const PaddedContainer = styled(Container)`
 `;
 
 export default function Discussion() {
-  const isAdmin = useSelector((state) => state.user.user.isAdmin);
   const [searchTerm, setSearchTerm] = useState('');
 
   const storeDiscussions = useSelector((state) => state.discussions.discussions);
@@ -68,7 +67,7 @@ export default function Discussion() {
   return (
     <div>
       <HeaderWithNav>Discussions</HeaderWithNav>
-      {isAdmin ? <CreateThread show={show} setShow={setShow} /> : null}
+      <CreateThread show={show} setShow={setShow} />
       <PaddedContainer fluid>
         <Row className="justify-content-md-center">
           <Col className="search" md={9} lg={8} xl={7}>
