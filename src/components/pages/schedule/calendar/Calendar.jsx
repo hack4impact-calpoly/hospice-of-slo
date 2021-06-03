@@ -10,6 +10,7 @@ import Modal from 'react-bootstrap/Modal';
 import moment from 'moment';
 import ShiftDetails from './shiftDetails';
 import { vigilPropType } from '../../../../dataStructures/propTypes';
+import './Calendar.css';
 
 export default function Calendar(props) {
   const { eventData, setSelectVigil } = props;
@@ -90,14 +91,42 @@ export default function Calendar(props) {
     setShowModal(true);
   };
 
+  // Marks all overlapping events
+  const annotatedEventData = (events) => {
+    if (events.length === 0) {
+      return events;
+    }
+
+    const annotatedEvents = [...events];
+    annotatedEvents.sort((e1, e2) => e1.start - e2.start);
+    let eventCopy = { ...annotatedEvents[0] };
+    eventCopy.overlapping = false;
+    annotatedEvents[0] = eventCopy;
+
+    for (let i = 1; i < annotatedEvents.length; i += 1) {
+      eventCopy = { ...annotatedEvents[i] };
+      if (eventCopy.start < annotatedEvents[i - 1].end) {
+        eventCopy.overlapping = !annotatedEvents[i - 1].overlapping;
+      } else {
+        eventCopy.overlapping = false;
+      }
+      annotatedEvents[i] = eventCopy;
+    }
+    return annotatedEvents;
+  };
+
+  // Add isStart, isEnd, and overlapping-event when neccissary
   const getClassNames = (info) => {
+    const classNames = [];
     if (info.isStart) {
-      return ['isStart'];
+      classNames.push('isStart');
+    } else if (info.isEnd) {
+      classNames.push('isEnd');
     }
-    if (info.isEnd) {
-      return ['isEnd'];
+    if (info.event.extendedProps.overlapping) {
+      classNames.push('overlapping-event');
     }
-    return [];
+    return classNames;
   };
 
   const handleCloseClick = () => setShowModal(false);
@@ -111,7 +140,7 @@ export default function Calendar(props) {
             plugins={[timeGridPlugin, interactionPlugin]}
             initialView="timeGridDay"
             selectable
-            events={eventData}
+            events={annotatedEventData(eventData)}
             eventClick={handleEventClick}
             eventClassNames={getClassNames}
             headerToolbar={adminCalendarHeader}
@@ -126,7 +155,7 @@ export default function Calendar(props) {
             plugins={[timeGridPlugin, interactionPlugin]}
             initialView="timeGridDay"
             selectable
-            events={eventData}
+            events={annotatedEventData(eventData)}
             eventClick={handleEventClick}
             eventClassNames={getClassNames}
             headerToolbar={volunteerCalendarHeader}
