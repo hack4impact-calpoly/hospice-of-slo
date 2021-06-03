@@ -5,8 +5,9 @@ import styled from 'styled-components';
 import firebase from 'firebase/app';
 import 'firebase/firestore';
 import { useDispatch } from 'react-redux';
-import { BiTrash } from 'react-icons/bi';
+import { BiTrash, BiPencil } from 'react-icons/bi';
 import { GreyDiv } from '../../../styled-components/discussion-components';
+import CreateMessage from './CreateMessage';
 import actions from '../../../actions';
 
 const Author = styled.span`
@@ -59,6 +60,7 @@ export default function DiscussionPost({
   author,
   timeSent,
   message,
+  setMessage,
   userId,
   messageId,
   discussion,
@@ -68,7 +70,15 @@ export default function DiscussionPost({
   const sentAt = `${timeSent.toLocaleDateString(undefined, dateOptions)} at ${timeSent.toLocaleTimeString(undefined, timeOptions)}`;
   const currentUser = (sessionStorage.getItem('userid'));
 
-  const [show, setShow] = useState(false);
+  const [showDelete, setShowDelete] = useState(false);
+  const [showEdit, setShowEdit] = useState(false);
+
+  const [thisMessage, setThisMessage] = useState(message);
+
+  const handleClose = () => {
+    setShowEdit(false);
+    setMessage('');
+  };
 
   const dispatch = useDispatch();
 
@@ -84,28 +94,75 @@ export default function DiscussionPost({
       .catch((error) => {
         console.error('Error deleting document: ', error);
       });
-    setShow(false);
+    setShowDelete(false);
+  }
+
+  async function editMessage() {
+    let updatedMessage;
+    firebase.firestore().collection('discussions')
+      .doc(discussion.id).collection('messages')
+      .doc(messageId)
+      .update({
+        message: thisMessage,
+      })
+      .then(() => {
+        discussion.messages.forEach((m) => {
+          if (m.messageId === messageId) {
+            updatedMessage = { ...m, message: thisMessage };
+          }
+        });
+        const newMessages = discussion.messages.filter((m) => m.messageId !== messageId);
+        newMessages.push(updatedMessage);
+        dispatch(actions.discussions.editDiscussion(discussion.id, { ...discussion, messages: newMessages }));
+        handleClose();
+      })
+      .catch((error) => {
+        console.error('Error updating document: ', error);
+      });
+    setShowDelete(false);
   }
 
   return (
     <GreyDiv>
-      { (currentUser === userId)
-        ? (
-          <BiTrash style={{ cursor: 'pointer' }} size="25" onClick={() => setShow(true)} className="mr-2 mb-1" />
-        )
-        : null}
       <Author>{author}</Author>
       <Time>{sentAt}</Time>
+      { (currentUser === userId)
+        ? (
+          <>
+            <BiTrash
+              style={{ cursor: 'pointer', float: 'right' }}
+              size="25"
+              onClick={() => setShowDelete(true)}
+              className="mr-2 mb-1 ml-2"
+            />
+            <BiPencil
+              style={{ cursor: 'pointer', float: 'right' }}
+              size="25"
+              onClick={() => setShowEdit(true)}
+            />
+          </>
+        )
+        : null}
+
       <Message>{message}</Message>
-      <StyledModal show={show} centered>
+      <StyledModal show={showDelete} centered>
         <Modal.Body>
           Are you sure you want to delete this message?
         </Modal.Body>
         <Modal.Footer>
-          <StyledButton onClick={() => setShow(false)}>Cancel</StyledButton>
+          <StyledButton onClick={() => setShowDelete(false)}>Cancel</StyledButton>
           <StyledButton onClick={() => deleteThisMessage()}>Ok</StyledButton>
         </Modal.Footer>
       </StyledModal>
+      <CreateMessage
+        show={showEdit}
+        handleClose={handleClose}
+        discussion={discussion}
+        setMessage={setThisMessage}
+        message={thisMessage}
+        postMessage={editMessage}
+        isEditing
+      />
     </GreyDiv>
   );
 }
