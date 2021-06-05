@@ -49,7 +49,7 @@ export default function HistoryTable() {
     }
   });
 
-  function aRow(col1, col2, col3, col4, color) {
+  function aRow(col1, col2, col3, col4, col5, color) {
     return (
       <StyledRow key={col4} style={{ background: color }} className="justify-content-md-center">
         <StyledCol>
@@ -64,18 +64,22 @@ export default function HistoryTable() {
         <StyledCol>
           {col4}
         </StyledCol>
+        <StyledCol>
+          {col5}
+        </StyledCol>
       </StyledRow>
     );
   }
 
-  const table = [aRow('Name', 'Vigil', 'Date', 'Time', '#C4C4C4')];
+  const table = [aRow('Name', 'Vigil', 'Date', 'Time', 'Duration (hours)', '#C4C4C4')];
 
   vigilHistory.forEach((r) => {
     const timePer = `${r.shiftStartTime.toDate().toLocaleTimeString(undefined, timeOptions)} 
         to ${r.shiftEndTime.toDate().toLocaleTimeString(undefined, timeOptions)}`;
     const shiftDate = `${r.shiftStartTime.toDate().toLocaleDateString(undefined, dateOptions)}`;
+    const duration = `${moment(r.shiftEndTime.toDate()).diff(moment(r.shiftStartTime.toDate()), 'hours')}`;
 
-    table.push(aRow(r.name, r.address, shiftDate, timePer, '#DCDCDC'));
+    table.push(aRow(r.name, r.address, shiftDate, timePer, duration, '#DCDCDC'));
   });
 
   return (

@@ -13,6 +13,7 @@ async function generateCSV(shifts) {
       { field: 'startTime', title: 'Start Time' },
       { field: 'endTime', title: 'End Time' },
       { field: 'duration', title: 'Duration (hours)' },
+      { field: 'empty', title: 'Nothing' },
     ],
   };
   const shiftsCSV = await json2csvAsync(shifts, options);
