@@ -39,7 +39,6 @@ export default function HistoryTable() {
 
   const vigilHistory = [];
   storeHistory.forEach((shift) => {
-    console.log(shift);
     if (shift.address.includes(id) && !shift.isAdmin) { // Adding new field to JSON Objects to make calculating/retrieving dates & time easier
       shift.shiftDate = `${shift.shiftStartTime.toDate().toLocaleDateString(undefined, dateOptions)}`;
       shift.startTime = `${shift.shiftStartTime.toDate().toLocaleTimeString(undefined, timeOptions)}`;
