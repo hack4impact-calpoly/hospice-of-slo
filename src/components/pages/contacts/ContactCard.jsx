@@ -4,6 +4,8 @@ import styled from 'styled-components';
 import {
   Container, Row, Col,
 } from 'react-bootstrap';
+import firebase from 'firebase/app';
+import 'firebase/firestore';
 import { GreyDiv } from '../../../styled-components/discussion-components';
 import Edit from './ContactOptions';
 
@@ -41,6 +43,40 @@ const Dots = styled(Edit)`
   align-self: center;
 `;
 
+const ButtonBox = styled.div`
+  margin-left: auto;
+  margin-top: 25px;
+`;
+
+const ApproveButton = styled.button`
+color: white;
+background-color: #80CB7D;
+border-radius: 5px;
+padding: 6px 10px; 
+font-size: 14px;
+fontFamily: Roboto;
+margin-right: 10px;
+
+&:hover{
+  color: white;
+  background-color: #558E97;
+}
+`;
+
+const DenyButton = styled.button`
+color: white;
+background-color: #C54B4B;
+border-radius: 5px;
+padding: 6px 10px; 
+font-size: 14px;
+fontFamily: Roboto;
+
+&:hover{
+  color: white;
+  background-color: #558E97;
+}
+`;
+
 export default function ContactCard({
   name,
   email,
@@ -48,7 +84,23 @@ export default function ContactCard({
   isAdminAccount,
   isAdmin,
   userId,
+  accountStatus,
 }) {
+  function approveAccount() {
+    const db = firebase.firestore();
+    db.collection('users').doc(userId).update({
+      accountStatus: 'approved',
+    });
+    alert('Account has been approved');
+  }
+
+  function denyAccount() {
+    const db = firebase.firestore();
+    db.collection('users').doc(userId).update({
+      accountStatus: 'denied',
+    });
+    alert('Account has been denied');
+  }
   return (
     <GreyDiv>
       <Container>
@@ -57,6 +109,7 @@ export default function ContactCard({
             <Name>
               {name}
               {isAdminAccount ? (<span> (Admin) </span>) : (null)}
+              {accountStatus === 'pending' ? (<span> (Pending Account) </span>) : (null)}
             </Name>
             <a href={`mailto:${email}`}>
               <Email>{email}</Email>
@@ -64,6 +117,26 @@ export default function ContactCard({
             <a href={`sms:+1-${phone}`}>
               <Phone>{phone}</Phone>
             </a>
+          </Col>
+          <Col xs={4} sm={2} md={4}>
+            {isAdmin
+              ? (
+                <div>
+                  {accountStatus === 'pending'
+                    ? (
+                      <ButtonBox>
+                        <ApproveButton onClick={approveAccount}>
+                          Approve
+                        </ApproveButton>
+                        <DenyButton onClick={denyAccount}>
+                          Deny
+                        </DenyButton>
+                      </ButtonBox>
+                    )
+                    : null }
+                </div>
+              )
+              : null }
           </Col>
           <Col xs={2} sm={1}>
             {isAdmin ? <Dots isAdminAccount={isAdminAccount} userId={userId} /> : (null) }
