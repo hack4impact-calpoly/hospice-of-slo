@@ -4,21 +4,35 @@ import firebase from 'firebase/app';
 import 'firebase/firestore';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import generateCSV from './DiscussionCSV';
 import { FloatingActionButton } from '../../../styled-components/discussion-components';
 import HeaderWithBackArrow from '../../navigation/HeaderWithBackArrow';
 import CreateMessage from './CreateMessage';
 import DiscussionPost from './DiscussionPost';
 import actions from '../../../actions';
+import { SubmitButton } from '../../../styled-components/form-components';
 
 const PostWrapper = styled.div`
   padding: 0 15%;
   display: flex;
   flex-direction: column;
 `;
+
 const StyledText = styled.p`
   text-align: center;
   font-size: 16px;
   color: #6C6B6B;
+`;
+
+const StyledDiv = styled.div`
+  position: fixed;
+  right: 100px;
+  top: 35px;
+`;
+
+const StyledButton = styled(SubmitButton)`
+  padding-left: 30px;
+  padding-right: 30px;
 `;
 
 export default function DiscussionThread() {
@@ -31,6 +45,7 @@ export default function DiscussionThread() {
     }
   });
   const dispatch = useDispatch();
+  const isAdmin = useSelector((state) => state.user.user.isAdmin);
   const [title, setTitle] = useState('');
   const [posts, setPosts] = useState([]);
   // Get Messages
@@ -113,6 +128,13 @@ export default function DiscussionThread() {
   return (
     <div>
       <HeaderWithBackArrow>{title}</HeaderWithBackArrow>
+      {isAdmin
+        ? (
+          <StyledDiv>
+            <StyledButton onClick={() => generateCSV(posts, title)}>Export</StyledButton>
+          </StyledDiv>
+        )
+        : null }
       <FloatingActionButton>+</FloatingActionButton>
       {displayEmptySignal()}
       <FloatingActionButton onClick={handleShow}>+</FloatingActionButton>

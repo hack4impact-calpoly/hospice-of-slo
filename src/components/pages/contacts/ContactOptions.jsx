@@ -61,7 +61,6 @@ export default function Edit(props) {
   }
 
   function deleteAccount() {
-    console.log('delete Account');
     const db = firebase.firestore();
     db.collection('users').doc(userId).update({
       accountStatus: 'denied',
