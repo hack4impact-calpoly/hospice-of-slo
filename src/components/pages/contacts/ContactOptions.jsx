@@ -64,7 +64,7 @@ export default function Edit(props) {
     console.log('delete Account');
     const db = firebase.firestore();
     db.collection('users').doc(userId).update({
-      isActiveAccount: false,
+      accountStatus: 'denied',
     });
     alert('SUCCESS! User has been Deleted. Refresh page to see changes');
     setShowDeleteAccountModal(false);

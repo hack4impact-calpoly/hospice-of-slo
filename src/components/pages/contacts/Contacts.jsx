@@ -49,16 +49,6 @@ export default function Contacts() {
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
 
-  function compare(a, b) { // sorts in alphabetical order
-    if (a.name < b.name) {
-      return -1;
-    }
-    if (a.name > b.name) {
-      return 1;
-    }
-    return 0;
-  }
-
   function closeModal() {
     setPhone('');
     setEmail('');
@@ -185,7 +175,7 @@ export default function Contacts() {
             </Modal.Body>
           </StyledModal>
         </Row>
-        {users.filter((user) => user.name.toLowerCase().includes(searchTerm.toLowerCase())).sort(compare).map((user) => <ContactCard key={user.id} userId={user.id} name={user.name} email={user.email} phone={user.phone} isAdminAccount={user.isAdminAccount} isAdmin={isAdmin} color="#333333" />)}
+        {users.filter((user) => user.name.toLowerCase().includes(searchTerm.toLowerCase())).map((user) => <ContactCard key={user.id} userId={user.id} name={user.name} email={user.email} phone={user.phone} isAdminAccount={user.isAdminAccount} isAdmin={isAdmin} accountStatus={user.accountStatus} />)}
       </ListWrapper>
     </div>
   );

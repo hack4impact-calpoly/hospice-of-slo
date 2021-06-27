@@ -114,10 +114,12 @@ export default function Login() {
         const userRef = db.collection('users').doc(currentUser);
         userRef.get().then((user) => {
           if (user.exists) {
-            if (user.data().isActiveAccount !== false) {
-              history.push('/');
-            } else {
+            if (user.data().accountStatus === 'denied') {
               alert('Your account has been recently deleted. Please make sure that you wait 30 days before you create an account with the same email. ');
+            } if (user.data().accountStatus === 'pending') {
+              alert('Your account has been created. Please wait a few days, for an admin to approve/deny your account. If you need an account urgently, please reach out to Hospice of SLO and ask to be approved sooner!');
+            } else {
+              history.push('/');
             }
           } else {
             // user.data() will be undefined in this case

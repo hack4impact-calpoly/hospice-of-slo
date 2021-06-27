@@ -61,27 +61,50 @@ const retrieveUser = async (dbRef) => {
   return user;
 };
 
+function compare(a, b) { // sorts in alphabetical order
+  if (a.name < b.name) {
+    return -1;
+  }
+  if (a.name > b.name) {
+    return 1;
+  }
+  return 0;
+}
+
 const retrieveUsers = async (dbRef) => {
   const users = [];
+  const pendingUsers = [];
   const usersRef = dbRef.collection('users');
   const usersSnapshot = await usersRef.get();
 
   usersSnapshot.forEach((doc) => {
     const {
-      email, name, phone, isAdmin, isActiveAccount,
+      email, name, phone, isAdmin, accountStatus,
     } = doc.data();
 
-    if (isActiveAccount !== false) {
+    if (accountStatus === 'pending') {
+      pendingUsers.push({
+        id: doc.id,
+        email,
+        name,
+        phone,
+        accountStatus,
+        isAdminAccount: isAdmin,
+      });
+    } else if ((accountStatus !== 'denied')) {
       users.push({
         id: doc.id,
         email,
         name,
         phone,
+        accountStatus,
         isAdminAccount: isAdmin,
       });
     }
   });
-  return users;
+  users.sort(compare);
+  pendingUsers.sort(compare);
+  return pendingUsers.concat(users);
 };
 
 const retrieveVigils = async (dbRef) => {
