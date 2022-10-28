@@ -40,7 +40,9 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint --ext .js,.jsx ./src --quiet",
-    "lint-autofix": "eslint --ext .js,.jsx ./src --fix --quiet"
+    "lint-autofix": "eslint --ext .js,.jsx ./src --fix --quiet",
+    "lint-check": "eslint --ext .js,.jsx,.ts,.tsx --ignore-path .gitignore . && prettier --check .",
+    "lint-write": "npx lint-staged"
   },
   "eslintConfig": {
     "extends": [
@@ -61,13 +63,18 @@
     ]
   },
   "devDependencies": {
-    "eslint": "^7.21.0",
+    "eslint": "^7.32.0",
     "eslint-config-airbnb": "^18.2.1",
+    "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-jsx-a11y": "^6.4.1",
-    "eslint-plugin-react": "^7.22.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-react": "^7.31.10",
     "eslint-plugin-react-hooks": "^4.2.0",
-    "nodemon": "^2.0.6"
+    "husky": "^8.0.1",
+    "lint-staged": "^13.0.3",
+    "nodemon": "^2.0.6",
+    "prettier": "^2.7.1"
   },
   "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
   "main": "index.js",
