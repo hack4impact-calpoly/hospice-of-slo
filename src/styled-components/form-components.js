@@ -1,34 +1,34 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 const SubmitButton = styled.button`
   color: white;
-  background-color: #84C0C9;
-  border: none; 
+  background-color: #84c0c9;
+  border: none;
   border-radius: 6px;
   width: 100%;
   height: 33px;
   font-size: 14px;
 
-  &:hover{
-    background-color: #558E97;
+  &:hover {
+    background-color: #558e97;
   }
-  
-  &:disabled{
+
+  &:disabled {
     color: darkgrey;
     background-color: lightgrey;
   }
 `;
 
 const CancelButton = styled.button`
-  color: #558E97;
+  color: #558e97;
   background-color: transparent;
-  border: 1px solid #558E97;
+  border: 1px solid #558e97;
   border-radius: 6px;
   width: 100%;
   height: 33px;
   font-size: 14px;
 
-  &:hover{
+  &:hover {
     background-color: lightgrey;
   }
 `;

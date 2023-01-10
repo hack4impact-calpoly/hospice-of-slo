@@ -1,9 +1,9 @@
-import React from 'react';
-import { Col } from 'react-bootstrap';
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import { Link } from 'react-router-dom';
-import { BiChevronRight } from 'react-icons/bi';
+import React from "react";
+import { Col } from "react-bootstrap";
+import PropTypes from "prop-types";
+import styled from "styled-components";
+import { Link } from "react-router-dom";
+import { BiChevronRight } from "react-icons/bi";
 
 const ForumBox = styled.button`
   width: 100%;
@@ -12,14 +12,14 @@ const ForumBox = styled.button`
   opacity: 80%;
   font-size: 18px;
 
-  :hover{
+  :hover {
     opacity: 100%;
   }
 `;
 
 const ForumLink = styled(Link)`
-  :hover{
-    text-decoration: none; 
+  :hover {
+    text-decoration: none;
   }
 `;
 
@@ -35,10 +35,8 @@ export default function HistoryForum(props) {
   const tableLink = `/history/${title}`;
   return (
     <Col md={11} lg={10} xl={9}>
-      <ForumLink to={tableLink} style={{ width: '100%' }}>
-        <ForumBox
-          className="mt-3 d-flex"
-        >
+      <ForumLink to={tableLink} style={{ width: "100%" }}>
+        <ForumBox className="mt-3 d-flex">
           {title}
           <Arrow />
         </ForumBox>

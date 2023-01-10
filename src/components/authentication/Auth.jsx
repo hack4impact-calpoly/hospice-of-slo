@@ -1,14 +1,14 @@
 // This is where the loading of our app occurs, redux, firebase, render frontend components, ...
-import React, { useEffect, useState } from 'react';
-import { ClassicSpinner } from 'react-spinners-kit';
-import styled from 'styled-components';
-import firebase from 'firebase/app';
-import 'firebase/firestore';
-import 'firebase/auth';
+import React, { useEffect, useState } from "react";
+import { ClassicSpinner } from "react-spinners-kit";
+import styled from "styled-components";
+import firebase from "firebase/app";
+import "firebase/firestore";
+import "firebase/auth";
 
-import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
-import actions from '../../actions/index';
+import PropTypes from "prop-types";
+import { useDispatch } from "react-redux";
+import actions from "../../actions/index";
 
 const LoaderContainer = styled.div`
   width: 100%;
@@ -20,33 +20,30 @@ const LoaderContainer = styled.div`
 `;
 
 const retrieveUser = async (dbRef) => {
-  const currentUser = (sessionStorage.getItem('userid'));
-  const thisUserRef = dbRef.collection('users').doc(currentUser);
+  const currentUser = sessionStorage.getItem("userid");
+  const thisUserRef = dbRef.collection("users").doc(currentUser);
   const temp = await thisUserRef.get();
   const ps = [];
   let user = {};
   try {
     temp.data().prevShifts.forEach((shift) => {
-      shift.get()
-        .then((doc) => {
-          if (doc.data() !== undefined) {
-            const {
-              address, shiftEndTime, shiftStartTime, userRef,
-            } = doc.data();
+      shift.get().then((doc) => {
+        if (doc.data() !== undefined) {
+          const { address, shiftEndTime, shiftStartTime, userRef } = doc.data();
 
-            ps.push({
-              id: doc.id,
-              address,
-              shiftEndTime,
-              shiftStartTime,
-              userRef,
-            });
-          }
-        });
+          ps.push({
+            id: doc.id,
+            address,
+            shiftEndTime,
+            shiftStartTime,
+            userRef,
+          });
+        }
+      });
     });
-    console.log('Had shifts');
+    console.log("Had shifts");
   } catch {
-    console.log('No shifts');
+    console.log("No shifts");
   }
   try {
     user = {
@@ -55,13 +52,14 @@ const retrieveUser = async (dbRef) => {
       prevShifts: ps,
     };
   } catch {
-    console.log('not logged in');
+    console.log("not logged in");
   }
-  sessionStorage.setItem('user', JSON.stringify(user));
+  sessionStorage.setItem("user", JSON.stringify(user));
   return user;
 };
 
-function compare(a, b) { // sorts in alphabetical order
+function compare(a, b) {
+  // sorts in alphabetical order
   if (a.name < b.name) {
     return -1;
   }
@@ -74,15 +72,13 @@ function compare(a, b) { // sorts in alphabetical order
 const retrieveUsers = async (dbRef) => {
   const users = [];
   const pendingUsers = [];
-  const usersRef = dbRef.collection('users');
+  const usersRef = dbRef.collection("users");
   const usersSnapshot = await usersRef.get();
 
   usersSnapshot.forEach((doc) => {
-    const {
-      email, name, phone, isAdmin, accountStatus,
-    } = doc.data();
+    const { email, name, phone, isAdmin, accountStatus } = doc.data();
 
-    if (accountStatus === 'pending') {
+    if (accountStatus === "pending") {
       pendingUsers.push({
         id: doc.id,
         email,
@@ -91,7 +87,7 @@ const retrieveUsers = async (dbRef) => {
         accountStatus,
         isAdminAccount: isAdmin,
       });
-    } else if ((accountStatus !== 'denied')) {
+    } else if (accountStatus !== "denied") {
       users.push({
         id: doc.id,
         email,
@@ -109,13 +105,11 @@ const retrieveUsers = async (dbRef) => {
 
 const retrieveVigils = async (dbRef) => {
   const vigils = [];
-  const vigilsRef = dbRef.collection('vigils');
+  const vigilsRef = dbRef.collection("vigils");
   const vigilsSnapshot = await vigilsRef.get();
 
   vigilsSnapshot.forEach((doc) => {
-    const {
-      address, startTime, endTime, notes,
-    } = doc.data();
+    const { address, startTime, endTime, notes } = doc.data();
     vigils.push({
       id: doc.id,
       address,
@@ -129,22 +123,18 @@ const retrieveVigils = async (dbRef) => {
 
 const retrieveDiscussions = async (dbRef) => {
   const discussions = [];
-  const discussionsRef = dbRef.collection('discussions');
+  const discussionsRef = dbRef.collection("discussions");
   const discussionsSnapshot = await discussionsRef.get();
 
   discussionsSnapshot.forEach(async (doc) => {
     const messages = [];
 
-    const {
-      dateCreated, name, pinned,
-    } = doc.data();
+    const { dateCreated, name, pinned } = doc.data();
 
-    const msgRef = discussionsRef.doc(doc.id).collection('messages');
+    const msgRef = discussionsRef.doc(doc.id).collection("messages");
     const messageSnapshot = await msgRef.get();
     messageSnapshot.forEach((msg) => {
-      const {
-        message, timeSent, userRef,
-      } = msg.data();
+      const { message, timeSent, userRef } = msg.data();
 
       messages.push({
         message,
@@ -166,22 +156,18 @@ const retrieveDiscussions = async (dbRef) => {
 
 const retrieveHistoryShifts = async (dbRef) => {
   const historyShifts = [];
-  const vigilsRef = dbRef.collection('vigils');
+  const vigilsRef = dbRef.collection("vigils");
   const vigilsSnapshot = await vigilsRef.get();
 
   vigilsSnapshot.forEach(async (doc) => {
-    const historyShiftsRef = vigilsRef.doc(doc.id).collection('shifts');
+    const historyShiftsRef = vigilsRef.doc(doc.id).collection("shifts");
     const historyShiftsSnapshot = await historyShiftsRef.get();
 
     historyShiftsSnapshot.forEach(async (shift) => {
-      const {
-        address, shiftEndTime, shiftStartTime, userRef,
-      } = shift.data();
+      const { address, shiftEndTime, shiftStartTime, userRef } = shift.data();
       const userSnapshot = await userRef.get();
 
-      const {
-        name, isAdmin,
-      } = userSnapshot.data();
+      const { name, isAdmin } = userSnapshot.data();
 
       const thisShift = {
         id: shift.id,
@@ -215,7 +201,8 @@ export default function AuthProvider({ children }) {
         retrieveDiscussions(dbRef), // Gets discussions
         retrieveHistoryShifts(dbRef),
       ]);
-      const [user, users, vigils, discussions, historyShifts] = firestoreResponse;
+      const [user, users, vigils, discussions, historyShifts] =
+        firestoreResponse;
       // Initialize redux store
       await dispatch(actions.user.initializeUser(user));
       await dispatch(actions.users.initializeUsers(users));
@@ -235,7 +222,7 @@ export default function AuthProvider({ children }) {
     firebase.auth().onAuthStateChanged((user) => {
       if (user != null) {
         setPending(true);
-        sessionStorage.setItem('userid', user.uid);
+        sessionStorage.setItem("userid", user.uid);
         wraperFunc();
       } else {
         setPending(false);
@@ -251,9 +238,7 @@ export default function AuthProvider({ children }) {
     );
   }
 
-  return (
-    <>{children}</>
-  );
+  return <>{children}</>;
 }
 
 AuthProvider.propTypes = {

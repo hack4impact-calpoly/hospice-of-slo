@@ -1,32 +1,24 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { Redirect, Route } from 'react-router-dom';
+import React from "react";
+import PropTypes from "prop-types";
+import { Redirect, Route } from "react-router-dom";
 
-export default function PrivateRoute({
-  children, path, exact, adminOnly,
-}) {
-  const currentUser = (sessionStorage.getItem('userid'));
+export default function PrivateRoute({ children, path, exact, adminOnly }) {
+  const currentUser = sessionStorage.getItem("userid");
 
   const checkAccess = () => {
     if (currentUser === null) {
-      return (<Redirect to="/login" />);
+      return <Redirect to="/login" />;
     }
     if (adminOnly) {
-      if (!(JSON.parse(sessionStorage.getItem('user')).isAdmin)) {
-        return (<Redirect to="/discussion" />);
+      if (!JSON.parse(sessionStorage.getItem("user")).isAdmin) {
+        return <Redirect to="/discussion" />;
       }
-      return (children);
+      return children;
     }
-    return (children);
+    return children;
   };
 
-  return (
-    <Route
-      path={path}
-      exact={exact}
-      render={() => (checkAccess())}
-    />
-  );
+  return <Route path={path} exact={exact} render={() => checkAccess()} />;
 }
 
 PrivateRoute.propTypes = {

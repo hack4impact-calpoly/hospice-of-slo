@@ -1,9 +1,9 @@
 // Root for all Things Schedule
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import { useSelector } from 'react-redux';
-import HeaderWithNav from '../../navigation/nav-header';
-import Calendar from './calendar/Calendar';
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
+import { useSelector } from "react-redux";
+import HeaderWithNav from "../../navigation/nav-header";
+import Calendar from "./calendar/Calendar";
 
 const PaddedDiv = styled.div`
   padding: 0 2%;
@@ -22,7 +22,7 @@ export default function Schedule(props) {
         title: v.address,
         start: v.startTime,
         end: v.endTime,
-        backgroundColor: '#8FCBD4',
+        backgroundColor: "#8FCBD4",
         notes: v.notes,
         id: v.id,
       });

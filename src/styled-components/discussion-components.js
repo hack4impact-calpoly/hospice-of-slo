@@ -1,8 +1,8 @@
-import styled from 'styled-components';
-import { Button } from 'react-bootstrap';
+import styled from "styled-components";
+import { Button } from "react-bootstrap";
 
 const GreyDiv = styled.div`
-  background: #DDDDDD 67%;
+  background: #dddddd 67%;
   border-radius: 8px;
   max-width: 750px;
   width: 100%;
@@ -15,15 +15,15 @@ const FloatingActionButton = styled(Button)`
   border-radius: 50%;
   border: none;
   padding: 1ex 1em;
-  position:fixed;
+  position: fixed;
   right: 25px;
   top: 25px;
-  background-color: #84C0C9;
+  background-color: #84c0c9;
   z-index: 1;
 
   font-size: 20px;
-  &:hover{
-    background-color: #558E97;
+  &:hover {
+    background-color: #558e97;
   }
 `;
 

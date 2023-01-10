@@ -1,12 +1,16 @@
-import React, { useState } from 'react';
-import { Route, Switch, useRouteMatch } from 'react-router-dom';
-import CreateShift from './createVigil/CreateVigil';
-import Schedule from './Schedule';
+import React, { useState } from "react";
+import { Route, Switch, useRouteMatch } from "react-router-dom";
+import CreateShift from "./createVigil/CreateVigil";
+import Schedule from "./Schedule";
 
 function ScheduleManager() {
   const match = useRouteMatch();
   const [selectVigil, setSelectVigil] = useState({
-    id: '', address: '', endTime: new Date(), startTime: new Date(), notes: '',
+    id: "",
+    address: "",
+    endTime: new Date(),
+    startTime: new Date(),
+    notes: "",
   });
 
   return (

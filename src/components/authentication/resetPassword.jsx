@@ -1,23 +1,21 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import {
-  Container, Row, Col, Form,
-} from 'react-bootstrap';
-import { Link, useLocation, useHistory } from 'react-router-dom';
-import { BiArrowBack } from 'react-icons/bi';
-import firebase from 'firebase/app';
-import 'firebase/auth';
+import React, { useState } from "react";
+import styled from "styled-components";
+import { Container, Row, Col, Form } from "react-bootstrap";
+import { Link, useLocation, useHistory } from "react-router-dom";
+import { BiArrowBack } from "react-icons/bi";
+import firebase from "firebase/app";
+import "firebase/auth";
 
 const StyledDiv = styled.div`
   height: 100vh;
-  background-color: #E2E2E2;
+  background-color: #e2e2e2;
 `;
 
 const StyledContainer = styled(Container)`
   width: 100%;
   height: 100vh;
   @media only screen and (min-width: 768px) {
-    height: 100vh;  
+    height: 100vh;
     padding: 20vh 0;
   }
 `;
@@ -30,28 +28,28 @@ const StyledRow = styled(Row)`
 `;
 
 const StyledCol = styled(Col)`
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   padding: 10%;
   @media only screen and (min-width: 768px) {
-    border: 2px solid #C4C4C4;
+    border: 2px solid #c4c4c4;
     border-radius: 5px;
-    padding: 5% 10%
+    padding: 5% 10%;
   }
 `;
 
 const SubmitButton = styled.button`
   color: white;
-  background-color: #84C0C9;
-  border: 2px solid #FFFFFF; 
+  background-color: #84c0c9;
+  border: 2px solid #ffffff;
   border-radius: 5px;
-  padding: 6px 0px; 
+  padding: 6px 0px;
   width: 100%;
   font-size: 14px;
-  fontFamily: Roboto;
+  fontfamily: Roboto;
 
-  &:hover{
+  &:hover {
     color: white;
-    background-color: #558E97;
+    background-color: #558e97;
   }
 `;
 
@@ -60,10 +58,10 @@ const StyledError = styled.div`
 `;
 
 export default function ResetPassword() {
-  const [password, setPassword] = useState('');
-  const [rePassword, setRePassword] = useState('');
+  const [password, setPassword] = useState("");
+  const [rePassword, setRePassword] = useState("");
   const [showErr, setShowErr] = useState(false);
-  const [errMessage, setErrMessage] = useState('');
+  const [errMessage, setErrMessage] = useState("");
   const history = useHistory();
 
   // A custom hook that builds on useLocation to parse
@@ -74,15 +72,15 @@ export default function ResetPassword() {
 
   const query = useQuery();
 
-  const oobCode = query.get('oobCode');
+  const oobCode = query.get("oobCode");
 
   const validatePass = () => {
     if (password !== rePassword) {
       setShowErr(true);
-      setErrMessage('Passwords must match');
+      setErrMessage("Passwords must match");
     } else if (password.length < 6) {
       setShowErr(true);
-      setErrMessage('Password must be at least 6 letters');
+      setErrMessage("Password must be at least 6 letters");
     } else {
       setShowErr(false);
     }
@@ -91,12 +89,11 @@ export default function ResetPassword() {
   function confirmPassword() {
     const auth = firebase.auth();
     if (!showErr) {
-      auth.confirmPasswordReset(oobCode, password)
-        .catch((error) => {
-          console.error(`error: ${error}`);
-        });
-      alert('Your password has been successfully changed!');
-      history.push('/');
+      auth.confirmPasswordReset(oobCode, password).catch((error) => {
+        console.error(`error: ${error}`);
+      });
+      alert("Your password has been successfully changed!");
+      history.push("/");
     } else {
       setShowErr(true);
     }
@@ -134,20 +131,18 @@ export default function ResetPassword() {
                       required
                     />
                   </Form.Group>
-                  {showErr
-                    ? (
-                      <StyledError>
-                        {errMessage}
-                        <SubmitButton type="submit" onClick={confirmPassword}>
-                          Create Account
-                        </SubmitButton>
-                      </StyledError>
-                    )
-                    : (
+                  {showErr ? (
+                    <StyledError>
+                      {errMessage}
                       <SubmitButton type="submit" onClick={confirmPassword}>
-                        Confirm
+                        Create Account
                       </SubmitButton>
-                    )}
+                    </StyledError>
+                  ) : (
+                    <SubmitButton type="submit" onClick={confirmPassword}>
+                      Confirm
+                    </SubmitButton>
+                  )}
                 </Col>
               </Row>
             </Form>

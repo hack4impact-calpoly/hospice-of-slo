@@ -1,10 +1,10 @@
-import React from 'react';
-import styled from 'styled-components';
-import Dropdown from 'react-bootstrap/Dropdown';
-import { BiDotsVerticalRounded } from 'react-icons/bi';
-import { useSelector } from 'react-redux';
-import CreateThread from './createThread';
-import EditHelper from './editDiscussionHelper';
+import React from "react";
+import styled from "styled-components";
+import Dropdown from "react-bootstrap/Dropdown";
+import { BiDotsVerticalRounded } from "react-icons/bi";
+import { useSelector } from "react-redux";
+import CreateThread from "./createThread";
+import EditHelper from "./editDiscussionHelper";
 
 const StyledDropdown = styled(Dropdown)`
   margin-left: auto;
@@ -50,24 +50,41 @@ export default function Edit(props) {
 
         <Dropdown.Menu>
           <Dropdown.Item
-            onSelect={(ek, e) => { handleChildClick(ek, e); }}
+            onSelect={(ek, e) => {
+              handleChildClick(ek, e);
+            }}
           >
             <EditHelper discussion={discussion} isPinning />
           </Dropdown.Item>
           <Dropdown.Item
-            onSelect={(ek, e) => { handleChildClick(ek, e); }}
+            onSelect={(ek, e) => {
+              handleChildClick(ek, e);
+            }}
           >
-            <div role="button" tabIndex={0} onKeyPress={handleShow} onClick={handleShow}>edit</div>
-
+            <div
+              role="button"
+              tabIndex={0}
+              onKeyPress={handleShow}
+              onClick={handleShow}
+            >
+              edit
+            </div>
           </Dropdown.Item>
           <Dropdown.Item
-            onSelect={(ek, e) => { handleChildClick(ek, e); }}
+            onSelect={(ek, e) => {
+              handleChildClick(ek, e);
+            }}
           >
             <EditHelper discussion={discussion} isDeleting />
           </Dropdown.Item>
         </Dropdown.Menu>
       </StyledDropdown>
-      <CreateThread discussion={discussion} show={show} setShow={setShow} isEditing />
+      <CreateThread
+        discussion={discussion}
+        show={show}
+        setShow={setShow}
+        isEditing
+      />
     </>
   );
 }

@@ -1,15 +1,20 @@
-import { slide as Menu } from 'react-burger-menu';
-import React from 'react';
-import PropTypes from 'prop-types';
-import './navbar.css';
-import styled from 'styled-components';
-import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { slide as Menu } from "react-burger-menu";
+import React from "react";
+import PropTypes from "prop-types";
+import "./navbar.css";
+import styled from "styled-components";
+import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 import {
-  BiCalendarAlt, BiChat, BiClipboard, BiPhone, BiTime, BiLogOut,
-} from 'react-icons/bi';
-import firebase from 'firebase/app';
-import 'firebase/auth';
+  BiCalendarAlt,
+  BiChat,
+  BiClipboard,
+  BiPhone,
+  BiTime,
+  BiLogOut,
+} from "react-icons/bi";
+import firebase from "firebase/app";
+import "firebase/auth";
 
 const SpacedDiv = styled.div`
   display: flex;
@@ -18,13 +23,11 @@ const SpacedDiv = styled.div`
 `;
 
 const LinkLabel = styled.span`
-  font-size: ${(props) => props.fontSize || '26px'};
+  font-size: ${(props) => props.fontSize || "26px"};
   padding-left: 10px;
 `;
 
-function NavLink({
-  to, Icon, children, handleClick, fontSize,
-}) {
+function NavLink({ to, Icon, children, handleClick, fontSize }) {
   return (
     <Link to={to}>
       <SpacedDiv onClick={handleClick}>
@@ -43,7 +46,7 @@ NavLink.propTypes = {
 };
 
 NavLink.defaultProps = {
-  fontSize: '26px',
+  fontSize: "26px",
 };
 
 export default function Navbar() {
@@ -59,16 +62,32 @@ export default function Navbar() {
 
   return (
     <Menu>
-      <NavLink to="/discussion" Icon={BiChat}>Discussions</NavLink>
-      <NavLink to="/schedule" Icon={BiCalendarAlt}>Schedule</NavLink>
-      { isAdmin
-        ? <NavLink to="/past-shifts" Icon={BiClipboard} fontSize="20px">Blocked Off Shifts</NavLink>
-        : <NavLink to="/past-shifts" Icon={BiClipboard}>Past Shifts</NavLink>}
-      <NavLink to="/contacts" Icon={BiPhone}>Contacts</NavLink>
-      { isAdmin
-        ? <NavLink to="/history" Icon={BiTime}>History</NavLink>
-        : null}
-      <NavLink to="/login" handleClick={signOut} Icon={BiLogOut}>Sign Out</NavLink>
+      <NavLink to="/discussion" Icon={BiChat}>
+        Discussions
+      </NavLink>
+      <NavLink to="/schedule" Icon={BiCalendarAlt}>
+        Schedule
+      </NavLink>
+      {isAdmin ? (
+        <NavLink to="/past-shifts" Icon={BiClipboard} fontSize="20px">
+          Blocked Off Shifts
+        </NavLink>
+      ) : (
+        <NavLink to="/past-shifts" Icon={BiClipboard}>
+          Past Shifts
+        </NavLink>
+      )}
+      <NavLink to="/contacts" Icon={BiPhone}>
+        Contacts
+      </NavLink>
+      {isAdmin ? (
+        <NavLink to="/history" Icon={BiTime}>
+          History
+        </NavLink>
+      ) : null}
+      <NavLink to="/login" handleClick={signOut} Icon={BiLogOut}>
+        Sign Out
+      </NavLink>
     </Menu>
   );
 }

@@ -1,3 +1,38 @@
+// {
+//     "env": {
+//         "browser": true,
+//         "es2021": true
+//     },
+//     "extends": [
+//         "plugin:react/recommended",
+//         "airbnb"
+//     ],
+//     "parserOptions": {
+//         "ecmaVersion": 6,
+//         "sourceType": "module",
+//         "ecmaFeatures": {
+//             "jsx": true,
+//             "modules": true
+//         }
+//     },
+//     "prettier/prettier": [
+//         "error",
+//         {
+//           "endOfLine": "auto"
+//         }
+//       ],
+//     "plugins": [
+//         "react"
+//     ],
+//     "rules": {
+//       "no-console": "off",
+//       "linebreak-style": 0,
+//       "max-len": 0,
+//       "react/jsx-filename-extension": 0,
+//       "no-alert": 0,
+//       "react/prop-types": 0
+//     }
+// }
 {
     "env": {
         "browser": true,

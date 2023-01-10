@@ -1,9 +1,9 @@
 // Root for all Things realted to viewing Past Shifts
-import React from 'react';
-import styled from 'styled-components';
-import { useSelector } from 'react-redux';
-import HeaderWithNav from '../../navigation/nav-header';
-import PastShiftCard from './PastShiftCard';
+import React from "react";
+import styled from "styled-components";
+import { useSelector } from "react-redux";
+import HeaderWithNav from "../../navigation/nav-header";
+import PastShiftCard from "./PastShiftCard";
 
 const ListWrapper = styled.div`
   padding: 0 15%;
@@ -16,11 +16,19 @@ const ListWrapper = styled.div`
 const StyledText = styled.p`
   text-align: center;
   font-size: 16px;
-  color: #6C6B6B;
+  color: #6c6b6b;
 `;
 
 export default function PastShifts() {
-  const dayNames = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+  const dayNames = [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday",
+  ];
   // Gets User Data from redux store
   const prevShifts = useSelector((state) => state.user.user.prevShifts);
   const isAdmin = useSelector((state) => state.user.user.isAdmin);
@@ -32,7 +40,8 @@ export default function PastShifts() {
     });
   }
 
-  function compare(a, b) { // sorts in chronological order
+  function compare(a, b) {
+    // sorts in chronological order
     if (a.shiftStartTime.valueOf() < b.shiftStartTime.valueOf()) {
       return 1;
     }
@@ -48,13 +57,24 @@ export default function PastShifts() {
 
   return (
     <div>
-      <HeaderWithNav>{isAdmin ? 'Blocked Off Shifts' : 'Past Shifts'}</HeaderWithNav>
-      {shifts.length === 0 && <StyledText>You currently have no shifts</StyledText>}
+      <HeaderWithNav>
+        {isAdmin ? "Blocked Off Shifts" : "Past Shifts"}
+      </HeaderWithNav>
+      {shifts.length === 0 && (
+        <StyledText>You currently have no shifts</StyledText>
+      )}
       <ListWrapper>
         {shifts.sort(compare).map((shift) => {
-          const time = `${shift.shiftStartTime.toDate().toLocaleTimeString()} to ${shift.shiftEndTime.toDate().toLocaleTimeString()}`;
-          const date = `${dayNames[shift.shiftStartTime.toDate().getDay()]} ${shift.shiftStartTime.toDate().getMonth() + 1}/${
-            shift.shiftStartTime.toDate().getDate()}/${shift.shiftStartTime.toDate().getFullYear()}`;
+          const time = `${shift.shiftStartTime
+            .toDate()
+            .toLocaleTimeString()} to ${shift.shiftEndTime
+            .toDate()
+            .toLocaleTimeString()}`;
+          const date = `${dayNames[shift.shiftStartTime.toDate().getDay()]} ${
+            shift.shiftStartTime.toDate().getMonth() + 1
+          }/${shift.shiftStartTime.toDate().getDate()}/${shift.shiftStartTime
+            .toDate()
+            .getFullYear()}`;
           return (
             <PastShiftCard
               key={shift.id}
