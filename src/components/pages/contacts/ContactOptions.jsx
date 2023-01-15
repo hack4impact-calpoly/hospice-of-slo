@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import styled from "styled-components";
 import { Modal } from "react-bootstrap";
 import firebase from "firebase/app";
@@ -35,6 +36,7 @@ export default function Edit(props) {
   const [showAdminModal, setShowAdminModal] = useState(false);
   const [showDeleteAccountModal, setShowDeleteAccountModal] = useState(false);
 
+  /* eslint react/prop-types: 0 */
   const CustomToggle = React.forwardRef(({ onClick }, ref) => (
     <a
       href="."
@@ -142,3 +144,8 @@ export default function Edit(props) {
     </>
   );
 }
+
+Edit.propTypes = {
+  userId: PropTypes.string.isRequired,
+  isAdminAccount: PropTypes.bool.isRequired,
+};

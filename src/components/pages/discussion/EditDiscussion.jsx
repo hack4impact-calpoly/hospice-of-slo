@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import styled from "styled-components";
 import Dropdown from "react-bootstrap/Dropdown";
 import { BiDotsVerticalRounded } from "react-icons/bi";
@@ -23,18 +24,23 @@ export default function Edit(props) {
     }
   });
 
-  const CustomToggle = React.forwardRef(({ onClick }, ref) => (
-    <a
-      href="."
-      ref={ref}
-      onClick={(e) => {
-        e.preventDefault();
-        onClick(e);
-      }}
-    >
-      <BiDotsVerticalRounded />
-    </a>
-  ));
+  const CustomToggle = React.forwardRef(
+    (
+      { onClick }, // eslint-disable-line
+      ref
+    ) => (
+      <a
+        href="."
+        ref={ref}
+        onClick={(e) => {
+          e.preventDefault();
+          onClick(e);
+        }}
+      >
+        <BiDotsVerticalRounded />
+      </a>
+    )
+  );
 
   const handleChildClick = (ek, e) => {
     e.stopPropagation();
@@ -88,3 +94,7 @@ export default function Edit(props) {
     </>
   );
 }
+
+Edit.propTypes = {
+  docId: PropTypes.string.isRequired,
+};

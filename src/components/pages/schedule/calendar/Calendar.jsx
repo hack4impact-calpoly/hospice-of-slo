@@ -192,4 +192,5 @@ export default function Calendar(props) {
 
 Calendar.propTypes = {
   eventData: PropTypes.arrayOf(vigilPropType).isRequired,
+  setSelectVigil: PropTypes.func.isRequired,
 };

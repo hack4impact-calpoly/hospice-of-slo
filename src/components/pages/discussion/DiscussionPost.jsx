@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import PropTypes from "prop-types";
 import Modal from "react-bootstrap/Modal";
 import styled from "styled-components";
@@ -145,6 +145,10 @@ export default function DiscussionPost({
     setShowDelete(false);
   }
 
+  const editFunc = useCallback(() => {
+    editMessage();
+  }, [editMessage]);
+
   return (
     <GreyDiv>
       <Author>{author}</Author>
@@ -181,7 +185,7 @@ export default function DiscussionPost({
         discussion={discussion}
         setMessage={setThisMessage}
         message={thisMessage}
-        postMessage={editMessage}
+        postMessage={editFunc}
         isEditing
       />
     </GreyDiv>
@@ -192,4 +196,8 @@ DiscussionPost.propTypes = {
   author: PropTypes.string.isRequired,
   timeSent: PropTypes.instanceOf(Date).isRequired,
   message: PropTypes.string.isRequired,
+  setMessage: PropTypes.func.isRequired,
+  userId: PropTypes.string.isRequired,
+  messageId: PropTypes.string.isRequired,
+  discussion: PropTypes.shape.isRequired,
 };

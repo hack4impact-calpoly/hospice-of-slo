@@ -1,5 +1,5 @@
 import { slide as Menu } from "react-burger-menu";
-import React from "react";
+import React, { useCallback } from "react";
 import PropTypes from "prop-types";
 import "./navbar.css";
 import styled from "styled-components";
@@ -41,8 +41,14 @@ function NavLink({ to, Icon, children, handleClick, fontSize }) {
 NavLink.propTypes = {
   to: PropTypes.string.isRequired,
   Icon: PropTypes.func.isRequired,
-  children: PropTypes.string.isRequired,
+  children: PropTypes.string,
   fontSize: PropTypes.string,
+  handleClick: PropTypes.func,
+};
+
+NavLink.defaultProps = {
+  children: "",
+  handleClick: () => {},
 };
 
 NavLink.defaultProps = {
@@ -59,6 +65,10 @@ export default function Navbar() {
       alert(`Whoops, log out did not work:\n${err}`);
     }
   }
+
+  const signOutFunc = useCallback(() => {
+    signOut();
+  }, [signOut]);
 
   return (
     <Menu>
@@ -85,7 +95,7 @@ export default function Navbar() {
           History
         </NavLink>
       ) : null}
-      <NavLink to="/login" handleClick={signOut} Icon={BiLogOut}>
+      <NavLink to="/login" handleClick={signOutFunc} Icon={BiLogOut}>
         Sign Out
       </NavLink>
     </Menu>

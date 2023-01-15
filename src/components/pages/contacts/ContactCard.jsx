@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { Container, Row, Col } from "react-bootstrap";
@@ -99,6 +99,16 @@ export default function ContactCard({
     });
     alert("Account has been denied");
   }
+
+  // fix linting errors with this
+  const approveFunc = useCallback(() => {
+    approveAccount();
+  }, [approveAccount]);
+
+  const denyFunc = useCallback(() => {
+    denyAccount();
+  }, [denyAccount]);
+
   return (
     <GreyDiv>
       <Container>
@@ -123,10 +133,8 @@ export default function ContactCard({
               <div>
                 {accountStatus === "pending" ? (
                   <ButtonBox>
-                    <ApproveButton onClick={approveAccount}>
-                      Approve
-                    </ApproveButton>
-                    <DenyButton onClick={denyAccount}>Deny</DenyButton>
+                    <ApproveButton onClick={approveFunc}>Approve</ApproveButton>
+                    <DenyButton onClick={denyFunc}>Deny</DenyButton>
                   </ButtonBox>
                 ) : null}
               </div>
@@ -147,4 +155,8 @@ ContactCard.propTypes = {
   name: PropTypes.string.isRequired,
   email: PropTypes.string.isRequired,
   phone: PropTypes.string.isRequired,
+  isAdminAccount: PropTypes.bool.isRequired,
+  isAdmin: PropTypes.bool.isRequired,
+  userId: PropTypes.string.isRequired,
+  accountStatus: PropTypes.string.isRequired,
 };

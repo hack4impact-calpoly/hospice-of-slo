@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import styled from "styled-components";
 import { Container, Row, Col, Form } from "react-bootstrap";
 import { Link, useLocation, useHistory } from "react-router-dom";
@@ -98,6 +98,12 @@ export default function ResetPassword() {
       setShowErr(true);
     }
   }
+
+  // fix linting errors with this
+  const confirmFunc = useCallback(() => {
+    confirmPassword();
+  }, [confirmPassword]);
+
   return (
     <StyledDiv>
       <StyledContainer fluid>
@@ -134,12 +140,12 @@ export default function ResetPassword() {
                   {showErr ? (
                     <StyledError>
                       {errMessage}
-                      <SubmitButton type="submit" onClick={confirmPassword}>
+                      <SubmitButton type="submit" onClick={confirmFunc}>
                         Create Account
                       </SubmitButton>
                     </StyledError>
                   ) : (
-                    <SubmitButton type="submit" onClick={confirmPassword}>
+                    <SubmitButton type="submit" onClick={confirmFunc}>
                       Confirm
                     </SubmitButton>
                   )}

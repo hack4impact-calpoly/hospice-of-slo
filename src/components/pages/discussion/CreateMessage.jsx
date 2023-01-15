@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { Modal, Form, Button } from "react-bootstrap";
 import styled from "styled-components";
 
@@ -106,3 +107,13 @@ export default function CreateMessage(props) {
     </Modal>
   );
 }
+
+CreateMessage.propTypes = {
+  show: PropTypes.bool.isRequired,
+  handleClose: PropTypes.func.isRequired,
+  discussion: PropTypes.shape.isRequired,
+  setMessage: PropTypes.func.isRequired,
+  message: PropTypes.string.isRequired,
+  postMessage: PropTypes.func.isRequired,
+  isEditing: PropTypes.bool.isRequired,
+};

@@ -1,6 +1,8 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { Row, Col, Modal, Form } from "react-bootstrap";
 import styled from "styled-components";
+import { discussionPropType } from "../../../dataStructures/propTypes";
 
 const StyledCreate = styled.button`
   color: white;
@@ -77,3 +79,16 @@ export default function DiscussionModal(props) {
     </Modal>
   );
 }
+
+DiscussionModal.propTypes = {
+  show: PropTypes.bool.isRequired,
+  handleClose: PropTypes.func.isRequired,
+  discussion: discussionPropType,
+  isEditing: PropTypes.bool.isRequired,
+  setTitle: PropTypes.func.isRequired,
+  discussionPress: PropTypes.func.isRequired,
+};
+
+DiscussionModal.defaultProps = {
+  discussion: {},
+};

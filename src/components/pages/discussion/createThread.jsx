@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { useDispatch } from "react-redux";
 import PropTypes from "prop-types";
 import firebase from "firebase/app";
@@ -66,6 +66,10 @@ export default function CreateThread(props) {
     }
   }
 
+  const discussFunc = useCallback(() => {
+    discussionPress();
+  }, [discussionPress]);
+
   return (
     <>
       {isEditing ? null : (
@@ -77,7 +81,7 @@ export default function CreateThread(props) {
         isEditing={isEditing}
         setTitle={setTitle}
         discussion={discussion}
-        discussionPress={discussionPress}
+        discussionPress={discussFunc}
       />
     </>
   );
@@ -86,6 +90,8 @@ export default function CreateThread(props) {
 CreateThread.propTypes = {
   discussion: discussionPropType,
   isEditing: PropTypes.bool,
+  show: PropTypes.bool.isRequired,
+  setShow: PropTypes.func.isRequired,
 };
 
 CreateThread.defaultProps = {

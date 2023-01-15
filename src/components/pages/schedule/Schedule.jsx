@@ -1,5 +1,6 @@
 // Root for all Things Schedule
 import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
 import HeaderWithNav from "../../navigation/nav-header";
@@ -43,3 +44,7 @@ export default function Schedule(props) {
     </div>
   );
 }
+
+Schedule.propTypes = {
+  setSelectVigil: PropTypes.func.isRequired,
+};

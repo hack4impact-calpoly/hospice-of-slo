@@ -10,10 +10,10 @@ const vigilPropType = PropTypes.shape({
 
 const discussionPropType = PropTypes.shape({
   id: PropTypes.string,
-  dateCreated: PropTypes.t,
+  dateCreated: PropTypes.string,
   name: PropTypes.string,
   pinned: PropTypes.bool,
-  messages: PropTypes.arrayOf(PropTypes.object),
+  messages: PropTypes.arrayOf(PropTypes.shape), // this might break it?
 });
 
 export { vigilPropType, discussionPropType };
