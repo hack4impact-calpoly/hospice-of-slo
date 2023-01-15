@@ -1,53 +1,61 @@
-import React from 'react';
-import { Modal, Form, Button } from 'react-bootstrap';
-import styled from 'styled-components';
+import React from "react";
+import PropTypes from "prop-types";
+import { Modal, Form, Button } from "react-bootstrap";
+import styled from "styled-components";
 
 const StyledPost = styled.button`
   color: white;
-  background-color: #84C0C9;
+  background-color: #84c0c9;
   border: none;
   border-radius: 7px;
   width: 25%;
   padding: 6px 0px;
 
-  &:hover{
-    background-color: #558E97;
+  &:hover {
+    background-color: #558e97;
   }
 `;
 
 const StyledButton = styled(Button)`
   color: white;
   margin-bottom: 12px;
-  background-color: #558E97;
+  background-color: #558e97;
   border-radius: 5px;
-  padding: 6px 10px; 
+  padding: 6px 10px;
   border: none;
   width: 25%;
   font-size: 14px;
-  fontFamily: Roboto;
+  fontfamily: Roboto;
   outline: none !important;
   box-shadow: none !important;
 
-  &:hover{
+  &:hover {
     color: white;
-    background-color: #84C0C9;
+    background-color: #84c0c9;
   }
 
-  &:focus, &:active {
-    background-color: #558E97;
+  &:focus,
+  &:active {
+    background-color: #558e97;
   }
 `;
 
 const StyledCancel = styled.button`
-  color: #6C6B6B;
+  color: #6c6b6b;
   background: none;
   border: none;
-  padding: 0 20px 
+  padding: 0 20px;
 `;
 
 export default function CreateMessage(props) {
   const {
-    show, handleClose, discussion, setMessage, message, postMessage, isEditing,
+    show,
+    handleClose,
+    discussion,
+    setMessage,
+    message,
+    postMessage,
+    isEditing,
   } = props;
 
   return (
@@ -57,14 +65,31 @@ export default function CreateMessage(props) {
       </Modal.Header>
       <Modal.Body>
         <Form>
-          <StyledButton style={{ float: 'left' }} onClick={() => setMessage('Vigil Under Care')}> Under Care</StyledButton>
-          <StyledButton style={{ marginLeft: '12.5%' }} onClick={() => setMessage('Vigil On Hold')}>Vigil On Hold</StyledButton>
-          <StyledButton style={{ float: 'right' }} onClick={() => setMessage('Vigil Complete')}> Vigil Complete</StyledButton>
+          <StyledButton
+            style={{ float: "left" }}
+            onClick={() => setMessage("Vigil Under Care")}
+          >
+            {" "}
+            Under Care
+          </StyledButton>
+          <StyledButton
+            style={{ marginLeft: "12.5%" }}
+            onClick={() => setMessage("Vigil On Hold")}
+          >
+            Vigil On Hold
+          </StyledButton>
+          <StyledButton
+            style={{ float: "right" }}
+            onClick={() => setMessage("Vigil Complete")}
+          >
+            {" "}
+            Vigil Complete
+          </StyledButton>
           <Form.Group controlId="exampleForm.ControlTextarea1">
             <Form.Control
               as="textarea"
               placeholder="Write a message here..."
-              defaultValue={isEditing ? message : ''}
+              defaultValue={isEditing ? message : ""}
               rows={6}
               onChange={(e) => setMessage(e.target.value)}
             />
@@ -82,3 +107,13 @@ export default function CreateMessage(props) {
     </Modal>
   );
 }
+
+CreateMessage.propTypes = {
+  show: PropTypes.bool.isRequired,
+  handleClose: PropTypes.func.isRequired,
+  discussion: PropTypes.shape.isRequired,
+  setMessage: PropTypes.func.isRequired,
+  message: PropTypes.string.isRequired,
+  postMessage: PropTypes.func.isRequired,
+  isEditing: PropTypes.bool.isRequired,
+};

@@ -1,6 +1,8 @@
 import {
-  INITIALIZE_HISTORY, ADD_HISTORY_SHIFT, DELETE_HISTORY_SHIFT,
-} from '../reduxConstants/index';
+  INITIALIZE_HISTORY,
+  ADD_HISTORY_SHIFT,
+  DELETE_HISTORY_SHIFT,
+} from "../reduxConstants/index";
 
 const initializeHistory = (historyShifts) => ({
   type: INITIALIZE_HISTORY,

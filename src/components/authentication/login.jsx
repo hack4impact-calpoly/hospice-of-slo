@@ -1,24 +1,22 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import {
-  Container, Row, Col, Form, Image,
-} from 'react-bootstrap';
-import { Link, useHistory } from 'react-router-dom';
-import firebase from 'firebase/app';
-import 'firebase/firestore';
-import 'firebase/auth';
-import logoImage from '../../images/HospiceLogo.png';
+import React, { useState } from "react";
+import styled from "styled-components";
+import { Container, Row, Col, Form, Image } from "react-bootstrap";
+import { Link, useHistory } from "react-router-dom";
+import firebase from "firebase/app";
+import "firebase/firestore";
+import "firebase/auth";
+import logoImage from "../../images/HospiceLogo.png";
 
 const StyledDiv = styled.div`
   height: 100vh;
-  background-color: #E2E2E2;
+  background-color: #e2e2e2;
 `;
 
 const StyledContainer = styled(Container)`
   width: 100%;
   height: 100vh;
   @media only screen and (min-width: 768px) {
-    height: 100vh;  
+    height: 100vh;
     padding: 10vh 0;
   }
 `;
@@ -26,17 +24,17 @@ const StyledContainer = styled(Container)`
 const StyledRow = styled(Row)`
   width: 100vw;
   height: 100%;
-  text-align:center;
+  text-align: center;
   justify-content: center;
 `;
 
 const StyledCol = styled(Col)`
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   padding: 10%;
   @media only screen and (min-width: 768px) {
-    border: 2px solid #C4C4C4;
+    border: 2px solid #c4c4c4;
     border-radius: 5px;
-    padding: 5% 9%
+    padding: 5% 9%;
   }
 `;
 
@@ -47,35 +45,35 @@ const StyledImage = styled(Image)`
 
 const SignIn = styled.button`
   color: white;
-  background-color: #84C0C9;
-  border: 2px solid #FFFFFF; 
+  background-color: #84c0c9;
+  border: 2px solid #ffffff;
   border-radius: 5px;
-  padding: 6px 0px; 
+  padding: 6px 0px;
   width: 100%;
   font-size: 14px;
-  fontFamily: Roboto;
+  fontfamily: Roboto;
 
-  &:hover{
+  &:hover {
     color: white;
-    background-color: #558E97;
+    background-color: #558e97;
   }
 `;
 
 // Create account
 const CreatLink = styled.button`
-  color: #558E97;
+  color: #558e97;
   background-color: white;
-  border: 2px solid #558E97; 
+  border: 2px solid #558e97;
   border-radius: 5px;
-  padding: 6px 0px; 
+  padding: 6px 0px;
   width: 100%;
   font-size: 14px;
-  fontFamily: Roboto;
+  fontfamily: Roboto;
 
-  &:hover{
-    text-decoration:none;
+  &:hover {
+    text-decoration: none;
     color: white;
-    background-color: #558E97;
+    background-color: #558e97;
   }
 `;
 
@@ -83,9 +81,9 @@ const FLink = styled(Link)`
   position: relative;
   float: right;
   font-size: 14px;
-  fontFamily: Roboto;
-  color: #6C6B6B;
-  &:hover{
+  fontfamily: Roboto;
+  color: #6c6b6b;
+  &:hover {
     text-decoration: none;
     color: black;
   }
@@ -98,43 +96,53 @@ const StyledError = styled.div`
 export default function Login() {
   const history = useHistory();
 
-  const [email, setEmail] = React.useState('');
+  const [email, setEmail] = React.useState("");
   /* eslint-disable-next-line */
-  const [password, setPassword] = React.useState('');
+  const [password, setPassword] = React.useState("");
   const [showErr, setShowErr] = useState(false);
-  const [errMessage, setErrMessage] = useState('');
+  const [errMessage, setErrMessage] = useState("");
 
   const loginPress = () => {
     // sign in to firebase with email and password
-    firebase.auth().signInWithEmailAndPassword(email, password)
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(email, password)
       .then(() => {
         // signed in
         const currentUser = firebase.auth().currentUser.uid;
         const db = firebase.firestore();
-        const userRef = db.collection('users').doc(currentUser);
-        userRef.get().then((user) => {
-          if (user.exists) {
-            if (user.data().accountStatus === 'denied') {
-              alert('Your account has been recently deleted. Please make sure that you wait 30 days before you create an account with the same email. ');
-            } if (user.data().accountStatus === 'pending') {
-              alert('Your account has been created. Please wait a few days, for an admin to approve/deny your account. If you need an account urgently, please reach out to Hospice of SLO and ask to be approved sooner!');
+        const userRef = db.collection("users").doc(currentUser);
+        userRef
+          .get()
+          .then((user) => {
+            if (user.exists) {
+              if (user.data().accountStatus === "denied") {
+                alert(
+                  "Your account has been recently deleted. Please make sure that you wait 30 days before you create an account with the same email. "
+                );
+              }
+              if (user.data().accountStatus === "pending") {
+                alert(
+                  "Your account has been created. Please wait a few days, for an admin to approve/deny your account. If you need an account urgently, please reach out to Hospice of SLO and ask to be approved sooner!"
+                );
+              } else {
+                history.push("/");
+              }
             } else {
-              history.push('/');
+              // user.data() will be undefined in this case
+              setErrMessage("Cannot Find User");
+              setShowErr(true);
             }
-          } else {
-            // user.data() will be undefined in this case
-            setErrMessage('Cannot Find User');
+          })
+          .catch((error) => {
+            // console.error('Error getting user', error);
+            setErrMessage(error);
             setShowErr(true);
-          }
-        }).catch((error) => {
-          // console.error('Error getting user', error);
-          setErrMessage(error);
-          setShowErr(true);
-        });
+          });
       })
       .catch(() => {
         // unable to sign in
-        setErrMessage('Email account or password is incorrect');
+        setErrMessage("Email account or password is incorrect");
         setShowErr(true);
       });
   };
@@ -163,9 +171,7 @@ export default function Login() {
                 setShowErr(false);
               }}
             />
-            {showErr
-              ? <StyledError>{errMessage}</StyledError>
-              : (null)}
+            {showErr ? <StyledError>{errMessage}</StyledError> : null}
             <Row>
               <Col>
                 <Link to="/signup">
@@ -173,12 +179,12 @@ export default function Login() {
                 </Link>
               </Col>
               <Col>
-                <SignIn onClick={loginPress}>
-                  Sign In
-                </SignIn>
+                <SignIn onClick={loginPress}>Sign In</SignIn>
               </Col>
             </Row>
-            <FLink className="mt-2" to="/forgot-password">Forgot Password?</FLink>
+            <FLink className="mt-2" to="/forgot-password">
+              Forgot Password?
+            </FLink>
           </StyledCol>
         </StyledRow>
       </StyledContainer>

@@ -1,17 +1,17 @@
 // Root for all Things Discussions
-import React, { useState } from 'react';
-import Container from 'react-bootstrap/Container';
-import { useSelector } from 'react-redux';
-import { Row, Col, Form } from 'react-bootstrap';
-import styled from 'styled-components';
-import HeaderWithNav from '../../navigation/nav-header';
-import CreateThread from './createThread';
-import Forum from './Forum';
+import React, { useState } from "react";
+import Container from "react-bootstrap/Container";
+import { useSelector } from "react-redux";
+import { Row, Col, Form } from "react-bootstrap";
+import styled from "styled-components";
+import HeaderWithNav from "../../navigation/nav-header";
+import CreateThread from "./createThread";
+import Forum from "./Forum";
 
 /* search bar */
 const FormS = styled(Form.Control)`
   font-size: 18px;
-  background-color: #E5E5E5;
+  background-color: #e5e5e5;
   width: 100%;
 `;
 
@@ -20,11 +20,14 @@ const PaddedContainer = styled(Container)`
 `;
 
 export default function Discussion() {
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
 
-  const storeDiscussions = useSelector((state) => state.discussions.discussions);
+  const storeDiscussions = useSelector(
+    (state) => state.discussions.discussions
+  );
 
-  function compare(a, b) { // sorts in alphabetical order
+  function compare(a, b) {
+    // sorts in alphabetical order
     if (a.name < b.name) {
       return -1;
     }
@@ -38,29 +41,39 @@ export default function Discussion() {
   // storeDiscussions.reverse();
 
   /* organize pinned/not pinned forumns based on search and map them */
-  const forumsPinned = storeDiscussions.filter((discussion) => discussion.name.toLowerCase().includes(searchTerm.toLowerCase())).sort(compare).map((d) => {
-    if (d.pinned) {
-      return ([
-        <Row key={d.name} className="justify-content-md-center">
-          <Forum title={d.name} docId={d.id} isPinned />
-        </Row>,
-      ]);
-    }
+  const forumsPinned = storeDiscussions
+    .filter((discussion) =>
+      discussion.name.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+    .sort(compare)
+    .map((d) => {
+      if (d.pinned) {
+        return [
+          <Row key={d.name} className="justify-content-md-center">
+            <Forum title={d.name} docId={d.id} isPinned />
+          </Row>,
+        ];
+      }
 
-    return null;
-  });
+      return null;
+    });
 
-  const forumsNotPinned = storeDiscussions.filter((discussion) => discussion.name.toLowerCase().includes(searchTerm.toLowerCase())).sort(compare).map((d) => {
-    if (!d.pinned) {
-      return ([
-        <Row key={d.name} className="justify-content-md-center">
-          <Forum title={d.name} docId={d.id} />
-        </Row>,
-      ]);
-    }
+  const forumsNotPinned = storeDiscussions
+    .filter((discussion) =>
+      discussion.name.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+    .sort(compare)
+    .map((d) => {
+      if (!d.pinned) {
+        return [
+          <Row key={d.name} className="justify-content-md-center">
+            <Forum title={d.name} docId={d.id} />
+          </Row>,
+        ];
+      }
 
-    return null;
-  });
+      return null;
+    });
 
   const [show, setShow] = React.useState(false);
 

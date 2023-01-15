@@ -1,6 +1,8 @@
 import {
-  INITIALIZE_USER, ADD_SHIFT, DELETE_SHIFT,
-} from '../reduxConstants/index';
+  INITIALIZE_USER,
+  ADD_SHIFT,
+  DELETE_SHIFT,
+} from "../reduxConstants/index";
 
 const initializeUser = (user) => ({
   type: INITIALIZE_USER,

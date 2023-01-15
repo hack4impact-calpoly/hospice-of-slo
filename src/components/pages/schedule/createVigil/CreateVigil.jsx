@@ -1,18 +1,24 @@
-import React from 'react';
-import { Form, Col } from 'react-bootstrap';
-import styled from 'styled-components';
-import { useHistory } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
-import { useDispatch } from 'react-redux';
-import firebase from 'firebase/app';
-import 'firebase/firestore';
+import React from "react";
+import { Form, Col } from "react-bootstrap";
+import styled from "styled-components";
+import { useHistory } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
+import firebase from "firebase/app";
+import "firebase/firestore";
 import {
-  timeComesBefore, eventDataToFront, combineDateAndTime, dateComesBefore,
-} from './CreateVigilHelper';
-import { vigilPropType } from '../../../../dataStructures/propTypes';
-import HeaderWithBackArrow from '../../../navigation/HeaderWithBackArrow';
-import { SubmitButton, CancelButton } from '../../../../styled-components/form-components';
-import actions from '../../../../actions';
+  timeComesBefore,
+  eventDataToFront,
+  combineDateAndTime,
+  dateComesBefore,
+} from "./CreateVigilHelper";
+import { vigilPropType } from "../../../../dataStructures/propTypes";
+import HeaderWithBackArrow from "../../../navigation/HeaderWithBackArrow";
+import {
+  SubmitButton,
+  CancelButton,
+} from "../../../../styled-components/form-components";
+import actions from "../../../../actions";
 
 // Styled Components
 const PaddedDiv = styled.div`
@@ -34,21 +40,19 @@ function CreateVigil({ curEvent }) {
   const dispatch = useDispatch();
 
   // Form Stuff
-  const {
-    register, getValues, handleSubmit, errors,
-  } = useForm({ defaultValues: defaultVals });
+  const { register, getValues, handleSubmit, errors } = useForm({
+    defaultValues: defaultVals,
+  });
   const history = useHistory();
 
   const [showDateFeedback, setShowDateFeedback] = React.useState(false);
 
   async function onSubmit(data, event) {
     event.preventDefault();
-    const {
-      address, startDate, startTime, endDate, endTime, notes,
-    } = data;
+    const { address, startDate, startTime, endDate, endTime, notes } = data;
 
-    const start = (combineDateAndTime(startDate, startTime));
-    const end = (combineDateAndTime(endDate, endTime));
+    const start = combineDateAndTime(startDate, startTime);
+    const end = combineDateAndTime(endDate, endTime);
 
     if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) {
       setShowDateFeedback(true);
@@ -64,11 +68,16 @@ function CreateVigil({ curEvent }) {
     };
     const db = firebase.firestore();
 
-    if (isEditing) { // Editing current event
+    if (isEditing) {
+      // Editing current event
       // Changes the address of the vigil
-      await db.collection('vigils').doc(curEvent.id).set(shift);
+      await db.collection("vigils").doc(curEvent.id).set(shift);
       // Changes the address of each shift inside of the vigil
-      await db.collection('vigils').doc(curEvent.id).collection('shifts').get()
+      await db
+        .collection("vigils")
+        .doc(curEvent.id)
+        .collection("shifts")
+        .get()
         .then((querySnapshot) => {
           querySnapshot.forEach((doc) => {
             doc.ref.update({
@@ -77,10 +86,13 @@ function CreateVigil({ curEvent }) {
           });
         });
 
-      dispatch(actions.vigils.editVigil(curEvent.id, { ...shift, id: curEvent.id }));
-    } else { // Creating new event
-      const backRef = await db.collection('vigils').add(shift);
-      await db.collection('discussions').add({
+      dispatch(
+        actions.vigils.editVigil(curEvent.id, { ...shift, id: curEvent.id })
+      );
+    } else {
+      // Creating new event
+      const backRef = await db.collection("vigils").add(shift);
+      await db.collection("discussions").add({
         name: shift.address,
         dateCreated: firebase.firestore.FieldValue.serverTimestamp(),
         pinned: false,
@@ -88,7 +100,7 @@ function CreateVigil({ curEvent }) {
       dispatch(actions.vigils.addVigil({ ...shift, id: backRef.id }));
     }
 
-    history.push('/schedule');
+    history.push("/schedule");
   }
 
   // Validation Functions
@@ -99,7 +111,7 @@ function CreateVigil({ curEvent }) {
     */
 
   function endDateAfterStart(endDate) {
-    const startDate = getValues('startDate');
+    const startDate = getValues("startDate");
     return dateComesBefore(startDate, endDate);
   }
 
@@ -111,12 +123,20 @@ function CreateVigil({ curEvent }) {
   // React Component
   return (
     <PaddedDiv>
-      <HeaderWithBackArrow>{isEditing ? 'Edit Vigil' : 'Create Vigil'}</HeaderWithBackArrow>
+      <HeaderWithBackArrow>
+        {isEditing ? "Edit Vigil" : "Create Vigil"}
+      </HeaderWithBackArrow>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <Form.Group>
           <Form.Label>Location</Form.Label>
-          <Form.Control name="address" ref={register({ required: true })} isInvalid={!!errors.address} />
-          <Form.Control.Feedback type="invalid">Please provide a location</Form.Control.Feedback>
+          <Form.Control
+            name="address"
+            ref={register({ required: true })}
+            isInvalid={!!errors.address}
+          />
+          <Form.Control.Feedback type="invalid">
+            Please provide a location
+          </Form.Control.Feedback>
         </Form.Group>
 
         <Form.Group>
@@ -130,7 +150,9 @@ function CreateVigil({ curEvent }) {
                 ref={register({ required: true })}
                 isInvalid={!!errors.startDate}
               />
-              <Form.Control.Feedback type="invalid">Please provide a starting date</Form.Control.Feedback>
+              <Form.Control.Feedback type="invalid">
+                Please provide a starting date
+              </Form.Control.Feedback>
             </Col>
             <CenterCol xs={2} md={1} />
             <Col>
@@ -141,7 +163,9 @@ function CreateVigil({ curEvent }) {
                 ref={register({ required: true })}
                 isInvalid={!!errors.startTime}
               />
-              <Form.Control.Feedback type="invalid">Please provide a starting time</Form.Control.Feedback>
+              <Form.Control.Feedback type="invalid">
+                Please provide a starting time
+              </Form.Control.Feedback>
             </Col>
           </Form.Row>
         </Form.Group>
@@ -158,8 +182,10 @@ function CreateVigil({ curEvent }) {
                 isInvalid={!!errors.endDate}
               />
               <Form.Control.Feedback type="invalid">
-                {errors.endDate?.type === 'required' && 'Please provide an ending date'}
-                {errors.endDate?.type === 'validate' && 'This date should be the same as or after the starting date'}
+                {errors.endDate?.type === "required" &&
+                  "Please provide an ending date"}
+                {errors.endDate?.type === "validate" &&
+                  "This date should be the same as or after the starting date"}
               </Form.Control.Feedback>
             </Col>
             <CenterCol xs={2} md={1} />
@@ -172,21 +198,24 @@ function CreateVigil({ curEvent }) {
                 ref={register({ required: true, validate: endTimeAfterStart })}
               />
               <Form.Control.Feedback type="invalid">
-                {errors.endTime?.type === 'required' && 'Please provide an end time'}
-                {errors.endTime?.type === 'validate' && 'This time must come after the starting time'}
+                {errors.endTime?.type === "required" &&
+                  "Please provide an end time"}
+                {errors.endTime?.type === "validate" &&
+                  "This time must come after the starting time"}
               </Form.Control.Feedback>
             </Col>
           </Form.Row>
         </Form.Group>
         <Form.Group>
-          {showDateFeedback
-            ? (
-              <Form.Row>
-                <Col>
-                  <div style={{ color: '#ff0000' }}>Please enter the correct date and time format.</div>
-                </Col>
-              </Form.Row>
-            ) : null}
+          {showDateFeedback ? (
+            <Form.Row>
+              <Col>
+                <div style={{ color: "#ff0000" }}>
+                  Please enter the correct date and time format.
+                </div>
+              </Col>
+            </Form.Row>
+          ) : null}
         </Form.Group>
 
         <Form.Group>
@@ -196,9 +225,17 @@ function CreateVigil({ curEvent }) {
 
         <Form.Group>
           <Form.Row>
-            <Col><CancelButton onClick={() => history.push('/schedule')}>Cancel</CancelButton></Col>
+            <Col>
+              <CancelButton onClick={() => history.push("/schedule")}>
+                Cancel
+              </CancelButton>
+            </Col>
             <Col xs={1} />
-            <Col><SubmitButton type="submit">{isEditing ? 'Update Vigil' : 'Add Vigil'}</SubmitButton></Col>
+            <Col>
+              <SubmitButton type="submit">
+                {isEditing ? "Update Vigil" : "Add Vigil"}
+              </SubmitButton>
+            </Col>
           </Form.Row>
         </Form.Group>
       </Form>

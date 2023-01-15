@@ -1,49 +1,63 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import firebase from 'firebase/app';
-import 'firebase/firestore';
-import { useDispatch } from 'react-redux';
-import { discussionPropType } from '../../../dataStructures/propTypes';
-import actions from '../../../actions';
+import React from "react";
+import PropTypes from "prop-types";
+import firebase from "firebase/app";
+import "firebase/firestore";
+import { useDispatch } from "react-redux";
+import { discussionPropType } from "../../../dataStructures/propTypes";
+import actions from "../../../actions";
 
 export default function EditHelper(props) {
   const { isPinning, isDeleting, discussion } = props;
-  const pin = discussion.pinned ? 'unpin' : 'pin';
+  const pin = discussion.pinned ? "unpin" : "pin";
 
   const dispatch = useDispatch();
 
   const db = firebase.firestore();
-  const discussions = db.collection('discussions');
+  const discussions = db.collection("discussions");
   async function discussionPress() {
-    if (isPinning) { // editing a Discussion
-      discussions.doc(discussion.id)
+    if (isPinning) {
+      // editing a Discussion
+      discussions
+        .doc(discussion.id)
         .update({
-          pinned: !(discussion.pinned),
+          pinned: !discussion.pinned,
         })
         .then(() => {
-          dispatch(actions.discussions.editDiscussion(discussion.id, { ...discussion, pinned: !(discussion.pinned) }));
+          dispatch(
+            actions.discussions.editDiscussion(discussion.id, {
+              ...discussion,
+              pinned: !discussion.pinned,
+            })
+          );
         })
         .catch((error) => {
-          console.error('Error writing document: ', error);
+          console.error("Error writing document: ", error);
         });
     }
     if (isDeleting) {
       // Deletes Messages Subcollection
-      const messages = await discussions.doc(discussion.id).collection('messages');
+      const messages = await discussions
+        .doc(discussion.id)
+        .collection("messages");
       messages.get().then((querySnapshot) => {
         querySnapshot.docs.forEach((doc) => {
-          discussions.doc(discussion.id).collection('messages').doc(doc.id).delete();
+          discussions
+            .doc(discussion.id)
+            .collection("messages")
+            .doc(doc.id)
+            .delete();
         });
       });
 
       // Deletes the discussion collection
-      discussions.doc(discussion.id)
+      discussions
+        .doc(discussion.id)
         .delete()
         .then(() => {
           dispatch(actions.discussions.deleteDiscussion(discussion.id));
         })
         .catch((error) => {
-          console.error('Error deleting document: ', error);
+          console.error("Error deleting document: ", error);
         });
     }
   }
@@ -55,7 +69,7 @@ export default function EditHelper(props) {
       onKeyPress={discussionPress}
       onClick={discussionPress}
     >
-      {isPinning ? pin : 'delete'}
+      {isPinning ? pin : "delete"}
     </div>
   );
 }

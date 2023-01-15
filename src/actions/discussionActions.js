@@ -1,6 +1,9 @@
 import {
-  INITIALIZE_DISCUSSIONS, ADD_DISCUSSION, EDIT_DISCUSSION, DELETE_DISCUSSION,
-} from '../reduxConstants/index';
+  INITIALIZE_DISCUSSIONS,
+  ADD_DISCUSSION,
+  EDIT_DISCUSSION,
+  DELETE_DISCUSSION,
+} from "../reduxConstants/index";
 
 const initializeDiscussions = (discussions) => ({
   type: INITIALIZE_DISCUSSIONS,

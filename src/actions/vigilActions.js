@@ -1,6 +1,9 @@
 import {
-  INITIALIZE_VIGILS, ADD_VIGIL, EDIT_VIGIL, DELETE_VIGIL,
-} from '../reduxConstants/index';
+  INITIALIZE_VIGILS,
+  ADD_VIGIL,
+  EDIT_VIGIL,
+  DELETE_VIGIL,
+} from "../reduxConstants/index";
 
 const initalizeVigils = (vigils) => ({
   type: INITIALIZE_VIGILS,

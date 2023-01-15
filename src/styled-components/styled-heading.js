@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 const StyledHeading = styled.h2`
   text-align: center;
@@ -7,7 +7,7 @@ const StyledHeading = styled.h2`
   overflow: hidden;
 
   @media screen and (max-width: 768px) {
-    font-size: 1.3rem;  
+    font-size: 1.3rem;
     padding: 40px 0 10px;
   }
 

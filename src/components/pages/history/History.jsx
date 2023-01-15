@@ -1,10 +1,10 @@
 // Root for all Things Voulnteer History (Admin Only Page)
-import React from 'react';
-import { useSelector } from 'react-redux';
-import { Row } from 'react-bootstrap';
-import Container from 'react-bootstrap/Container';
-import HeaderWithNav from '../../navigation/nav-header';
-import HistoryForum from './HistoryForum';
+import React from "react";
+import { useSelector } from "react-redux";
+import { Row } from "react-bootstrap";
+import Container from "react-bootstrap/Container";
+import HeaderWithNav from "../../navigation/nav-header";
+import HistoryForum from "./HistoryForum";
 
 export default function History() {
   const storeVigils = useSelector((state) => state.vigils.vigils);
@@ -18,9 +18,7 @@ export default function History() {
   return (
     <div>
       <HeaderWithNav>Volunteer History</HeaderWithNav>
-      <Container>
-        {vigilForums}
-      </Container>
+      <Container>{vigilForums}</Container>
     </div>
   );
 }

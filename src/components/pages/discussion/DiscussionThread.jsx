@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
-import firebase from 'firebase/app';
-import 'firebase/firestore';
-import { useSelector, useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
-import generateCSV from './DiscussionCSV';
-import { FloatingActionButton } from '../../../styled-components/discussion-components';
-import HeaderWithBackArrow from '../../navigation/HeaderWithBackArrow';
-import CreateMessage from './CreateMessage';
-import DiscussionPost from './DiscussionPost';
-import actions from '../../../actions';
-import { SubmitButton } from '../../../styled-components/form-components';
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
+import firebase from "firebase/app";
+import "firebase/firestore";
+import { useSelector, useDispatch } from "react-redux";
+import { useParams } from "react-router-dom";
+import generateCSV from "./DiscussionCSV";
+import { FloatingActionButton } from "../../../styled-components/discussion-components";
+import HeaderWithBackArrow from "../../navigation/HeaderWithBackArrow";
+import CreateMessage from "./CreateMessage";
+import DiscussionPost from "./DiscussionPost";
+import actions from "../../../actions";
+import { SubmitButton } from "../../../styled-components/form-components";
 
 const PostWrapper = styled.div`
   padding: 0 15%;
@@ -21,7 +21,7 @@ const PostWrapper = styled.div`
 const StyledText = styled.p`
   text-align: center;
   font-size: 16px;
-  color: #6C6B6B;
+  color: #6c6b6b;
 `;
 
 const StyledDiv = styled.div`
@@ -46,17 +46,17 @@ export default function DiscussionThread() {
   });
   const dispatch = useDispatch();
   const isAdmin = useSelector((state) => state.user.user.isAdmin);
-  const [title, setTitle] = useState('');
+  const [title, setTitle] = useState("");
   const [posts, setPosts] = useState([]);
   // Get Messages
   const { messages } = discussion;
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
 
   const [show, setShow] = useState(false);
 
   const handleClose = () => {
     setShow(false);
-    setMessage('');
+    setMessage("");
   };
   const handleShow = () => setShow(true);
 
@@ -67,17 +67,19 @@ export default function DiscussionThread() {
     let usersData = messages.map((m) => m.userRef.get());
     usersData = await Promise.all(usersData);
     const users = [];
-    usersData.forEach((user) => users.push({ ...(user.data()), userId: user.id }));
+    usersData.forEach((user) =>
+      users.push({ ...user.data(), userId: user.id })
+    );
     // Combine each message with its populated user ref
     const populatedMessages = [];
     for (let i = 0; i < messages.length; i += 1) {
-      populatedMessages.push({ ...(messages[i]), user: users[i] });
+      populatedMessages.push({ ...messages[i], user: users[i] });
     }
     setPosts(populatedMessages);
   }
   const displayEmptySignal = () => {
     /* only display empty message if there
-         * are no messages */
+     * are no messages */
     if (messages.length <= 0) {
       return <StyledText>This forum has no messages yet</StyledText>;
     }
@@ -85,7 +87,8 @@ export default function DiscussionThread() {
     return <div />;
   };
 
-  function compare(a, b) { // sorts in alphabetical order
+  function compare(a, b) {
+    // sorts in alphabetical order
     if (a.timeSent.valueOf() < b.timeSent.valueOf()) {
       return 1;
     }
@@ -97,9 +100,12 @@ export default function DiscussionThread() {
 
   const postMessage = async () => {
     const db = firebase.firestore();
-    const currentUser = (sessionStorage.getItem('userid'));
-    const userRef = db.collection('users').doc(currentUser);
-    const messageRef = db.collection('discussions').doc(discussion.id).collection('messages');
+    const currentUser = sessionStorage.getItem("userid");
+    const userRef = db.collection("users").doc(currentUser);
+    const messageRef = db
+      .collection("discussions")
+      .doc(discussion.id)
+      .collection("messages");
     const messageData = {
       message,
       timeSent: firebase.firestore.FieldValue.serverTimestamp(),
@@ -107,17 +113,22 @@ export default function DiscussionThread() {
     };
     messageRef.add(messageData).then((msgRef) => {
       handleClose();
-      const theTime = (firebase.firestore.Timestamp.now());
-      const newMessages = [...(discussion.messages), {
-        message,
-        timeSent: theTime,
-        userRef,
-        messageId: msgRef.id,
-      }];
-      dispatch(actions.discussions.editDiscussion(discussion.id, {
-        ...discussion,
-        messages: newMessages,
-      }));
+      const theTime = firebase.firestore.Timestamp.now();
+      const newMessages = [
+        ...discussion.messages,
+        {
+          message,
+          timeSent: theTime,
+          userRef,
+          messageId: msgRef.id,
+        },
+      ];
+      dispatch(
+        actions.discussions.editDiscussion(discussion.id, {
+          ...discussion,
+          messages: newMessages,
+        })
+      );
     });
   };
 
@@ -128,13 +139,13 @@ export default function DiscussionThread() {
   return (
     <div>
       <HeaderWithBackArrow>{title}</HeaderWithBackArrow>
-      {isAdmin
-        ? (
-          <StyledDiv>
-            <StyledButton onClick={() => generateCSV(posts, title)}>Export</StyledButton>
-          </StyledDiv>
-        )
-        : null }
+      {isAdmin ? (
+        <StyledDiv>
+          <StyledButton onClick={() => generateCSV(posts, title)}>
+            Export
+          </StyledButton>
+        </StyledDiv>
+      ) : null}
       <FloatingActionButton>+</FloatingActionButton>
       {displayEmptySignal()}
       <FloatingActionButton onClick={handleShow}>+</FloatingActionButton>

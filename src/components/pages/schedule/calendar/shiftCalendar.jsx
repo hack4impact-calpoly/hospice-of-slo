@@ -1,28 +1,28 @@
-import React, { useState, useEffect } from 'react';
-import FullCalendar from '@fullcalendar/react';
-import timeGridPlugin from '@fullcalendar/timegrid';
-import { useSelector, useDispatch } from 'react-redux';
-import interactionPlugin from '@fullcalendar/interaction';
-import PropTypes from 'prop-types';
-import Modal from 'react-bootstrap/Modal';
-import { Row, Col } from 'react-bootstrap';
-import moment from 'moment';
-import firebase from 'firebase/app';
-import 'firebase/firestore';
-import styled from 'styled-components';
-import { vigilPropType } from '../../../../dataStructures/propTypes';
-import actions from '../../../../actions';
+import React, { useState, useEffect } from "react";
+import FullCalendar from "@fullcalendar/react";
+import timeGridPlugin from "@fullcalendar/timegrid";
+import { useSelector, useDispatch } from "react-redux";
+import interactionPlugin from "@fullcalendar/interaction";
+import PropTypes from "prop-types";
+import Modal from "react-bootstrap/Modal";
+import { Row, Col } from "react-bootstrap";
+import moment from "moment";
+import firebase from "firebase/app";
+import "firebase/firestore";
+import styled from "styled-components";
+import { vigilPropType } from "../../../../dataStructures/propTypes";
+import actions from "../../../../actions";
 
 const StyledDrop = styled.button`
   color: white;
-  background-color: #84C0C9;
+  background-color: #84c0c9;
   border: none;
   border-radius: 7px;
   width: 25%;
   padding: 6px 0px;
 
-  &:hover{
-    background-color: #558E97;
+  &:hover {
+    background-color: #558e97;
   }
 `;
 
@@ -50,11 +50,11 @@ function ShiftCalendar({ vigil, isSingleDay, curDate }) {
   const getShifts = () => {
     const vigilsData = [];
     vigilShifts.forEach((shift) => {
-      let color = '#8FCBD4';
+      let color = "#8FCBD4";
       let label = shift.name;
       if (shift.isAdmin) {
-        color = '#C4C4C4';
-        label = 'Blocked Off';
+        color = "#C4C4C4";
+        label = "Blocked Off";
       }
       vigilsData.push({
         title: label,
@@ -74,19 +74,22 @@ function ShiftCalendar({ vigil, isSingleDay, curDate }) {
   }, [storeShifts]); // This useEffect block gets whole collection of vigil documents upon redux updates
 
   const volunteerCalendarHeader = {
-    center: '',
-    end: isSingleDay ? '' : 'prev,next',
+    center: "",
+    end: isSingleDay ? "" : "prev,next",
   };
   const validRange = {
     start: startTime,
     end: endTime,
   };
-  const scrollTime = startTime.getTime() === curDate.getTime() ? moment(startTime).format('HH:mm') : '06:00';
+  const scrollTime =
+    startTime.getTime() === curDate.getTime()
+      ? moment(startTime).format("HH:mm")
+      : "06:00";
 
   const [contactInfo, setContact] = useState({});
 
   const getContact = async (userId) => {
-    const userRef = db.collection('users').doc(userId);
+    const userRef = db.collection("users").doc(userId);
     const user = await userRef.get();
     const { email, phone } = user.data();
     setContact({
@@ -97,7 +100,7 @@ function ShiftCalendar({ vigil, isSingleDay, curDate }) {
   };
 
   const [clickedInfo, setClickedInfo] = useState({
-    title: '',
+    title: "",
   });
 
   const handleEventClick = (info) => {
@@ -116,26 +119,28 @@ function ShiftCalendar({ vigil, isSingleDay, curDate }) {
   const dispatch = useDispatch();
 
   const handleDrop = async () => {
-    const vigilRef = db.collection('vigils').doc(clickedInfo.vigilId);
-    const shiftRef = vigilRef.collection('shifts').doc(clickedInfo.shiftId);
-    shiftRef.delete()
+    const vigilRef = db.collection("vigils").doc(clickedInfo.vigilId);
+    const shiftRef = vigilRef.collection("shifts").doc(clickedInfo.shiftId);
+    shiftRef
+      .delete()
       .then(() => {
         dispatch(actions.history.deleteHistoryShift(clickedInfo.shiftId));
         dispatch(actions.user.deleteShift(clickedInfo.shiftId));
       })
       .catch((error) => {
-        console.error('Error deleting document: ', error);
+        console.error("Error deleting document: ", error);
       });
-    const currentUser = (sessionStorage.getItem('userid'));
-    const userRef = db.collection('users').doc(currentUser);
-    userRef.update({
-      prevShifts: firebase.firestore.FieldValue.arrayRemove(shiftRef),
-    })
+    const currentUser = sessionStorage.getItem("userid");
+    const userRef = db.collection("users").doc(currentUser);
+    userRef
+      .update({
+        prevShifts: firebase.firestore.FieldValue.arrayRemove(shiftRef),
+      })
       .then(() => {
         dispatch(actions.user.deleteShift(clickedInfo.shiftId));
       })
       .catch((error) => {
-        console.error('Error deleting document: ', error);
+        console.error("Error deleting document: ", error);
       });
     handleCloseClick();
   };
@@ -153,12 +158,19 @@ function ShiftCalendar({ vigil, isSingleDay, curDate }) {
         headerToolbar={volunteerCalendarHeader}
         allDaySlot={false}
         height="400px"
-        dayHeaderFormat={{ month: 'numeric', day: 'numeric' }}
+        dayHeaderFormat={{ month: "numeric", day: "numeric" }}
         slotEventOverlap={false}
         eventClick={handleEventClick}
       />
-      <StyledModal show={showModal} onEscapeKeyDown={handleCloseClick} onHide={handleCloseClick} centered>
-        <Modal.Header className="font-weight-bold" closeButton>Contact Info</Modal.Header>
+      <StyledModal
+        show={showModal}
+        onEscapeKeyDown={handleCloseClick}
+        onHide={handleCloseClick}
+        centered
+      >
+        <Modal.Header className="font-weight-bold" closeButton>
+          Contact Info
+        </Modal.Header>
         <Modal.Body>
           <Col>
             <Row>{clickedInfo.title}</Row>
@@ -170,13 +182,13 @@ function ShiftCalendar({ vigil, isSingleDay, curDate }) {
             </a>
           </Col>
         </Modal.Body>
-        { contactInfo.userId === thisUser
-          ? (
-            <Modal.Footer>
-              <StyledDrop type="button" onClick={handleDrop}>drop shift</StyledDrop>
-            </Modal.Footer>
-          )
-          : null}
+        {contactInfo.userId === thisUser ? (
+          <Modal.Footer>
+            <StyledDrop type="button" onClick={handleDrop}>
+              drop shift
+            </StyledDrop>
+          </Modal.Footer>
+        ) : null}
       </StyledModal>
     </>
   );

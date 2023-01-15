@@ -1,16 +1,14 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import {
-  Container, Row, Col, Form,
-} from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-import { BiArrowBack } from 'react-icons/bi';
-import firebase from 'firebase/app';
-import 'firebase/auth';
+import React, { useState } from "react";
+import styled from "styled-components";
+import { Container, Row, Col, Form } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import { BiArrowBack } from "react-icons/bi";
+import firebase from "firebase/app";
+import "firebase/auth";
 
 const StyledDiv = styled.div`
   height: 100vh;
-  background-color: #E2E2E2;
+  background-color: #e2e2e2;
 `;
 
 const StyledContainer = styled(Container)`
@@ -30,28 +28,28 @@ const StyledRow = styled(Row)`
 `;
 
 const StyledCol = styled(Col)`
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   padding: 10%;
   @media only screen and (min-width: 768px) {
-    border: 2px solid #C4C4C4;
+    border: 2px solid #c4c4c4;
     border-radius: 5px;
-    padding: 5% 10%
+    padding: 5% 10%;
   }
 `;
 
 const SubmitButton = styled.button`
   color: white;
-  background-color: #84C0C9;
-  border: 2px solid #FFFFFF;
+  background-color: #84c0c9;
+  border: 2px solid #ffffff;
   border-radius: 5px;
   padding: 6px 0px;
   width: 100%;
   font-size: 14px;
-  fontFamily: Roboto;
+  fontfamily: Roboto;
 
-  &:hover{
+  &:hover {
     color: white;
-    background-color: #558E97;
+    background-color: #558e97;
   }
 `;
 
@@ -60,16 +58,19 @@ const StyledError = styled.div`
 `;
 
 export default function ForgotPassword() {
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState("");
   const [showStatus, setShowStatus] = useState(false);
 
   const forgotPassword = () => {
     const auth = firebase.auth();
-    auth.sendPasswordResetEmail(email).then(() => {
-      setShowStatus(true);
-    }).catch((error) => {
-      alert(error);
-    });
+    auth
+      .sendPasswordResetEmail(email)
+      .then(() => {
+        setShowStatus(true);
+      })
+      .catch((error) => {
+        alert(error);
+      });
   };
 
   return (
@@ -84,7 +85,10 @@ export default function ForgotPassword() {
               <Row>
                 <Col md={12}>
                   <h3>Forgot Password</h3>
-                  <p className="mt-4"> A reset link will be sent to your email </p>
+                  <p className="mt-4">
+                    {" "}
+                    A reset link will be sent to your email{" "}
+                  </p>
                   <Form.Group className="mt-4">
                     <Form.Label>Email</Form.Label>
                     <Form.Control
@@ -95,23 +99,18 @@ export default function ForgotPassword() {
                       required
                     />
                   </Form.Group>
-                  {showStatus
-                    ? (
-                      <StyledError>
-                        <p className="mt-4">
-                          {`Reset link sent to ${email}`}
-                        </p>
-                        <SubmitButton type="submit" onClick={forgotPassword}>
-                          Reset Password
-                        </SubmitButton>
-                      </StyledError>
-                    )
-                    : (
-
+                  {showStatus ? (
+                    <StyledError>
+                      <p className="mt-4">{`Reset link sent to ${email}`}</p>
                       <SubmitButton type="submit" onClick={forgotPassword}>
                         Reset Password
                       </SubmitButton>
-                    )}
+                    </StyledError>
+                  ) : (
+                    <SubmitButton type="submit" onClick={forgotPassword}>
+                      Reset Password
+                    </SubmitButton>
+                  )}
                 </Col>
               </Row>
             </Form>
