@@ -53,6 +53,7 @@ const retrieveUser = async (dbRef) => {
       id: currentUser,
       isAdmin: temp.data().isAdmin || false,
       prevShifts: ps,
+      isValidated: false,
     };
   } catch {
     console.log('not logged in');
@@ -79,7 +80,7 @@ const retrieveUsers = async (dbRef) => {
 
   usersSnapshot.forEach((doc) => {
     const {
-      email, name, phone, isAdmin, accountStatus,
+      email, name, phone, isValidated, isAdmin, accountStatus,
     } = doc.data();
 
     if (accountStatus === 'pending') {
@@ -89,6 +90,7 @@ const retrieveUsers = async (dbRef) => {
         name,
         phone,
         accountStatus,
+        isValidated,
         isAdminAccount: isAdmin,
       });
     } else if ((accountStatus !== 'denied')) {
@@ -98,6 +100,7 @@ const retrieveUsers = async (dbRef) => {
         name,
         phone,
         accountStatus,
+        isValidated,
         isAdminAccount: isAdmin,
       });
     }
@@ -233,7 +236,8 @@ export default function AuthProvider({ children }) {
     };
 
     firebase.auth().onAuthStateChanged((user) => {
-      if (user != null) {
+      console.log(user);
+      if (user != null && user.isValidated !== false) {
         setPending(true);
         sessionStorage.setItem('userid', user.uid);
         wraperFunc();
