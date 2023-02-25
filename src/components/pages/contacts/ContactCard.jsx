@@ -83,7 +83,6 @@ export default function ContactCard({
   isAdmin,
   userId,
   accountStatus,
-  isValidated,
 }) {
   function approveAccount() {
     const db = firebase.firestore();
@@ -160,5 +159,4 @@ ContactCard.propTypes = {
   isAdmin: PropTypes.bool.isRequired,
   userId: PropTypes.string.isRequired,
   accountStatus: PropTypes.string.isRequired,
-  isValidated: PropTypes.bool.isRequired,
 };
