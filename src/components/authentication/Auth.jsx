@@ -50,6 +50,7 @@ const retrieveUser = async (dbRef) => {
       id: currentUser,
       isAdmin: temp.data().isAdmin || false,
       prevShifts: ps,
+      isValidated: temp.data().isValidated || false,
     };
   } catch {
     console.log("not logged in");
@@ -76,7 +77,8 @@ const retrieveUsers = async (dbRef) => {
   const usersSnapshot = await usersRef.get();
 
   usersSnapshot.forEach((doc) => {
-    const { email, name, phone, isAdmin, accountStatus } = doc.data();
+    const { email, name, phone, isAdmin, accountStatus, isValidated } =
+      doc.data();
 
     if (accountStatus === "pending") {
       pendingUsers.push({
@@ -86,6 +88,7 @@ const retrieveUsers = async (dbRef) => {
         phone,
         accountStatus,
         isAdminAccount: isAdmin,
+        isValidated,
       });
     } else if (accountStatus !== "denied") {
       users.push({
@@ -95,6 +98,7 @@ const retrieveUsers = async (dbRef) => {
         phone,
         accountStatus,
         isAdminAccount: isAdmin,
+        isValidated,
       });
     }
   });

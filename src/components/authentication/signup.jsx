@@ -124,6 +124,7 @@ export default function SignUp() {
       phone: phone,
       isAdmin: false,
       prevShifts: [],
+      isValidated: false,
     };
     userRef.set(userData);
   };
