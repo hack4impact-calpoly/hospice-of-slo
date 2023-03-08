@@ -51,10 +51,10 @@ export default function NewCalendar() {
         </div>
       </div>
     );
-    const root = ReactDOM.createRoot(
+    ReactDOM.render(
+      extendedInfoElement,
       document.getElementById("extended-info-container")
     );
-    root.render(extendedInfoElement);
   }
 
   const extendedInfoPlaceholder = (
@@ -68,15 +68,15 @@ export default function NewCalendar() {
   );
 
   function handleMouseLeave() {
-    const root = ReactDOM.createRoot(
+    ReactDOM.render(
+      extendedInfoPlaceholder,
       document.getElementById("extended-info-container")
     );
-    root.render(extendedInfoPlaceholder);
   }
 
   const expandedCalendar = (
     <FullCalendar
-      className="expanded-shift-calendar"
+      id="expanded-shift-calendar"
       plugins={[timeGridPlugin, interactionPlugin]}
       headerToolbar={{
         left: "prev,next today",
@@ -97,7 +97,7 @@ export default function NewCalendar() {
 
   const minimizedCalendar = (
     <FullCalendar
-      className="minimized-shift-calendar"
+      id="minimized-shift-calendar"
       plugins={[timeGridPlugin, interactionPlugin]}
       headerToolbar={{
         left: "prev,next today",
@@ -117,12 +117,16 @@ export default function NewCalendar() {
   );
 
   const updateMedia = () => {
-    const root = ReactDOM.createRoot(document.getElementById("shift-calendar"));
-
     if (window.innerWidth > 900) {
-      root.render(expandedCalendar);
+      ReactDOM.render(
+        expandedCalendar,
+        document.getElementById("shift-calendar")
+      );
     } else {
-      root.render(minimizedCalendar);
+      ReactDOM.render(
+        minimizedCalendar,
+        document.getElementById("shift-calendar")
+      );
     }
   };
 
