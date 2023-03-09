@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import moment from "moment";
 import { vigilPropType } from "../../../../dataStructures/propTypes";
 import { combineDateAndTime } from "../createVigil/CreateVigilHelper";
-import "./modalDetails.css";
+// import "./modalDetails.css";
 
 const StyledCard = styled(Card)`
   border: none;
