@@ -8,7 +8,7 @@ import { useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import Modal from "react-bootstrap/Modal";
 import moment from "moment";
-import ShiftDetails from "./shiftDetails";
+import ModalDetails from "./modalDetails";
 import { vigilPropType } from "../../../../dataStructures/propTypes";
 import "./Calendar.css";
 
@@ -97,6 +97,11 @@ export default function Calendar(props) {
     setShowModal(true);
   };
 
+  const handleDateClick = (info) => {
+    setCurDate(info.date);
+    setShowModal(true);
+  };
+
   // Marks all overlapping events
   const annotatedEventData = (events) => {
     if (events.length === 0) {
@@ -161,6 +166,7 @@ export default function Calendar(props) {
           selectable
           events={annotatedEventData(eventData)}
           eventClick={handleEventClick}
+          dateClick={handleDateClick}
           eventClassNames={getClassNames}
           headerToolbar={volunteerCalendarHeader}
           height="80vh"
@@ -169,16 +175,16 @@ export default function Calendar(props) {
       )}
       <Modal
         show={showModal}
-        size="lg"
+        size="md"
         onEscapeKeyDown={handleCloseClick}
         onHide={handleCloseClick}
         centered
       >
         <Modal.Header className="font-weight-bold" closeButton>
-          {clickedInfo.address}
+          Sign up for a Shift
         </Modal.Header>
         <Modal.Body>
-          <ShiftDetails
+          <ModalDetails
             vigil={clickedInfo}
             setSelectVigil={setSelectVigil}
             setShowModal={setShowModal}
