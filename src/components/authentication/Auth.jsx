@@ -76,8 +76,8 @@ const retrieveUsers = async (dbRef) => {
   const usersSnapshot = await usersRef.get();
 
   usersSnapshot.forEach((doc) => {
-    const { email, name, phone, isAdmin, accountStatus } = doc.data();
-
+    const { email, name, phone, isAdmin, isValidated, accountStatus } =
+      doc.data();
     if (accountStatus === "pending") {
       pendingUsers.push({
         id: doc.id,
@@ -86,6 +86,7 @@ const retrieveUsers = async (dbRef) => {
         phone,
         accountStatus,
         isAdminAccount: isAdmin,
+        isValidAccount: isValidated,
       });
     } else if (accountStatus !== "denied") {
       users.push({
@@ -95,6 +96,7 @@ const retrieveUsers = async (dbRef) => {
         phone,
         accountStatus,
         isAdminAccount: isAdmin,
+        isValidAccount: isValidated,
       });
     }
   });

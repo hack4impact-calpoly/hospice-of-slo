@@ -12,6 +12,7 @@ import {
   BiPhone,
   BiTime,
   BiLogOut,
+  BiUserPlus,
 } from "react-icons/bi";
 import firebase from "firebase/app";
 import "firebase/auth";
@@ -95,6 +96,13 @@ export default function Navbar() {
           History
         </NavLink>
       ) : null}
+
+      {isAdmin ? (
+        <NavLink to="/userValid" Icon={BiUserPlus} fontSize="20px">
+          User Validation
+        </NavLink>
+      ) : null}
+
       <NavLink to="/login" handleClick={signOutFunc} Icon={BiLogOut}>
         Sign Out
       </NavLink>

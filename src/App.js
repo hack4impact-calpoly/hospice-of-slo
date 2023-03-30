@@ -16,6 +16,7 @@ import PrivateRoute from "./components/authentication/PrivateRoute";
 import AuthProvider from "./components/authentication/Auth";
 import DiscussionThread from "./components/pages/discussion/DiscussionThread";
 import ScheduleManager from "./components/pages/schedule/ScheduleManager";
+import UserValid from "./components/pages/userValid/Valid";
 
 // OLD SETUP
 // Your web app's Firebase configuration
@@ -84,6 +85,11 @@ export default function App() {
           <PrivateRoute adminOnly path="/history">
             <History />
           </PrivateRoute>
+
+          <PrivateRoute adminOnly path="/userValid">
+            <UserValid />
+          </PrivateRoute>
+
           <Route render={() => <Redirect to="/discussion" />} />
         </Switch>
       </AuthProvider>
