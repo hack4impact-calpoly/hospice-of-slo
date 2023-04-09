@@ -201,6 +201,7 @@ export default function Contacts() {
         </Row>
         {users
           .filter((user) =>
+            // checkAdmin(user)
             user.name.toLowerCase().includes(searchTerm.toLowerCase())
           )
           .map((user) => (

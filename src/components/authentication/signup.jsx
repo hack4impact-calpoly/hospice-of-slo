@@ -123,6 +123,7 @@ export default function SignUp() {
       name: name,
       phone: phone,
       isAdmin: false,
+      isValidated: false,
       prevShifts: [],
       isValidated: false,
     };

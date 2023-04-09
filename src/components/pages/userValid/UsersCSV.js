@@ -17,11 +17,11 @@ async function generateCSV(users) {
 
   // Create CSV File
   const storageRef = firebase.storage().ref();
-  const contactsCsvRef = storageRef.child("contacts.csv");
-  await contactsCsvRef.putString(usersCSV);
+  const usersCsvRef = storageRef.child("users.csv");
+  await usersCsvRef.putString(usersCSV);
 
   // Download CSV File
-  const ContactsURL = await contactsCsvRef.getDownloadURL();
+  const ContactsURL = await usersCsvRef.getDownloadURL();
   window.open(ContactsURL);
 }
 
