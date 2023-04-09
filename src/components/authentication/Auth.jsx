@@ -50,6 +50,7 @@ const retrieveUser = async (dbRef) => {
       id: currentUser,
       isAdmin: temp.data().isAdmin || false,
       prevShifts: ps,
+      isValidated: temp.data().isValidated || false,
     };
   } catch {
     console.log("not logged in");
@@ -86,6 +87,7 @@ const retrieveUsers = async (dbRef) => {
         phone,
         accountStatus,
         isAdminAccount: isAdmin,
+
         isValidAccount: isValidated,
       });
     } else if (accountStatus !== "denied") {
