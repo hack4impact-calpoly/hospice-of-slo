@@ -67,31 +67,31 @@ export default function App() {
           <Route path="/reset-password">
             <ResetPassword />
           </Route>
-          <PrivateRoute path="/schedule">
+          <PrivateRoute validatedOnly path="/schedule">
             <ScheduleManager />
           </PrivateRoute>
-          <PrivateRoute path="/discussion/:id">
+          <PrivateRoute validatedOnly path="/discussion/:id">
             <DiscussionThread />
           </PrivateRoute>
-          <PrivateRoute path="/discussion">
+          <PrivateRoute validatedOnly path="/discussion">
             <Discussion />
           </PrivateRoute>
-          <PrivateRoute path="/past-shifts">
+          <PrivateRoute validatedOnly path="/past-shifts">
             <PastShifts />
           </PrivateRoute>
-          <PrivateRoute path="/contacts">
+          <PrivateRoute validatedOnly path="/contacts">
             <Contacts />
           </PrivateRoute>
-          <PrivateRoute adminOnly path="/history/:id">
+          <PrivateRoute validatedOnly adminOnly path="/history/:id">
             <HistoryTable />
           </PrivateRoute>
-          <PrivateRoute adminOnly path="/history">
+          <PrivateRoute validatedOnly adminOnly path="/history">
             <History />
           </PrivateRoute>
-          <PrivateRoute adminOnly path="/userValid">
+          <PrivateRoute validatedOnly adminOnly path="/userValid">
             <UserValid />
           </PrivateRoute>
-          <PrivateRoute path="/shifts">
+          <PrivateRoute validatedOnly path="/shifts">
             <NewCalendar />
           </PrivateRoute>
           <Route path="/not-validated">
