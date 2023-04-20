@@ -1,24 +1,37 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom"; // eslint-disable-line
 import { formatDate } from "@fullcalendar/core";
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
+import { Modal } from "react-bootstrap";
 import { eventShiftsFormatted } from "./sampleData";
 import "./newCalendar.css";
 import mouseOverIcon from "../../../../images/mouseovericon.svg";
+import ModalDetails from "./modalDetails";
 
 export default function NewCalendar() {
+  const [showModal, setShowModal] = useState(false);
+  const [curDate, setCurDate] = useState(Date());
+  const [clickedInfo, setClickedInfo] = useState({
+    id: "",
+    address: "",
+    endTime: new Date(),
+    startTime: new Date(),
+    notes: "",
+  });
+  const handleCloseClick = () => setShowModal(false);
+
   function handleMouseEnter(info) {
     const nameAddressString = info.event.title;
     const at = nameAddressString.indexOf("at");
     const volunteerName = nameAddressString.slice(0, at);
     const eventAddress = nameAddressString.slice(at + 3);
-    const shiftStartTime = formatDate(info.event.start, {
+    const shiftStartTime = formatDate(info.start, {
       hour: "numeric",
       minute: "2-digit",
     });
-    const shiftEndtime = formatDate(info.event.end, {
+    const shiftEndtime = formatDate(info.end, {
       hour: "numeric",
       minute: "2-digit",
     });
@@ -74,6 +87,16 @@ export default function NewCalendar() {
     );
   }
 
+  function handleMouseClick(info) {
+    alert(`Clicked on: ${info.date.getHours()}:${info.date.getMinutes()}`);
+  }
+
+  function handleSelection(info) {
+    setClickedInfo({ endTime: info.end, startTime: info.start });
+    setCurDate(info.start);
+    setShowModal(true);
+  }
+
   const expandedCalendar = (
     <FullCalendar
       id="expanded-shift-calendar"
@@ -90,8 +113,9 @@ export default function NewCalendar() {
       events={eventShiftsFormatted}
       eventMaxStack={2}
       displayEventEnd
-      eventMouseEnter={(info) => handleMouseEnter(info)}
-      eventMouseLeave={(info) => handleMouseLeave(info)}
+      // eventMouseEnter={(info) => handleMouseEnter(info)}
+      // eventMouseLeave={(info) => handleMouseLeave(info)}
+      select={(info) => handleSelection(info)}
     />
   );
 
@@ -113,6 +137,7 @@ export default function NewCalendar() {
       displayEventEnd
       eventMouseEnter={(info) => handleMouseEnter(info)}
       eventMouseLeave={(info) => handleMouseLeave(info)}
+      dateClick={(info) => handleMouseClick(info)}
     />
   );
 
@@ -138,7 +163,27 @@ export default function NewCalendar() {
 
   return (
     <div id="shift-calendar-box">
-      <div id="shift-calendar">{expandedCalendar}</div>
+      <div id="shift-calendar">
+        {expandedCalendar}
+        <Modal
+          show={showModal}
+          size="md"
+          onEscapeKeyDown={handleCloseClick}
+          onHide={handleCloseClick}
+          centered
+        >
+          <Modal.Header className="font-weight-bold" closeButton>
+            Sign up for a Shift
+          </Modal.Header>
+          <Modal.Body>
+            <ModalDetails
+              vigil={clickedInfo}
+              setShowModal={setShowModal}
+              curDate={curDate}
+            />
+          </Modal.Body>
+        </Modal>
+      </div>
       <div id="extended-info-container">{extendedInfoPlaceholder}</div>
     </div>
   );

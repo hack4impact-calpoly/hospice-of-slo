@@ -31,18 +31,23 @@ const SignUpButton = styled.button`
 export default function ShiftDetails({ vigil, setShowModal, curDate }) {
   const { startTime, endTime } = vigil;
   const isSingleDay = moment(startTime).isSame(endTime, "day");
-  const [shiftStartTime, setShiftStartTime] = useState("");
-  const [shiftEndTime, setShiftEndTime] = useState("");
+  const [shiftStartTime, setShiftStartTime] = useState(
+    moment(startTime).format("HH:mm") || ""
+  );
+  const [shiftEndTime, setShiftEndTime] = useState(
+    moment(endTime).format("HH:mm") || ""
+  );
   const formStartDate = moment(curDate).format("YYYY-MM-DD");
   const [shiftStartDate, setShiftStartDate] = useState(
-    isSingleDay ? formStartDate : ""
+    isSingleDay ? formStartDate : moment(startTime).format("YYYY-MM-DD")
   );
   const [shiftEndDate, setShiftEndDate] = useState(
-    isSingleDay ? formStartDate : ""
+    isSingleDay ? formStartDate : moment(endTime).format("YYYY-MM-DD")
   );
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-
+  console.log({ start: startTime, end: endTime, date: curDate });
+  console.log(isSingleDay);
   async function addShiftPress() {
     // creates a new shift and adds it to a specific vigil
     const start = combineDateAndTime(shiftStartDate, shiftStartTime);
@@ -58,7 +63,7 @@ export default function ShiftDetails({ vigil, setShowModal, curDate }) {
 
   const [showDateWarning, setShowDateWarning] = useState(
     moment(curDate).isBetween(startTime, endTime, "day", "()")
-  ); // This warning displays when we can't garuntee that curDate matches the date the user clicked
+  ); // This warning displays when we can't guarantee that curDate matches the date the user clicked
 
   // Form Stuff
   const [validated, setValidated] = useState(false);
