@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import ReactDOM from "react-dom"; // eslint-disable-line
 import { formatDate } from "@fullcalendar/core";
 import FullCalendar from "@fullcalendar/react";
@@ -87,10 +87,6 @@ export default function NewCalendar() {
     );
   }
 
-  function handleMouseClick(info) {
-    alert(`Clicked on: ${info.date.getHours()}:${info.date.getMinutes()}`);
-  }
-
   function handleSelection(info) {
     setClickedInfo({ endTime: info.end, startTime: info.start });
     setCurDate(info.start);
@@ -113,53 +109,53 @@ export default function NewCalendar() {
       events={eventShiftsFormatted}
       eventMaxStack={2}
       displayEventEnd
-      // eventMouseEnter={(info) => handleMouseEnter(info)}
-      // eventMouseLeave={(info) => handleMouseLeave(info)}
+      eventMouseEnter={(info) => handleMouseEnter(info)}
+      eventMouseLeave={(info) => handleMouseLeave(info)}
       select={(info) => handleSelection(info)}
     />
   );
 
-  const minimizedCalendar = (
-    <FullCalendar
-      id="minimized-shift-calendar"
-      plugins={[timeGridPlugin, interactionPlugin]}
-      headerToolbar={{
-        left: "prev,next today",
-        center: "title",
-        right: "",
-      }}
-      initialView="timeGridDay"
-      selectable
-      dayMaxEvents
-      weekends
-      events={eventShiftsFormatted}
-      eventMaxStack={3}
-      displayEventEnd
-      eventMouseEnter={(info) => handleMouseEnter(info)}
-      eventMouseLeave={(info) => handleMouseLeave(info)}
-      dateClick={(info) => handleMouseClick(info)}
-    />
-  );
+  // const minimizedCalendar = (
+  //   <FullCalendar
+  //     id="minimized-shift-calendar"
+  //     plugins={[timeGridPlugin, interactionPlugin]}
+  //     headerToolbar={{
+  //       left: "prev,next today",
+  //       center: "title",
+  //       right: "",
+  //     }}
+  //     initialView="timeGridDay"
+  //     selectable
+  //     dayMaxEvents
+  //     weekends
+  //     events={eventShiftsFormatted}
+  //     eventMaxStack={3}
+  //     displayEventEnd
+  //     eventMouseEnter={(info) => handleMouseEnter(info)}
+  //     eventMouseLeave={(info) => handleMouseLeave(info)}
+  //     dateClick={(info) => handleMouseClick(info)}
+  //   />
+  // );
 
-  const updateMedia = () => {
-    if (window.innerWidth > 900) {
-      ReactDOM.render(
-        expandedCalendar,
-        document.getElementById("shift-calendar")
-      );
-    } else {
-      ReactDOM.render(
-        minimizedCalendar,
-        document.getElementById("shift-calendar")
-      );
-    }
-  };
+  // const updateMedia = () => {
+  //   if (window.innerWidth > 900) {
+  //     ReactDOM.render(
+  //       expandedCalendar,
+  //       document.getElementById("shift-calendar")
+  //     );
+  //   } else {
+  //     ReactDOM.render(
+  //       minimizedCalendar,
+  //       document.getElementById("shift-calendar")
+  //     );
+  //   }
+  // };
 
-  useEffect(() => {
-    updateMedia();
-    window.addEventListener("resize", updateMedia);
-    return () => window.removeEventListener("resize", updateMedia);
-  });
+  // useEffect(() => {
+  //   updateMedia();
+  //   window.addEventListener("resize", updateMedia);
+  //   return () => window.removeEventListener("resize", updateMedia);
+  // });
 
   return (
     <div id="shift-calendar-box">
