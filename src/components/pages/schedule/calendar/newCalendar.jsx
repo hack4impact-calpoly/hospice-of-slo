@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom"; // eslint-disable-line
 import { formatDate } from "@fullcalendar/core";
 import FullCalendar from "@fullcalendar/react";
@@ -9,6 +9,19 @@ import "./newCalendar.css";
 import mouseOverIcon from "../../../../images/mouseovericon.svg";
 
 export default function NewCalendar() {
+  const [isDesktopView, setDesktopView] = useState(window.innerWidth > 900);
+
+  const updateMedia = () => {
+    setDesktopView(window.innerWidth > 900);
+    console.log(window.innerWidth);
+    console.log(isDesktopView);
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", updateMedia);
+    return () => window.removeEventListener("resize", updateMedia);
+  }, [isDesktopView]);
+
   function handleMouseEnter(info) {
     const nameAddressString = info.event.title;
     const at = nameAddressString.indexOf("at");
@@ -116,29 +129,33 @@ export default function NewCalendar() {
     />
   );
 
-  const updateMedia = () => {
-    if (window.innerWidth > 900) {
-      ReactDOM.render(
-        expandedCalendar,
-        document.getElementById("shift-calendar")
-      );
-    } else {
-      ReactDOM.render(
-        minimizedCalendar,
-        document.getElementById("shift-calendar")
-      );
-    }
-  };
+  // const updateMedia = () => {
+  //   if (window.innerWidth > 900) {
+  //     ReactDOM.render(
+  //       expandedCalendar,
+  //       document.getElementById("shift-calendar")
+  //     );
+  //   } else {
+  //     ReactDOM.render(
+  //       minimizedCalendar,
+  //       document.getElementById("shift-calendar")
+  //     );
+  //   }
+  // };
 
-  useEffect(() => {
-    updateMedia();
-    window.addEventListener("resize", updateMedia);
-    return () => window.removeEventListener("resize", updateMedia);
-  });
+  // useEffect(() => {
+  //   updateMedia();
+  //   window.addEventListener("resize", updateMedia);
+  //   return () => window.removeEventListener("resize", updateMedia);
+  // });
 
   return (
     <div id="shift-calendar-box">
-      <div id="shift-calendar">{expandedCalendar}</div>
+      <div id="shift-calendar">
+        {isDesktopView ? expandedCalendar : minimizedCalendar}
+      </div>
+      {isDesktopView ? <p>big</p> : <p>small</p>}
+      {/* <div id="shift-calendar">{expandedCalendar}</div> */}
       <div id="extended-info-container">{extendedInfoPlaceholder}</div>
     </div>
   );

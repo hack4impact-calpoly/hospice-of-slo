@@ -19,7 +19,6 @@ import ScheduleManager from "./components/pages/schedule/ScheduleManager";
 import NewCalendar from "./components/pages/schedule/calendar/newCalendar";
 import NotValidated from "./components/authentication/notValidated";
 
-
 // OLD SETUP
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
