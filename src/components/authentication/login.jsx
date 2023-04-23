@@ -125,6 +125,9 @@ export default function Login() {
                 alert(
                   "Your account has been created. Please wait a few days, for an admin to approve/deny your account. If you need an account urgently, please reach out to Hospice of SLO and ask to be approved sooner!"
                 );
+              }
+              if (user.data().isValidated === false) {
+                history.push("/not-validated");
               } else {
                 history.push("/");
               }
