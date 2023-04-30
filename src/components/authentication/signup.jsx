@@ -125,7 +125,6 @@ export default function SignUp() {
       isAdmin: false,
       isValidated: false,
       prevShifts: [],
-      isValidated: false,
     };
     userRef.set(userData);
   };
