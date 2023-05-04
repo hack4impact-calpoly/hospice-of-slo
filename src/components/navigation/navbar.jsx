@@ -74,7 +74,7 @@ export default function Navbar() {
       <NavLink to="/discussion" Icon={BiChat}>
         Discussions
       </NavLink>
-      <NavLink to="/shifts" Icon={BiCalendarAlt}>
+      <NavLink to="/schedule" Icon={BiCalendarAlt}>
         Schedule
       </NavLink>
       <NavLink to="/contacts" Icon={BiPhone}>

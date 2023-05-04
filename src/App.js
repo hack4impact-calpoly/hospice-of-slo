@@ -12,7 +12,6 @@ import Contacts from "./components/pages/contacts/Contacts";
 import PrivateRoute from "./components/authentication/PrivateRoute";
 import AuthProvider from "./components/authentication/Auth";
 import DiscussionThread from "./components/pages/discussion/DiscussionThread";
-import ScheduleManager from "./components/pages/schedule/ScheduleManager";
 
 import UserValid from "./components/pages/userValid/Valid";
 import NewCalendar from "./components/pages/schedule/calendar/newCalendar";
@@ -64,9 +63,6 @@ export default function App() {
           <Route path="/reset-password">
             <ResetPassword />
           </Route>
-          <PrivateRoute validatedOnly path="/schedule">
-            <ScheduleManager />
-          </PrivateRoute>
           <PrivateRoute validatedOnly path="/discussion/:id">
             <DiscussionThread />
           </PrivateRoute>
@@ -79,7 +75,7 @@ export default function App() {
           <PrivateRoute validatedOnly adminOnly path="/userValid">
             <UserValid />
           </PrivateRoute>
-          <PrivateRoute validatedOnly path="/shifts">
+          <PrivateRoute validatedOnly path="/schedule">
             <NewCalendar />
           </PrivateRoute>
           <Route path="/not-validated">
