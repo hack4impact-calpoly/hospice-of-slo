@@ -15,7 +15,7 @@ export default function Schedule(props) {
   const [eventData, setEventData] = useState([]);
 
   // Gets Vigil Data from redux store
-  const storeVigils = useSelector((state) => state.vigils.vigils);
+  const storeShifts = useSelector((state) => state.vigils.vigils);
   const getVigilInfo = () => {
     const vigilsData = [];
     storeVigils.forEach((v) => {

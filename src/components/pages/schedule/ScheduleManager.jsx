@@ -5,9 +5,8 @@ import Schedule from "./Schedule";
 
 function ScheduleManager() {
   const match = useRouteMatch();
-  const [selectVigil, setSelectVigil] = useState({
+  const [selectShift, setSelectShift] = useState({
     id: "",
-    address: "",
     endTime: new Date(),
     startTime: new Date(),
     notes: "",
@@ -19,10 +18,10 @@ function ScheduleManager() {
         <CreateShift />
       </Route>
       <Route path={`${match.url}/edit-shift`}>
-        <CreateShift curEvent={selectVigil} />
+        <CreateShift curEvent={selectShift} />
       </Route>
       <Route path={`${match.url}`}>
-        <Schedule setSelectVigil={setSelectVigil} />
+        <Schedule setSelectVigil={setSelectShift} />
       </Route>
     </Switch>
   );
