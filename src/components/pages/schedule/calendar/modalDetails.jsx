@@ -3,7 +3,7 @@ import { Col, Container, Card, Form, Alert } from "react-bootstrap";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import moment from "moment";
-import { shiftPropType } from "../../../../dataStructures/propTypes";
+import { vigilPropType } from "../../../../dataStructures/propTypes";
 import { combineDateAndTime } from "../createVigil/CreateVigilHelper";
 // import "./modalDetails.css";
 
@@ -28,150 +28,64 @@ const SignUpButton = styled.button`
   }
 `;
 
-export default function ShiftDetails({
-  shift,
-  setSelectShift,
-  setShowModal,
-  curDate,
-}) {
-  const { id, startTime, endTime, notes } = shift;
-  const isAdmin = useSelector((state) => state.user.user.isAdmin);
+export default function ShiftDetails({ vigil, setShowModal, curDate }) {
+  const { startTime, endTime } = vigil;
   const isSingleDay = moment(startTime).isSame(endTime, "day");
-  const [show, setShow] = useState(false);
-  const history = useHistory();
-  const dispatch = useDispatch();
-  const dateFormat = "dddd, MMM D";
-  const formattedDate = isSingleDay
-    ? moment(startTime).format(dateFormat)
-    : `${moment(startTime).format(dateFormat)} to ${moment(endTime).format(
-        dateFormat
-      )}`;
-
-  const timeFormat = "h:mma";
-  const formattedTime = `${moment(startTime).format(timeFormat)} to ${moment(
-    endTime
-  ).format(timeFormat)}`;
-  const [shiftStartTime, setShiftStartTime] = useState("");
-  const [shiftEndTime, setShiftEndTime] = useState("");
-  const formStartDate = moment(startTime).format("YYYY-MM-DD");
+  const [shiftStartTime, setShiftStartTime] = useState(
+    moment(startTime).format("HH:mm") || ""
+  );
+  const [shiftEndTime, setShiftEndTime] = useState(
+    moment(endTime).format("HH:mm") || ""
+  );
+  const formStartDate = moment(curDate).format("YYYY-MM-DD");
   const [shiftStartDate, setShiftStartDate] = useState(
-    isSingleDay ? formStartDate : ""
+    isSingleDay ? formStartDate : moment(startTime).format("YYYY-MM-DD")
   );
   const [shiftEndDate, setShiftEndDate] = useState(
-    isSingleDay ? formStartDate : ""
+    isSingleDay ? formStartDate : moment(endTime).format("YYYY-MM-DD")
   );
-  const [showDateFeedback, setShowDateFeedback] = useState(false);
-
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  console.log({ start: startTime, end: endTime, date: curDate });
+  console.log(isSingleDay);
   async function addShiftPress() {
     // creates a new shift and adds it to a specific vigil
-    const currentUser = firebase.auth().currentUser.uid;
-    const db = firebase.firestore();
-    const shiftRef = await db.collection("shifts").doc(id);
-    const userRef = await db.collection("users").doc(currentUser);
-    const user = await userRef.get();
-    const { name } = await user.data();
     const start = combineDateAndTime(shiftStartDate, shiftStartTime);
     const end = combineDateAndTime(shiftEndDate, shiftEndTime);
     const newShift = {
-      address: vigil.address,
       shiftStartTime: start,
       shiftEndTime: end,
-      userRef: db.doc(`users/${currentUser}`),
+      firstName,
+      lastName,
     };
-
-    setShowDateFeedback(false);
-    
-    shiftRef
-      .add(newShift)
-      .then((ref) => {
-        const reduxStartTime = firebase.firestore.Timestamp.fromDate(start);
-        const reduxEndTime = firebase.firestore.Timestamp.fromDate(end);
-
-        dispatch(
-          actions.user.addShift({
-            ...newShift,
-            shiftStartTime: reduxStartTime,
-            shiftEndTime: reduxEndTime,
-            id: ref.id,
-          })
-        );
-
-        dispatch(
-          actions.history.addHistoryShift({
-            ...newShift,
-            id: ref.id,
-            shiftStartTime: reduxStartTime,
-            shiftEndTime: reduxEndTime,
-            name,
-            isAdmin,
-            userId: currentUser,
-          })
-        );
-      })
-      .catch((error) => {
-        console.error("Error writing document: ", error);
-      });
+    console.log(newShift);
   }
 
   const [showDateWarning, setShowDateWarning] = useState(
     moment(curDate).isBetween(startTime, endTime, "day", "()")
-  ); // This warning displays when we can't garuntee that curDate matches the date the user clicked
-
-  async function deleteShiftDocument() {
-    const db = firebase.firestore();
-    const shiftRef = await db.collection("shifts").doc(id);
-    // gets current user id
-    // const currentUser = firebase.auth().currentUser.uid;
-
-    // delete the Shifts in a vigil (No need to put in redux)
-    await shiftRef.delete()
-    // Delete Vigil
-    await vigilRef.delete();
-    dispatch(actions.user.deleteShift(id));
-
-    setShow(false);
-    setShowModal(false);
-  }
-
-  const editShift = () => {
-    setSelectShift({
-      id,
-      startTime,
-      endTime,
-      notes,
-    });
-    history.push("/schedule/edit-shift");
-  };
+  ); // This warning displays when we can't guarantee that curDate matches the date the user clicked
 
   // Form Stuff
   const [validated, setValidated] = useState(false);
   // Checks that the end date comes before the start date
   const endDateRef = React.createRef();
-  const startDateRef = React.createRef();
   const [datesInverted, setDatesInverted] = useState(false);
 
   // Checks that the end time comes before the start time
   const endTimeRef = React.createRef();
   const [endsBeforeStarts, setEndsBeforeStarts] = useState(false);
 
-  // Checks that selected start is within vigil time
-  const startTimeRef = React.createRef();
-  const [beforeStart, setBeforeStart] = useState(false);
-  const [afterEnd, setAfterEnd] = useState(false);
-
   useEffect(() => {
-    let endDateHasError = false;
     let endTimeHasError = false;
     if (moment(shiftEndDate).isBefore(moment(shiftStartDate))) {
-      endDateHasError = true;
       setDatesInverted(true);
       endDateRef.current.setCustomValidity(
         "End Date cannot come before Start Date"
       );
     } else {
       setDatesInverted(false);
+      endDateRef.current.setCustomValidity("");
     }
-
 
     const tFormat = "HH:mm";
     if (
@@ -189,39 +103,6 @@ export default function ShiftDetails({
       setEndsBeforeStarts(false);
       endTimeRef.current.setCustomValidity("");
     }
-
-    // Check if selection is before shift starts
-    if (
-      moment(combineDateAndTime(shiftStartDate, shiftStartTime)).isBefore(
-        startTime
-      )
-    ) {
-      setBeforeStart(true);
-      startTimeRef.current.setCustomValidity(
-        "Start time cannot come before a vigil has started"
-      );
-    } else {
-      setBeforeStart(false);
-      startTimeRef.current.setCustomValidity("");
-    }
-
-    // Check if selection is after shift ends
-    if (
-      moment(combineDateAndTime(shiftEndDate, shiftEndTime)).isAfter(endTime)
-    ) {
-      setAfterEnd(true);
-      endTimeRef.current.setCustomValidity(
-        "End time cannot come after a vigil has ended."
-      );
-    } else if (!endTimeHasError) {
-      setAfterEnd(false);
-      endTimeRef.current.setCustomValidity("");
-    } else {
-      setAfterEnd(false);
-      endTimeRef.current.setCustomValidity(
-        "Only End Time Before Start Time Should Display"
-      );
-    }
   }, [shiftEndTime, shiftEndDate, shiftStartDate, shiftStartTime]);
 
   const handleInputChange = (event, stateSetter) => {
@@ -234,7 +115,6 @@ export default function ShiftDetails({
     const end = combineDateAndTime(shiftEndDate, shiftEndTime);
 
     if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) {
-      setShowDateFeedback(true);
       return false;
     }
     const form = event.currentTarget;
@@ -254,191 +134,131 @@ export default function ShiftDetails({
     }
   };
   return (
-    <Container>
-      <Row>
-        <Col xs={12} sm={12} md={12} lg={6} className="mb-4">
-          <div>
-            {showDateWarning && (
-              <Alert
-                variant="primary"
-                onClose={() => setShowDateWarning(false)}
-                dismissible
-              >
-                Check that this date is correct
-              </Alert>
-            )}
-            <Card.Title className="font-weight-bold">Schedule</Card.Title>
-            <ShiftCalendar
-              vigil={vigil}
-              isSingleDay={isSingleDay}
-              curDate={curDate}
-            />
-          </div>
-        </Col>
-        <Col xs={12} sm={12} md={12} lg={6}>
-          <StyledCard>
-            {isAdmin ? (
-              <StyledDiv>
-                <BiPencil
-                  style={{ cursor: "pointer" }}
-                  size="32"
-                  onClick={() => editShift()}
-                  className="mb-4"
+    <Container className="modal-container">
+      {showDateWarning && (
+        <Alert
+          variant="primary"
+          onClose={() => setShowDateWarning(false)}
+          dismissible
+        >
+          Check that this date is correct
+        </Alert>
+      )}
+      <StyledCard>
+        <Form noValidate validated={validated} onSubmit={handleSubmit}>
+          <Form.Row>
+            <Col>
+              <Form.Group>
+                <Form.Label class="form-label">First Name</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="firstname"
+                  value={firstName}
+                  onChange={(e) => handleInputChange(e, setFirstName)}
+                  required
                 />
-                <BiTrash
-                  style={{ cursor: "pointer" }}
-                  size="32"
-                  onClick={() => setShow(true)}
-                  className="mb-4"
+                <Form.Control.Feedback type="invalid">
+                  {firstName === "" ? "Please provide a first name " : null}
+                </Form.Control.Feedback>
+              </Form.Group>
+              <Form.Group>
+                <Form.Label>Start Date</Form.Label>
+                <Form.Control
+                  type="date"
+                  name="startDate"
+                  placeholder="yyyy/mm/dd"
+                  value={shiftStartDate}
+                  onChange={(e) => handleInputChange(e, setShiftStartDate)}
+                  required
                 />
-              </StyledDiv>
-            ) : null}
-            <Card.Title className="font-weight-bold">Details</Card.Title>
-            <LessPadedText>{formattedDate}</LessPadedText>
-            <Card.Text>{formattedTime}</Card.Text>
-            <Card.Subtitle className="font-weight-bold">Notes</Card.Subtitle>
-            <Card.Text>{notes}</Card.Text>
-            <Card.Subtitle className="font-weight-bold pb-2">
-              {isAdmin ? "Block off a Shift" : "Sign up for a Shift"}
-            </Card.Subtitle>
-            <Form noValidate validated={validated} onSubmit={handleSubmit}>
-              {!isSingleDay && (
-                <Form.Row>
-                  <Col>
-                    <Form.Group>
-                      <Form.Label>Start Date</Form.Label>
-                      <Form.Control
-                        type="date"
-                        name="startDate"
-                        placeholder="yyyy/mm/dd"
-                        value={shiftStartDate}
-                        onChange={(e) =>
-                          handleInputChange(e, setShiftStartDate)
-                        }
-                        required
-                        ref={startDateRef}
-                      />
-                      <Form.Control.Feedback type="invalid">
-                        {shiftStartDate === ""
-                          ? "Please provide a starting date "
-                          : null}
-                        {dateBeforeVigilStarts
-                          ? "Start date cannot come before vigil starts"
-                          : null}
-                      </Form.Control.Feedback>
-                    </Form.Group>
-                  </Col>
-                  <Col>
-                    <Form.Group>
-                      <Form.Label>End Date</Form.Label>
-                      <Form.Control
-                        type="date"
-                        name="endDate"
-                        placeholder="yyyy/mm/dd"
-                        value={shiftEndDate}
-                        onChange={(e) => handleInputChange(e, setShiftEndDate)}
-                        required
-                        ref={endDateRef}
-                      />
-                      <Form.Control.Feedback type="invalid">
-                        {shiftEndDate === ""
-                          ? "Please provide an ending date "
-                          : null}
-                        {datesInverted
-                          ? "End date cannot come before start date "
-                          : null}
-                        {dateAfterVigilEnd
-                          ? "End date cannot come after vigil ends"
-                          : null}
-                      </Form.Control.Feedback>
-                    </Form.Group>
-                  </Col>
-                </Form.Row>
-              )}
-              <Form.Row>
-                <Col>
-                  <Form.Group>
-                    <Form.Label>Start Time</Form.Label>
-                    <Form.Control
-                      type="time"
-                      name="startTime"
-                      placeholder="24-hour time"
-                      value={shiftStartTime}
-                      onChange={(e) => handleInputChange(e, setShiftStartTime)}
-                      required
-                      ref={startTimeRef}
-                    />
-                    <Form.Control.Feedback type="invalid">
-                      {shiftStartTime === ""
-                        ? "Please provide a starting time "
-                        : null}
-                      {beforeStart
-                        ? "Start time cannot come before a vigil has started"
-                        : null}
-                    </Form.Control.Feedback>
-                  </Form.Group>
-                </Col>
-                <Col>
-                  <Form.Group>
-                    <Form.Label>End Time</Form.Label>
-                    <Form.Control
-                      type="time"
-                      name="endTime"
-                      placeholder="ex. 18:00"
-                      value={shiftEndTime}
-                      onChange={(e) => handleInputChange(e, setShiftEndTime)}
-                      required
-                      ref={endTimeRef}
-                    />
-                    <Form.Control.Feedback type="invalid">
-                      {shiftEndTime === ""
-                        ? "Please provide an ending time "
-                        : null}
-                      {endsBeforeStarts
-                        ? "End time cannot not come before start time "
-                        : null}
-                      {afterEnd
-                        ? "End time cannot be after a vigil has ended."
-                        : null}
-                    </Form.Control.Feedback>
-                  </Form.Group>
-                </Col>
-              </Form.Row>
-              {showDateFeedback ? (
-                <Form.Row>
-                  <Col>
-                    <div style={{ color: "#ff0000" }}>
-                      Please enter the correct date and time format.
-                    </div>
-                  </Col>
-                </Form.Row>
-              ) : null}
-              <SignUpButton type="submit">
-                {isAdmin ? "Block off" : "Sign Up"}
-              </SignUpButton>
-            </Form>
-            <StyledModal show={show} centered>
-              <Modal.Body>
-                Are you sure you want to delete this Vigil?
-              </Modal.Body>
-              <Modal.Footer>
-                <StyledButton onClick={() => setShow(false)}>
-                  Cancel
-                </StyledButton>
-                <StyledButton onClick={() => deleteShiftDocument()}>
-                  Ok
-                </StyledButton>
-              </Modal.Footer>
-            </StyledModal>
-          </StyledCard>
-        </Col>
-      </Row>
+                <Form.Control.Feedback type="invalid">
+                  {shiftStartDate === ""
+                    ? "Please provide a starting date "
+                    : null}
+                </Form.Control.Feedback>
+              </Form.Group>
+              <Form.Group>
+                <Form.Label>Start Time</Form.Label>
+                <Form.Control
+                  type="time"
+                  name="startTime"
+                  placeholder="24-hour time"
+                  value={shiftStartTime}
+                  onChange={(e) => handleInputChange(e, setShiftStartTime)}
+                  required
+                />
+                <Form.Control.Feedback type="invalid">
+                  {shiftStartTime === ""
+                    ? "Please provide a starting time "
+                    : null}
+                </Form.Control.Feedback>
+              </Form.Group>
+            </Col>
+            <Col>
+              <Form.Group>
+                <Form.Label>Last Name</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="lastname"
+                  value={lastName}
+                  onChange={(e) => handleInputChange(e, setLastName)}
+                  required
+                />
+                <Form.Control.Feedback type="invalid">
+                  {lastName === "" ? "Please provide a last name " : null}
+                </Form.Control.Feedback>
+              </Form.Group>
+              <Form.Group>
+                <Form.Label>End Date</Form.Label>
+                <Form.Control
+                  type="date"
+                  name="endDate"
+                  placeholder="yyyy/mm/dd"
+                  value={shiftEndDate}
+                  onChange={(e) => handleInputChange(e, setShiftEndDate)}
+                  required
+                  ref={endDateRef}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {shiftEndDate === ""
+                    ? "Please provide an ending date "
+                    : null}
+                  {datesInverted
+                    ? "End date cannot come before start date "
+                    : null}
+                </Form.Control.Feedback>
+              </Form.Group>
+              <Form.Group>
+                <Form.Label>End Time</Form.Label>
+                <Form.Control
+                  type="time"
+                  name="endTime"
+                  placeholder="ex. 18:00"
+                  value={shiftEndTime}
+                  onChange={(e) => handleInputChange(e, setShiftEndTime)}
+                  required
+                  ref={endTimeRef}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {shiftEndTime === ""
+                    ? "Please provide an ending time "
+                    : null}
+                  {endsBeforeStarts
+                    ? "End time cannot not come before start time "
+                    : null}
+                </Form.Control.Feedback>
+              </Form.Group>
+            </Col>
+          </Form.Row>
+          <SignUpButton type="submit">Sign Up</SignUpButton>
+        </Form>
+      </StyledCard>
     </Container>
   );
 }
 
 ShiftDetails.propTypes = {
-  shift: shiftPropType.isRequired,
+  vigil: vigilPropType.isRequired,
   setShowModal: PropTypes.func.isRequired,
   curDate: PropTypes.instanceOf(Date).isRequired,
 };

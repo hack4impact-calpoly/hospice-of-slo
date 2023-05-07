@@ -8,15 +8,6 @@ const vigilPropType = PropTypes.shape({
   notes: PropTypes.string,
 });
 
-const shiftPropType = PropTypes.shape({
-  // id: PropTypes.string,
-  startTime: PropTypes.instanceOf(Date),
-  endTime: PropTypes.instanceOf(Date),
-  firstName: PropTypes.string,
-  lastName: PropTypes.string,
-  // notes: PropTypes.string,
-});
-
 const discussionPropType = PropTypes.shape({
   id: PropTypes.string,
   dateCreated: PropTypes.string,
@@ -25,4 +16,4 @@ const discussionPropType = PropTypes.shape({
   messages: PropTypes.arrayOf(PropTypes.shape), // this might break it?
 });
 
-export { shiftPropType, discussionPropType };
+export { vigilPropType, discussionPropType };
