@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom"; // eslint-disable-line
-import { formatDate } from "@fullcalendar/core";
+import { useHistory } from "react-router-dom";
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
@@ -9,6 +9,7 @@ import { eventShiftsFormatted } from "./sampleData";
 import "./newCalendar.css";
 import mouseOverIcon from "../../../../images/mouseovericon.svg";
 import ModalDetails from "./modalDetails";
+import { addShiftPress } from "./shiftDetails";
 
 export default function NewCalendar() {
   const [showModal, setShowModal] = useState(false);
@@ -22,20 +23,27 @@ export default function NewCalendar() {
   });
   const handleCloseClick = () => setShowModal(false);
 
+  const history = useHistory();
+
+  const addEventButton = {
+    text: "Add Event",
+    click: () => history.push("/schedule/create-shift"),
+  };
+
+  // const addShiftButton = {
+  //   text: "Add Shift",
+  //   click: () => setShowModal(true),
+  // };
+
   function handleMouseEnter(info) {
     const nameAddressString = info.event.title;
     const at = nameAddressString.indexOf("at");
     const volunteerName = nameAddressString.slice(0, at);
     const eventAddress = nameAddressString.slice(at + 3);
-    const shiftStartTime = formatDate(info.start, {
-      hour: "numeric",
-      minute: "2-digit",
-    });
-    const shiftEndtime = formatDate(info.end, {
-      hour: "numeric",
-      minute: "2-digit",
-    });
+    const shiftStartTime = info.start;
+    const shiftEndTime = info.end;
 
+    console.log({ start: shiftStartTime, end: shiftEndTime });
     const extendedInfoElement = (
       <div id="extended-info">
         <div className="extended-info-member">
@@ -54,7 +62,7 @@ export default function NewCalendar() {
           <div className="extended-info-header">
             <strong>Shift End:</strong>
           </div>
-          <div className="extended-info-text">{shiftEndtime}</div>
+          <div className="extended-info-text">{shiftEndTime}</div>
         </div>
         <div className="extended-info-member">
           <div className="extended-info-header">
@@ -98,7 +106,7 @@ export default function NewCalendar() {
       id="expanded-shift-calendar"
       plugins={[timeGridPlugin, interactionPlugin]}
       headerToolbar={{
-        left: "prev,next today",
+        left: "prev,next today addEventButton",
         center: "title",
         right: "",
       }}
@@ -109,6 +117,7 @@ export default function NewCalendar() {
       events={eventShiftsFormatted}
       eventMaxStack={2}
       displayEventEnd
+      customButtons={{ addEventButton }}
       eventMouseEnter={(info) => handleMouseEnter(info)}
       eventMouseLeave={(info) => handleMouseLeave(info)}
       select={(info) => handleSelection(info)}

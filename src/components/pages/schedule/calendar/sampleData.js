@@ -1,3 +1,5 @@
+import moment from "moment";
+
 const events = [
   {
     title: "v1",
@@ -6,20 +8,20 @@ const events = [
         id: "p1",
         name: "Jim Jones",
         address: "300 Cherry Circle",
-        shiftStartTime: "2023-02-02T10:30:00-05:00",
-        shiftEndTime: "2023-02-02T11:30:00-05:00",
+        shiftStartTime: moment().format(),
+        shiftEndTime: moment().add(4, "hours").format(),
       },
       {
         id: "p2",
         name: "Sally Seagull",
         address: "300 Cherry Circle",
-        shiftStartTime: "2023-02-02T10:30:00-05:00",
-        shiftEndTime: "2023-02-02T11:30:00-05:00",
+        shiftStartTime: moment().subtract(3, "hours").format(),
+        shiftEndTime: moment().add(1, "hours").format(),
       },
     ],
     address: "300 Cherry Circle",
-    startTime: "2023-02-02T10:30:00-05:00",
-    endTime: "2023-02-02T12:30:00-05:00",
+    startTime: moment().subtract(3, "hours").format(),
+    endTime: moment().add(4, "hours").format(),
     notes: "Insert note here",
   },
 
