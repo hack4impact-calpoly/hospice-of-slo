@@ -17,7 +17,6 @@ const ListWrapper = styled.div`
 export default function Valid() {
     // Gets user data from redux store
     const users = useSelector((state) => state.users.users);
-    // const isValidated = useSelector((state) => state.user.user.isValidated);
 
     // Filtering function to get non validated users for admins to see
     function checkValid(user) {
