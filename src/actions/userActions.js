@@ -1,7 +1,7 @@
 import {
   INITIALIZE_USER,
-  // ADD_SHIFT,
-  // DELETE_SHIFT,
+  ADD_SHIFT,
+  DELETE_SHIFT,
 } from "../reduxConstants/index";
 
 const initializeUser = (user) => ({
@@ -9,18 +9,18 @@ const initializeUser = (user) => ({
   user,
 });
 
-// const addShift = (newShift) => ({
-//   type: ADD_SHIFT,
-//   payload: { newShift },
-// });
+const addShift = (newShift) => ({
+  type: ADD_SHIFT,
+  payload: { newShift },
+});
 
-// const deleteShift = (oldShiftId) => ({
-//   type: DELETE_SHIFT,
-//   payload: { oldShiftId },
-// });
+const deleteShift = (oldShiftId) => ({
+  type: DELETE_SHIFT,
+  payload: { oldShiftId },
+});
 
 export default {
   initializeUser,
-  // addShift,
-  // deleteShift,
+  addShift,
+  deleteShift,
 };
