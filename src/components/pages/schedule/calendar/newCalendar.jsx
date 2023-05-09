@@ -9,7 +9,6 @@ import { eventShiftsFormatted } from "./sampleData";
 import "./newCalendar.css";
 import mouseOverIcon from "../../../../images/mouseovericon.svg";
 import ModalDetails from "./modalDetails";
-import { addShiftPress } from "./shiftDetails";
 
 export default function NewCalendar() {
   const [showModal, setShowModal] = useState(false);

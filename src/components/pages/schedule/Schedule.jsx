@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
 import HeaderWithNav from "../../navigation/nav-header";
-import Calendar from "./calendar/Calendar";
+import newCalendar from "./calendar/newCalendar";
 
 const PaddedDiv = styled.div`
   padding: 0 2%;
@@ -16,8 +16,8 @@ export default function Schedule(props) {
 
   // Gets Vigil Data from redux store
   const storeShifts = useSelector((state) => state.vigils.vigils);
-  const getVigilInfo = () => {
-    const vigilsData = [];
+  const getShiftInfo = () => {
+    const shiftData = [];
     storeVigils.forEach((v) => {
       vigilsData.push({
         title: v.address,
@@ -39,7 +39,7 @@ export default function Schedule(props) {
     <div>
       <HeaderWithNav>Schedule</HeaderWithNav>
       <PaddedDiv>
-        <Calendar eventData={eventData} setSelectVigil={setSelectVigil} />
+        <NewCalendar eventData={eventData} setSelectVigil={setSelectVigil} />
       </PaddedDiv>
     </div>
   );
