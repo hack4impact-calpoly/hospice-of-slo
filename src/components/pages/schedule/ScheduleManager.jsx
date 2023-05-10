@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Route, Switch, useRouteMatch } from "react-router-dom";
-import CreateShift from "./createVigil/CreateVigil";
+
 import Schedule from "./Schedule";
 
 function ScheduleManager() {

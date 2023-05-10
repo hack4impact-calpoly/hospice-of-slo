@@ -2,9 +2,9 @@ import {
     INITIALIZE_SHIFTS,
   } from "../reduxConstants/index";
   
-  const initializeShifts = (shift) => ({
+  const initializeShifts = (shifts) => ({
     type: INITIALIZE_SHIFTS,
-    shift,
+    shifts,
   });
 
   
