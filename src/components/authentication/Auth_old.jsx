@@ -107,22 +107,22 @@ const retrieveUsers = async (dbRef) => {
   return pendingUsers.concat(users);
 };
 
-const retrieveShifts = async (dbRef) => {
-  const shifts = [];
-  const shiftsRef = dbRef.collection("shifts");
-  const shiftsSnapshot = await shiftsRef.get();
+const retrieveVigils = async (dbRef) => {
+  const vigils = [];
+  const vigilsRef = dbRef.collection("vigils");
+  const vigilsSnapshot = await vigilsRef.get();
 
-  shiftsSnapshot.forEach((doc) => {
-    const { startTime, endTime, firstName, lastName } = doc.data();
-    shifts.push({
+  vigilsSnapshot.forEach((doc) => {
+    const { address, startTime, endTime, notes } = doc.data();
+    vigils.push({
       id: doc.id,
+      address,
       startTime: startTime.toDate(),
       endTime: endTime.toDate(),
-      firstName,
-      lastName
+      notes,
     });
   });
-  return shifts;
+  return vigils;
 };
 
 const retrieveDiscussions = async (dbRef) => {
@@ -160,11 +160,11 @@ const retrieveDiscussions = async (dbRef) => {
 
 const retrieveHistoryShifts = async (dbRef) => {
   const historyShifts = [];
-  const shiftsRef = dbRef.collection("shifts");
-  const shiftsSnapshot = await shiftsRef.get();
+  const vigilsRef = dbRef.collection("vigils");
+  const vigilsSnapshot = await vigilsRef.get();
 
-  shiftsSnapshot.forEach(async (doc) => {
-    const historyShiftsRef = shiftsRef.doc(doc.id).collection("shifts");
+  vigilsSnapshot.forEach(async (doc) => {
+    const historyShiftsRef = vigilsRef.doc(doc.id).collection("shifts");
     const historyShiftsSnapshot = await historyShiftsRef.get();
 
     historyShiftsSnapshot.forEach(async (shift) => {
@@ -201,16 +201,16 @@ export default function AuthProvider({ children }) {
       const firestoreResponse = await Promise.all([
         retrieveUser(dbRef), // Gets current users prevShifts and isAdmin?
         retrieveUsers(dbRef), // Gets all users contact/account information
-        retrieveShifts(dbRef),
+        retrieveVigils(dbRef),
         retrieveDiscussions(dbRef), // Gets discussions
         retrieveHistoryShifts(dbRef),
       ]);
-      const [user, users, shifts, discussions, historyShifts] =
+      const [user, users, vigils, discussions, historyShifts] =
         firestoreResponse;
       // Initialize redux store
       await dispatch(actions.user.initializeUser(user));
       await dispatch(actions.users.initializeUsers(users));
-      await dispatch(actions.shifts.initalizeShifts(shifts));
+      await dispatch(actions.vigils.initalizeVigils(vigils));
       await dispatch(actions.discussions.initializeDiscussions(discussions));
       await dispatch(actions.history.initializeHistory(historyShifts));
     };

@@ -49,7 +49,7 @@ function CreateVigil({ curEvent }) {
 
   async function onSubmit(data, event) {
     event.preventDefault();
-    const { address, startDate, startTime, endDate, endTime, notes } = data;
+    const {  startDate, startTime, endDate, endTime } = data;
 
     const start = combineDateAndTime(startDate, startTime);
     const end = combineDateAndTime(endDate, endTime);
@@ -61,10 +61,10 @@ function CreateVigil({ curEvent }) {
     setShowDateFeedback(false);
 
     const shift = {
-      address,
       startTime: start,
       endTime: end,
-      notes,
+      firstName,
+      lastName
     };
     const db = firebase.firestore();
 
@@ -91,9 +91,9 @@ function CreateVigil({ curEvent }) {
       );
     } else {
       // Creating new event
-      const backRef = await db.collection("vigils").add(shift);
+      const backRef = await db.collection("shifts").add(shift);
       await db.collection("discussions").add({
-        name: shift.address,
+        name: shift.firstName,
         dateCreated: firebase.firestore.FieldValue.serverTimestamp(),
         pinned: false,
       });

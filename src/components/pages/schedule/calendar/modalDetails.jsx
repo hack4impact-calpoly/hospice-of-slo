@@ -3,7 +3,8 @@ import { Col, Container, Card, Form, Alert } from "react-bootstrap";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import moment from "moment";
-import { vigilPropType } from "../../../../dataStructures/propTypes";
+import { shiftPropType } from "../../../../dataStructures/propTypes";
+import { useDispatch } from "react-redux";
 import { combineDateAndTime } from "../createVigil/CreateVigilHelper";
 // import "./modalDetails.css";
 
@@ -28,8 +29,9 @@ const SignUpButton = styled.button`
   }
 `;
 
-export default function ShiftDetails({ vigil, setShowModal, curDate }) {
-  const { startTime, endTime } = vigil;
+export default function ShiftDetails({ shift, setShowModal, curDate }) {
+  
+  const { startTime, endTime } = shift;
   const isSingleDay = moment(startTime).isSame(endTime, "day");
   const [shiftStartTime, setShiftStartTime] = useState(
     moment(startTime).format("HH:mm") || ""
@@ -58,7 +60,9 @@ export default function ShiftDetails({ vigil, setShowModal, curDate }) {
       firstName,
       lastName,
     };
-    console.log(newShift);
+
+    
+
   }
 
   const [showDateWarning, setShowDateWarning] = useState(
@@ -258,7 +262,7 @@ export default function ShiftDetails({ vigil, setShowModal, curDate }) {
 }
 
 ShiftDetails.propTypes = {
-  vigil: vigilPropType.isRequired,
+  shift: shiftPropType.isRequired,
   setShowModal: PropTypes.func.isRequired,
   curDate: PropTypes.instanceOf(Date).isRequired,
 };

@@ -23,14 +23,14 @@ const shiftReducer = (state = initialState, action) => {
     }
     case EDIT_SHIFT: {
       const shiftsCopy = state.shifts.filter(
-        (v) => v.id !== action.payload.oldShiftId
+        (shift) => shift.id !== action.payload.oldShiftId
       );
       shiftsCopy.push(action.payload.newShift);
       return { shifts: shiftsCopy };
     }
     case DELETE_SHIFT: {
       const shiftsCopy = state.shifts.filter(
-        (v) => v.id !== action.payload.oldShiftId
+        (shift) => shift.id !== action.payload.oldShiftId
       );
       return { shifts: shiftsCopy };
     }
@@ -39,4 +39,4 @@ const shiftReducer = (state = initialState, action) => {
   }
 };
 
-export default vigilReducer;
+export default shiftReducer;

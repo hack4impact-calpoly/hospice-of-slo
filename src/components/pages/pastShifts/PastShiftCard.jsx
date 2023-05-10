@@ -31,10 +31,9 @@ const Date = styled.p`
   }
 `;
 
-export default function PastShiftCard({ address, date, time }) {
+export default function PastShiftCard({ date, time }) {
   return (
     <GreyDiv>
-      <Address>{address}</Address>
       <Date>{date}</Date>
       <Time>{time}</Time>
     </GreyDiv>
