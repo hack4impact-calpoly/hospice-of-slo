@@ -3,8 +3,8 @@ import { Col, Container, Card, Form, Alert } from "react-bootstrap";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import moment from "moment";
-import { shiftPropType } from "../../../../dataStructures/propTypes";
 import { useDispatch } from "react-redux";
+import { shiftPropType } from "../../../../dataStructures/propTypes";
 import { combineDateAndTime } from "../createVigil/CreateVigilHelper";
 // import "./modalDetails.css";
 
@@ -30,7 +30,6 @@ const SignUpButton = styled.button`
 `;
 
 export default function ShiftDetails({ shift, setShowModal, curDate }) {
-  
   const { startTime, endTime } = shift;
   const isSingleDay = moment(startTime).isSame(endTime, "day");
   const [shiftStartTime, setShiftStartTime] = useState(
@@ -60,9 +59,6 @@ export default function ShiftDetails({ shift, setShowModal, curDate }) {
       firstName,
       lastName,
     };
-
-    
-
   }
 
   const [showDateWarning, setShowDateWarning] = useState(

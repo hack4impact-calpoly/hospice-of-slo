@@ -10,7 +10,7 @@ import moment from "moment";
 import firebase from "firebase/app";
 import "firebase/firestore";
 import styled from "styled-components";
-import { vigilPropType } from "../../../../dataStructures/propTypes";
+import { shiftPropType } from "../../../../dataStructures/propTypes";
 import actions from "../../../../actions";
 
 const StyledDrop = styled.button`
@@ -42,7 +42,7 @@ function ShiftCalendar({ shift, isSingleDay, curDate }) {
   // Gets all shifts from the vigil that was clicked on.
   const allShifts = [];
   storeShifts.forEach((shift) => {
-    allShifts.push(shift)
+    allShifts.push(shift);
   });
 
   const getShifts = () => {
@@ -188,7 +188,7 @@ function ShiftCalendar({ shift, isSingleDay, curDate }) {
 }
 
 ShiftCalendar.propTypes = {
-  shift: vigilPropType.isRequired,
+  shift: shiftPropType.isRequired,
   isSingleDay: PropTypes.bool.isRequired,
   curDate: PropTypes.instanceOf(Date).isRequired,
 };

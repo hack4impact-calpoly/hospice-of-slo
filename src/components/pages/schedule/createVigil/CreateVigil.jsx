@@ -49,7 +49,7 @@ function CreateVigil({ curEvent }) {
 
   async function onSubmit(data, event) {
     event.preventDefault();
-    const {  startDate, startTime, endDate, endTime } = data;
+    const { startDate, startTime, endDate, endTime } = data;
 
     const start = combineDateAndTime(startDate, startTime);
     const end = combineDateAndTime(endDate, endTime);
@@ -64,7 +64,7 @@ function CreateVigil({ curEvent }) {
       startTime: start,
       endTime: end,
       firstName,
-      lastName
+      lastName,
     };
     const db = firebase.firestore();
 

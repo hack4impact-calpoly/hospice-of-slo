@@ -1,14 +1,10 @@
-import {
-    INITIALIZE_SHIFTS,
-  } from "../reduxConstants/index";
-  
-  const initializeShifts = (shifts) => ({
-    type: INITIALIZE_SHIFTS,
-    shifts,
-  });
+import { INITIALIZE_SHIFTS } from "../reduxConstants/index";
 
-  
-  export default {
-    initializeShifts,
-  };
-  
+const initializeShifts = (shifts) => ({
+  type: INITIALIZE_SHIFTS,
+  shifts,
+});
+
+export default {
+  initializeShifts,
+};

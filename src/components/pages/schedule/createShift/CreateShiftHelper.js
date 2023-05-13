@@ -5,83 +5,82 @@ import firebase from "firebase/app";
 import "firebase/firestore";
 import {
   timeComesBefore,
-//   eventDataToFront,
+  //   eventDataToFront,
   combineDateAndTime,
   dateComesBefore,
-} from "./CreateVigilHelper";
+} from "./CreateShiftHelper";
 import { shiftPropType } from "../../../../dataStructures/propTypes";
 import actions from "../../../../actions";
 
-
 async function CreateShift({ curEvent }) {
-    //   // Event Editing info
-    //   const isEditing = Object.keys(curEvent).length !== 0;
-    //   const defaultVals = isEditing ? eventDataToFront(curEvent) : curEvent;
+  //   // Event Editing info
+  //   const isEditing = Object.keys(curEvent).length !== 0;
+  //   const defaultVals = isEditing ? eventDataToFront(curEvent) : curEvent;
 
-    // Redux setup
-    const dispatch = useDispatch();
+  // Redux setup
+  const dispatch = useDispatch();
 
-    //   // Form Stuff
-    //   const { register, getValues, handleSubmit, errors } = useForm({
-    //     defaultValues: defaultVals,
-    //   });
-    //   const history = useHistory();
+  //   // Form Stuff
+  //   const { register, getValues, handleSubmit, errors } = useForm({
+  //     defaultValues: defaultVals,
+  //   });
+  //   const history = useHistory();
 
-    //   const [showDateFeedback, setShowDateFeedback] = React.useState(false);
+  //   const [showDateFeedback, setShowDateFeedback] = React.useState(false);
 
-    event.preventDefault();
-    const {  startDate, startTime, endDate, endTime } = data;
+  event.preventDefault();
+  const { startDate, startTime, endDate, endTime } = data;
 
-    const start = combineDateAndTime(startDate, startTime);
-    const end = combineDateAndTime(endDate, endTime);
+  const start = combineDateAndTime(startDate, startTime);
+  const end = combineDateAndTime(endDate, endTime);
 
-    if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) {
+  if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) {
     setShowDateFeedback(true);
     return;
-    }
-    setShowDateFeedback(false);
+  }
+  setShowDateFeedback(false);
 
-    const shift = {
+  const shift = {
     startTime: start,
     endTime: end,
     firstName,
-    lastName
-    };
-    const db = firebase.firestore();
+    lastName,
+  };
+  const db = firebase.firestore();
 
-    if (isEditing) {
+  if (isEditing) {
     // Editing current event
     // Changes the address of the vigil
     await db.collection("vigils").doc(curEvent.id).set(shift);
     // Changes the address of each shift inside of the vigil
     await db
-    .collection("vigils")
-    .doc(curEvent.id)
-    .collection("shifts")
-    .get()
-    .then((querySnapshot) => {
+      .collection("vigils")
+      .doc(curEvent.id)
+      .collection("shifts")
+      .get()
+      .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
-        doc.ref.update({
+          doc.ref.update({
             address: shift.address,
+          });
         });
-        });
-    });
+      });
 
     dispatch(
-    actions.vigils.editVigil(curEvent.id, { ...shift, id: curEvent.id })
+      actions.vigils.editVigil(curEvent.id, { ...shift, id: curEvent.id })
     );
-    } else {
+  } else {
     // Creating new event
     const backRef = await db.collection("shifts").add(shift);
     await db.collection("discussions").add({
-    name: shift.firstName,
-    dateCreated: firebase.firestore.FieldValue.serverTimestamp(),
-    pinned: false,
+      name: shift.firstName,
+      dateCreated: firebase.firestore.FieldValue.serverTimestamp(),
+      pinned: false,
     });
     dispatch(actions.vigils.addVigil({ ...shift, id: backRef.id }));
-    }
+  }
 
-    history.push("/schedule");
+  history.push("/schedule");
 
   // Validation Functions
   /* Current Validation:
@@ -89,8 +88,6 @@ async function CreateShift({ curEvent }) {
         - endDate must be the same as or come after startDate
         - If startDate and endDate are the same, startTime must come before endTime
     */
-
-
 }
 
 CreateShift.propTypes = {

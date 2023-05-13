@@ -1,11 +1,11 @@
-import vigilActions from "./vigilActions";
 import usersActions from "./usersActions";
 import userActions from "./userActions";
 import discussionActions from "./discussionActions";
 import historyActions from "./historyActions";
+import shiftActions from "./shiftActions";
 
 export default {
-  vigils: vigilActions,
+  shifts: shiftActions,
   users: usersActions,
   user: userActions,
   discussions: discussionActions,

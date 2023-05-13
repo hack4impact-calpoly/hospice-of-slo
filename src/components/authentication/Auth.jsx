@@ -119,7 +119,7 @@ const retrieveShifts = async (dbRef) => {
       startTime: startTime.toDate(),
       endTime: endTime.toDate(),
       firstName,
-      lastName
+      lastName,
     });
   });
   return shifts;
@@ -163,29 +163,24 @@ const retrieveHistoryShifts = async (dbRef) => {
   const shiftsRef = dbRef.collection("shifts");
   const shiftsSnapshot = await shiftsRef.get();
 
-  shiftsSnapshot.forEach(async (doc) => {
-    const historyShiftsRef = shiftsRef.doc(doc.id).collection("shifts");
-    const historyShiftsSnapshot = await historyShiftsRef.get();
+  shiftsSnapshot.forEach(async (shift) => {
+    const { shiftEndTime, shiftStartTime, userRef } = shift.data();
+    const userSnapshot = await userRef.get();
 
-    historyShiftsSnapshot.forEach(async (shift) => {
-      const { address, shiftEndTime, shiftStartTime, userRef } = shift.data();
-      const userSnapshot = await userRef.get();
+    const { name, isAdmin } = userSnapshot.data();
 
-      const { name, isAdmin } = userSnapshot.data();
-
-      const thisShift = {
-        id: shift.id,
-        address,
-        shiftEndTime,
-        shiftStartTime,
-        name,
-        isAdmin,
-        userId: userSnapshot.id,
-        vigilId: doc.id,
-      };
-      historyShifts.push(thisShift);
-    });
+    const thisShift = {
+      id: shift.id,
+      shiftEndTime,
+      shiftStartTime,
+      name,
+      isAdmin,
+      userId: userSnapshot.id,
+      shiftId: shift.id,
+    };
+    historyShifts.push(thisShift);
   });
+
   return historyShifts;
 };
 
