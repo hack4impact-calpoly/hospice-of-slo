@@ -107,23 +107,23 @@ const retrieveUsers = async (dbRef) => {
   return pendingUsers.concat(users);
 };
 
-const retrieveShifts = async (dbRef) => {
-  const shifts = [];
-  const shiftsRef = dbRef.collection("shifts");
-  const shiftsSnapshot = await shiftsRef.get();
+// const retrieveShifts = async (dbRef) => {
+//   const shifts = [];
+//   const shiftsRef = dbRef.collection("shifts");
+//   const shiftsSnapshot = await shiftsRef.get();
 
-  shiftsSnapshot.forEach((doc) => {
-    const { startTime, endTime, firstName, lastName } = doc.data();
-    shifts.push({
-      id: doc.id,
-      startTime: startTime.toDate(),
-      endTime: endTime.toDate(),
-      firstName,
-      lastName,
-    });
-  });
-  return shifts;
-};
+//   shiftsSnapshot.forEach((doc) => {
+//     const { startTime, endTime, firstName, lastName } = doc.data();
+//     shifts.push({
+//       id: doc.id,
+//       startTime: startTime.toDate(),
+//       endTime: endTime.toDate(),
+//       firstName,
+//       lastName,
+//     });
+//   });
+//   return shifts;
+// };
 
 const retrieveDiscussions = async (dbRef) => {
   const discussions = [];
@@ -164,21 +164,26 @@ const retrieveHistoryShifts = async (dbRef) => {
   const shiftsSnapshot = await shiftsRef.get();
 
   shiftsSnapshot.forEach(async (shift) => {
-    const { shiftEndTime, shiftStartTime, userRef } = shift.data();
-    const userSnapshot = await userRef.get();
+    console.log(shift);
+    console.dir(shift);
+    console.log(shift.data());
+    console.dir(shift.data());
+    const { startTime, endTime, firstName, lastName } = shift.data();
+    // const userSnapshot = await userRef.get();
 
-    const { name, isAdmin } = userSnapshot.data();
-
-    const thisShift = {
-      id: shift.id,
-      shiftEndTime,
-      shiftStartTime,
-      name,
-      isAdmin,
-      userId: userSnapshot.id,
-      shiftId: shift.id,
-    };
-    historyShifts.push(thisShift);
+    try {
+      const thisShift = {
+        id: shift.id,
+        startTime,
+        endTime,
+        firstName,
+        lastName,
+      };
+      historyShifts.push(thisShift);
+      console.log(thisShift);
+    } catch (error) {
+      console.log("Error getting document:", error);
+    }
   });
 
   return historyShifts;
@@ -196,16 +201,13 @@ export default function AuthProvider({ children }) {
       const firestoreResponse = await Promise.all([
         retrieveUser(dbRef), // Gets current users prevShifts and isAdmin?
         retrieveUsers(dbRef), // Gets all users contact/account information
-        retrieveShifts(dbRef),
         retrieveDiscussions(dbRef), // Gets discussions
         retrieveHistoryShifts(dbRef),
       ]);
-      const [user, users, shifts, discussions, historyShifts] =
-        firestoreResponse;
+      const [user, users, discussions, historyShifts] = firestoreResponse;
       // Initialize redux store
       await dispatch(actions.user.initializeUser(user));
       await dispatch(actions.users.initializeUsers(users));
-      await dispatch(actions.shifts.initalizeShifts(shifts));
       await dispatch(actions.discussions.initializeDiscussions(discussions));
       await dispatch(actions.history.initializeHistory(historyShifts));
     };

@@ -13,7 +13,7 @@ import moment from "moment";
 import actions from "../../../../actions";
 import ShiftCalendar from "./shiftCalendar";
 import { shiftPropType } from "../../../../dataStructures/propTypes";
-import { combineDateAndTime } from "../createVigil/CreateVigilHelper";
+import { combineDateAndTime } from "../createShift/CreateShiftHelper";
 
 const StyledCard = styled(Card)`
   border: none;
@@ -192,10 +192,9 @@ export default function ShiftDetails({
   const [afterEnd, setAfterEnd] = useState(false);
 
   useEffect(() => {
-    let endDateHasError = false;
     let endTimeHasError = false;
     if (moment(shiftEndDate).isBefore(moment(shiftStartDate))) {
-      endDateHasError = true;
+      endTimeHasError = true;
       setDatesInverted(true);
       endDateRef.current.setCustomValidity(
         "End Date cannot come before Start Date"
@@ -353,9 +352,6 @@ export default function ShiftDetails({
                         {shiftStartDate === ""
                           ? "Please provide a starting date "
                           : null}
-                        {dateBeforeVigilStarts
-                          ? "Start date cannot come before vigil starts"
-                          : null}
                       </Form.Control.Feedback>
                     </Form.Group>
                   </Col>
@@ -377,9 +373,6 @@ export default function ShiftDetails({
                           : null}
                         {datesInverted
                           ? "End date cannot come before start date "
-                          : null}
-                        {dateAfterVigilEnd
-                          ? "End date cannot come after vigil ends"
                           : null}
                       </Form.Control.Feedback>
                     </Form.Group>

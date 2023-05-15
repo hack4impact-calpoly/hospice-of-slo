@@ -5,20 +5,24 @@ import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import { Modal } from "react-bootstrap";
-import { eventShiftsFormatted } from "./sampleData";
+import { useSelector } from "react-redux";
+import { getFormattedShifts } from "./sampleData";
 import "./newCalendar.css";
 import mouseOverIcon from "../../../../images/mouseovericon.svg";
 import ModalDetails from "./modalDetails";
 
 export default function NewCalendar() {
   const [showModal, setShowModal] = useState(false);
-  const [curDate, setCurDate] = useState(Date());
+  const currentShifts = useSelector(
+    (state) => state.historyShifts.historyShifts
+  );
+  const [curDate, setCurDate] = useState(new Date());
   const [clickedInfo, setClickedInfo] = useState({
     id: "",
-    address: "",
     endTime: new Date(),
     startTime: new Date(),
-    notes: "",
+    firstName: "",
+    lastName: "",
   });
   const handleCloseClick = () => setShowModal(false);
 
@@ -96,13 +100,12 @@ export default function NewCalendar() {
 
   function handleSelection(info) {
     setClickedInfo({ endTime: info.end, startTime: info.start });
-    setCurDate(info.start);
+    setCurDate(new Date(info.start));
     setShowModal(true);
   }
 
   const expandedCalendar = (
     <FullCalendar
-      id="expanded-shift-calendar"
       plugins={[timeGridPlugin, interactionPlugin]}
       headerToolbar={{
         left: "prev,next today addEventButton",
@@ -113,7 +116,7 @@ export default function NewCalendar() {
       selectable
       dayMaxEvents
       weekends
-      events={eventShiftsFormatted}
+      events={getFormattedShifts(currentShifts)}
       eventMaxStack={2}
       displayEventEnd
       customButtons={{ addEventButton }}
@@ -181,7 +184,7 @@ export default function NewCalendar() {
           </Modal.Header>
           <Modal.Body>
             <ModalDetails
-              vigil={clickedInfo}
+              shift={clickedInfo}
               setShowModal={setShowModal}
               curDate={curDate}
             />

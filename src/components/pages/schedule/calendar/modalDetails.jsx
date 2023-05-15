@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import firebase from "firebase";
 import { Col, Container, Card, Form, Alert } from "react-bootstrap";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import moment from "moment";
-import { useDispatch } from "react-redux";
 import { shiftPropType } from "../../../../dataStructures/propTypes";
-import { combineDateAndTime } from "../createVigil/CreateVigilHelper";
+import { combineDateAndTime } from "../createShift/CreateShiftHelper";
+import actions from "../../../../actions";
 // import "./modalDetails.css";
 
 const StyledCard = styled(Card)`
@@ -30,6 +33,9 @@ const SignUpButton = styled.button`
 `;
 
 export default function ShiftDetails({ shift, setShowModal, curDate }) {
+  // Redux setup
+  const dispatch = useDispatch();
+  const history = useHistory();
   const { startTime, endTime } = shift;
   const isSingleDay = moment(startTime).isSame(endTime, "day");
   const [shiftStartTime, setShiftStartTime] = useState(
@@ -49,16 +55,99 @@ export default function ShiftDetails({ shift, setShowModal, curDate }) {
   const [lastName, setLastName] = useState("");
   console.log({ start: startTime, end: endTime, date: curDate });
   console.log(isSingleDay);
+
+  async function CreateShift(curEvent) {
+    //   // Event Editing info
+    //   const isEditing = Object.keys(curEvent).length !== 0;
+    //   const defaultVals = isEditing ? eventDataToFront(curEvent) : curEvent;
+
+    //   // Form Stuff
+    //   const { register, getValues, handleSubmit, errors } = useForm({
+    //     defaultValues: defaultVals,
+    //   });
+
+    //   const [showDateFeedback, setShowDateFeedback] = React.useState(false);
+
+    // event.preventDefault();
+
+    // if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) {
+    //   setShowDateFeedback(true);
+    //   return;
+    // }
+    // setShowDateFeedback(false);
+    console.log("current event");
+    console.dir(curEvent);
+    const newShift = {
+      startTime: curEvent.startTime,
+      endTime: curEvent.endTime,
+      firstName: curEvent.firstName,
+      lastName: curEvent.lastName,
+    };
+    const db = firebase.firestore();
+
+    // if (isEditing) {
+    //   // Editing current event
+    //   // Changes the address of the vigil
+    //   await db.collection("vigils").doc(curEvent.id).set(shift);
+    //   // Changes the address of each shift inside of the vigil
+    //   await db
+    //     .collection("vigils")
+    //     .doc(curEvent.id)
+    //     .collection("shifts")
+    //     .get()
+    //     .then((querySnapshot) => {
+    //       querySnapshot.forEach((doc) => {
+    //         doc.ref.update({
+    //           address: shift.address,
+    //         });
+    //       });
+    //     });
+
+    //   dispatch(
+    //     actions.vigils.editVigil(curEvent.id, { ...shift, id: curEvent.id })
+    //   );
+    // } else {
+    //   // Creating new event
+    //   const backRef = await db.collection("shifts").add(shift);
+    //   await db.collection("discussions").add({
+    //     name: shift.firstName,
+    //     dateCreated: firebase.firestore.FieldValue.serverTimestamp(),
+    //     pinned: false,
+    //   });
+    //   dispatch(actions.vigils.addVigil({ ...shift, id: backRef.id }));
+    // }
+
+    await db.collection("shifts").add(newShift);
+    await db.collection("discussions").add({
+      name: newShift.firstName,
+      dateCreated: firebase.firestore.FieldValue.serverTimestamp(),
+      pinned: false,
+    });
+    dispatch(actions.history.addHistoryShift({ ...newShift }));
+
+    history.push("/shifts");
+
+    // Validation Functions
+    /* Current Validation:
+          - date, startTime, and endTime are required
+          - endDate must be the same as or come after startDate
+          - If startDate and endDate are the same, startTime must come before endTime
+      */
+  }
+
   async function addShiftPress() {
     // creates a new shift and adds it to a specific vigil
     const start = combineDateAndTime(shiftStartDate, shiftStartTime);
     const end = combineDateAndTime(shiftEndDate, shiftEndTime);
     const newShift = {
-      shiftStartTime: start,
-      shiftEndTime: end,
+      startTime: start,
+      endTime: end,
       firstName,
       lastName,
     };
+    console.log(newShift);
+
+    await CreateShift(newShift);
   }
 
   const [showDateWarning, setShowDateWarning] = useState(

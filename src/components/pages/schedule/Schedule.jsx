@@ -10,8 +10,7 @@ const PaddedDiv = styled.div`
   padding: 0 2%;
 `;
 
-export default function Schedule(props) {
-  const { setSelectShift } = props;
+export default function Schedule({ setSelectShift }) {
   const [eventData, setEventData] = useState([]);
 
   // Gets Vigil Data from redux store
