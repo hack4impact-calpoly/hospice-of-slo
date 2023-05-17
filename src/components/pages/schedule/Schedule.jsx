@@ -14,11 +14,15 @@ export default function Schedule({ setSelectShift }) {
   const [eventData, setEventData] = useState([]);
 
   // Gets Vigil Data from redux store
-  const storeShifts = useSelector((state) => state.shifts.shifts);
+  const storeShifts = useSelector((state) => state.historyShifts.historyShifts);
+  console.log(storeShifts);
+
   const getShiftInfo = () => {
     const shiftData = [];
     storeShifts.forEach((s) => {
+      const label = `${s.firstName} ${s.lastName}`;
       shiftData.push({
+        title: label,
         start: s.startTime,
         end: s.endTime,
         backgroundColor: "#8FCBD4",
@@ -36,7 +40,7 @@ export default function Schedule({ setSelectShift }) {
     <div>
       <HeaderWithNav>Schedule</HeaderWithNav>
       <PaddedDiv>
-        <Calendar eventData={eventData} setSelectShift={setSelectShift} />
+        <Calendar eventData={[...eventData]} setSelectShift={setSelectShift} />
       </PaddedDiv>
     </div>
   );

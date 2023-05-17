@@ -53,7 +53,7 @@ export default function getFormattedShifts(shifts) {
   const eventShiftsFormatted = eventShifts.map((shift) => ({
     start: shift.startTime,
     end: shift.endTime,
-    title: `${shift.firstName + shift.lastName}`,
+    title: `${shift.firstName} ${shift.lastName}`,
     extendedProps: {
       description: "N/A",
     },

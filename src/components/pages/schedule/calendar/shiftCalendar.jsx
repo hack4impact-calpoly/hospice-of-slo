@@ -36,20 +36,24 @@ function ShiftCalendar({ shiftEvent, isSingleDay, curDate }) {
   const [eventData, setEventData] = useState([]);
   const db = firebase.firestore();
   // Gets all shift Data from redux store
+  const allShifts = [];
+  db.collection("shifts")
+    .get()
+    .then((docs) => docs.forEach((doc) => allShifts.push(doc)));
   const storeShifts = useSelector((state) => state.historyShifts.historyShifts);
   const thisUser = useSelector((state) => state.user.user.id);
 
   // Gets all shifts from the vigil that was clicked on.
-  const allShifts = [];
-  storeShifts.forEach((shift) => {
-    allShifts.push(shift);
-  });
+
+  // storeShifts.forEach((shift) => {
+  //   allShifts.push(shift);
+  // });
 
   const getShifts = () => {
     const shiftData = [];
     allShifts.forEach((shift) => {
       const color = "#8FCBD4";
-      const label = shift.firstName + shift.lastName;
+      const label = `${shift.firstName} ${shift.lastName}`;
       shiftData.push({
         title: label,
         start: shift.startTime.toDate().toISOString(),
@@ -63,7 +67,7 @@ function ShiftCalendar({ shiftEvent, isSingleDay, curDate }) {
 
   useEffect(() => {
     getShifts();
-  }, [storeShifts]); // This useEffect block gets whole collection of vigil documents upon redux updates
+  }, [storeShifts]); // This useEffect block gets whole collection of shift documents upon redux updates
 
   const volunteerCalendarHeader = {
     center: "",

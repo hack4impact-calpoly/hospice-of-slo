@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import moment from "moment";
 import ReactDOM from "react-dom"; // eslint-disable-line
 import { useHistory } from "react-router-dom";
 import FullCalendar from "@fullcalendar/react";
@@ -13,9 +14,15 @@ import ModalDetails from "./modalDetails";
 
 export default function NewCalendar() {
   const [showModal, setShowModal] = useState(false);
-  const currentShifts = useSelector(
-    (state) => state.historyShifts.historyShifts
-  );
+  const [eventData, setEventData] = useState([]);
+  const storeShifts = useSelector((state) => state.historyShifts.historyShifts);
+  // const thisUser = useSelector((state) => state.user.user.id);
+  // Gets all shifts from the vigil that was clicked on.
+
+  useEffect(() => {
+    setEventData(getFormattedShifts(storeShifts));
+  }, [storeShifts]); // This useEffect block gets whole collection of shift documents upon redux updates
+
   const [curDate, setCurDate] = useState(new Date());
   const [clickedInfo, setClickedInfo] = useState({
     id: "",
@@ -39,14 +46,16 @@ export default function NewCalendar() {
   // };
 
   function handleMouseEnter(info) {
-    const nameAddressString = info.event.title;
-    const at = nameAddressString.indexOf("at");
-    const volunteerName = nameAddressString.slice(0, at);
-    const eventAddress = nameAddressString.slice(at + 3);
-    const shiftStartTime = info.start;
-    const shiftEndTime = info.end;
+    console.log(info);
+    const volunteerName = info.event.title;
+    // const eventAddress = nameAddressString.slice(at + 3);
+    const shiftStartTime = moment(info.event._instance.range.start).format(
+      "hh:mm MM/DD/YYYY"
+    );
+    const shiftEndTime = moment(info.event._instance.range.end).format(
+      "hh:mm MM/DD/YYYY"
+    );
 
-    console.log({ start: shiftStartTime, end: shiftEndTime });
     const extendedInfoElement = (
       <div id="extended-info">
         <div className="extended-info-member">
@@ -67,12 +76,12 @@ export default function NewCalendar() {
           </div>
           <div className="extended-info-text">{shiftEndTime}</div>
         </div>
-        <div className="extended-info-member">
+        {/* <div className="extended-info-member">
           <div className="extended-info-header">
             <strong>Event Address:</strong>
           </div>
           <div className="extended-info-text">{eventAddress}</div>
-        </div>
+        </div> */}
       </div>
     );
     ReactDOM.render(
@@ -116,7 +125,7 @@ export default function NewCalendar() {
       selectable
       dayMaxEvents
       weekends
-      events={getFormattedShifts(currentShifts)}
+      events={eventData}
       eventMaxStack={2}
       displayEventEnd
       customButtons={{ addEventButton }}

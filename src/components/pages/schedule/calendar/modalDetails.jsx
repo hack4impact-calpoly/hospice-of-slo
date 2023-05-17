@@ -53,8 +53,6 @@ export default function ShiftDetails({ shift, setShowModal, curDate }) {
   );
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  console.log({ start: startTime, end: endTime, date: curDate });
-  console.log(isSingleDay);
 
   async function CreateShift(curEvent) {
     //   // Event Editing info
@@ -75,8 +73,6 @@ export default function ShiftDetails({ shift, setShowModal, curDate }) {
     //   return;
     // }
     // setShowDateFeedback(false);
-    console.log("current event");
-    console.dir(curEvent);
     const newShift = {
       startTime: curEvent.startTime,
       endTime: curEvent.endTime,
