@@ -8,9 +8,7 @@ import { useSelector } from "react-redux";
 import {
   BiCalendarAlt,
   BiChat,
-  BiClipboard,
   BiPhone,
-  BiTime,
   BiLogOut,
   BiUserPlus,
 } from "react-icons/bi";
@@ -79,24 +77,9 @@ export default function Navbar() {
       <NavLink to="/schedule" Icon={BiCalendarAlt}>
         Schedule
       </NavLink>
-      {isAdmin ? (
-        <NavLink to="/past-shifts" Icon={BiClipboard} fontSize="20px">
-          Blocked Off Shifts
-        </NavLink>
-      ) : (
-        <NavLink to="/past-shifts" Icon={BiClipboard}>
-          Past Shifts
-        </NavLink>
-      )}
       <NavLink to="/contacts" Icon={BiPhone}>
         Contacts
       </NavLink>
-      {isAdmin ? (
-        <NavLink to="/history" Icon={BiTime}>
-          History
-        </NavLink>
-      ) : null}
-
       {isAdmin ? (
         <NavLink to="/userValid" Icon={BiUserPlus} fontSize="20px">
           User Validation
