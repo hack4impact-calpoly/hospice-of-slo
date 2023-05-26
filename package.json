@@ -36,6 +36,7 @@
     "web-vitals": "^1.1.0"
   },
   "scripts": {
+    "dev": "nodemon index.js",
     "start": "react-scripts --openssl-legacy-provider start",
     "build": "react-scripts build",
     "test": "react-scripts test",

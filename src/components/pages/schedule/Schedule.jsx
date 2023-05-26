@@ -23,7 +23,7 @@ export default function Schedule(props) {
         title: v.address,
         start: v.startTime,
         end: v.endTime,
-        backgroundColor: "#8FCBD4",
+        backgroundColor: "#108888",
         notes: v.notes,
         id: v.id,
       });

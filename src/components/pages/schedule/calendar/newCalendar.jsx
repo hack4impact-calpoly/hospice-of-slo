@@ -77,6 +77,7 @@ export default function NewCalendar() {
   const expandedCalendar = (
     <FullCalendar
       id="expanded-shift-calendar"
+      className=".fc-agendaWeek-view"
       plugins={[timeGridPlugin, interactionPlugin]}
       headerToolbar={{
         left: "prev,next today",
@@ -92,6 +93,7 @@ export default function NewCalendar() {
       displayEventEnd
       eventMouseEnter={(info) => handleMouseEnter(info)}
       eventMouseLeave={(info) => handleMouseLeave(info)}
+      allDaySlot={false}
     />
   );
 
