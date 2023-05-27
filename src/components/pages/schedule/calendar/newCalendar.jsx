@@ -22,13 +22,18 @@ const StyledButton = styled.button`
   border: 2px solid #84c0c9;
   border-radius: 5px;
   padding: 6px 10px;
-  font-size: 14px;
+  font-size: 18px;
   fontfamily: Roboto;
 
   &:hover {
     color: white;
     background-color: #558e97;
   }
+`;
+
+const StyledDiv = styled.div`
+  padding: 10px;
+  font-size: 18px;
 `;
 
 export default function NewCalendar() {
@@ -212,7 +217,7 @@ export default function NewCalendar() {
           centered
         >
           <Modal.Body>
-            <div>
+            <StyledDiv>
               <div>
                 <strong>Volunteer Name:</strong>{" "}
                 {showSelectedItem?.volunteerName}
@@ -226,7 +231,7 @@ export default function NewCalendar() {
               <div>
                 <strong>Shift End:</strong> {showSelectedItem?.shiftEndTime}
               </div>
-            </div>
+            </StyledDiv>
           </Modal.Body>
           <StyledButton onClick={() => setShiftModal(false)}>Ok</StyledButton>
         </StyledModal>
