@@ -7,6 +7,7 @@ import interactionPlugin from "@fullcalendar/interaction";
 import styled from "styled-components";
 import { Modal } from "react-bootstrap";
 import { eventShiftsFormatted } from "./sampleData";
+import HeaderWithNav from "../../../navigation/nav-header";
 // import "firebase/firestore";
 import "./newCalendar.css";
 // import mouseOverIcon from "../../../../images/mouseovericon.svg";
@@ -195,38 +196,42 @@ export default function NewCalendar() {
   }, [isDesktopView]);
 
   return (
-    <div id="shift-calendar-box">
-      {/* <div onClick={handleClick}>{expandedCalendar}</div> */}
-      {/* <div id="shift-calendar">{expandedCalendar}</div> */}
-      <div id="shift-calendar">
-        {isDesktopView ? expandedCalendar : minimizedCalendar}
+    <div>
+      <HeaderWithNav>Schedule</HeaderWithNav>
+      <div id="shift-calendar-box">
+        {/* <div onClick={handleClick}>{expandedCalendar}</div> */}
+        {/* <div id="shift-calendar">{expandedCalendar}</div> */}
+        <div id="shift-calendar">
+          {isDesktopView ? expandedCalendar : minimizedCalendar}
+        </div>
+        {/* {isDesktopView ? <p>big</p> : <p>small</p>} */}
+        {/* <div id="shift-calendar">{expandedCalendar}</div> */}
+        <StyledModal
+          show={showShiftModal}
+          onHide={() => setShiftModal(false)}
+          centered
+        >
+          <Modal.Body>
+            <div>
+              <div>
+                <strong>Volunteer Name:</strong>{" "}
+                {showSelectedItem?.volunteerName}
+              </div>
+              <div>
+                <strong>Event Address:</strong> {showSelectedItem?.eventAddress}
+              </div>
+              <div>
+                <strong>Shift Start:</strong> {showSelectedItem?.shiftStartTime}
+              </div>
+              <div>
+                <strong>Shift End:</strong> {showSelectedItem?.shiftEndTime}
+              </div>
+            </div>
+          </Modal.Body>
+          <StyledButton onClick={() => setShiftModal(false)}>Ok</StyledButton>
+        </StyledModal>
+        {/* <div id="extended-info-container">{extendedInfoPlaceholder}</div> */}
       </div>
-      {/* {isDesktopView ? <p>big</p> : <p>small</p>} */}
-      {/* <div id="shift-calendar">{expandedCalendar}</div> */}
-      <StyledModal
-        show={showShiftModal}
-        onHide={() => setShiftModal(false)}
-        centered
-      >
-        <Modal.Body>
-          <div>
-            <div>
-              <strong>Volunteer Name:</strong> {showSelectedItem?.volunteerName}
-            </div>
-            <div>
-              <strong>Event Address:</strong> {showSelectedItem?.eventAddress}
-            </div>
-            <div>
-              <strong>Shift Start:</strong> {showSelectedItem?.shiftStartTime}
-            </div>
-            <div>
-              <strong>Shift End:</strong> {showSelectedItem?.shiftEndTime}
-            </div>
-          </div>
-        </Modal.Body>
-        <StyledButton onClick={() => setShiftModal(false)}>Ok</StyledButton>
-      </StyledModal>
-      {/* <div id="extended-info-container">{extendedInfoPlaceholder}</div> */}
     </div>
   );
 }
