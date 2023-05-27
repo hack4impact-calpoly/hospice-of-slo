@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import moment from "moment";
 import ReactDOM from "react-dom"; // eslint-disable-line
-import { useHistory } from "react-router-dom";
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
@@ -18,9 +17,13 @@ export default function NewCalendar() {
   const storeShifts = useSelector((state) => state.historyShifts.historyShifts);
   // const thisUser = useSelector((state) => state.user.user.id);
   // Gets all shifts from the vigil that was clicked on.
-
+  function getShifts(shifts) {
+    const allShifts = [];
+    shifts.forEach((shift) => allShifts.push(shift));
+    return allShifts;
+  }
   useEffect(() => {
-    setEventData(getFormattedShifts(storeShifts));
+    setEventData(getFormattedShifts(getShifts(storeShifts)));
   }, [storeShifts]); // This useEffect block gets whole collection of shift documents upon redux updates
 
   const [curDate, setCurDate] = useState(new Date());
@@ -33,12 +36,12 @@ export default function NewCalendar() {
   });
   const handleCloseClick = () => setShowModal(false);
 
-  const history = useHistory();
+  // const history = useHistory();
 
-  const addEventButton = {
-    text: "Add Event",
-    click: () => history.push("/schedule/create-shift"),
-  };
+  // // const addEventButton = {
+  // //   text: "Add Event",
+  // //   click: () => history.push("/schedule/create-shift"),
+  // // };
 
   // const addShiftButton = {
   //   text: "Add Shift",
@@ -46,15 +49,10 @@ export default function NewCalendar() {
   // };
 
   function handleMouseEnter(info) {
-    console.log(info);
     const volunteerName = info.event.title;
     // const eventAddress = nameAddressString.slice(at + 3);
-    const shiftStartTime = moment(info.event._instance.range.start).format(
-      "hh:mm MM/DD/YYYY"
-    );
-    const shiftEndTime = moment(info.event._instance.range.end).format(
-      "hh:mm MM/DD/YYYY"
-    );
+    const shiftStartTime = moment(info.event.start).format("hh:mm MM/DD/YYYY");
+    const shiftEndTime = moment(info.event.end).format("hh:mm MM/DD/YYYY");
 
     const extendedInfoElement = (
       <div id="extended-info">
@@ -117,7 +115,7 @@ export default function NewCalendar() {
     <FullCalendar
       plugins={[timeGridPlugin, interactionPlugin]}
       headerToolbar={{
-        left: "prev,next today addEventButton",
+        left: "prev,next today",
         center: "title",
         right: "",
       }}
@@ -128,7 +126,6 @@ export default function NewCalendar() {
       events={eventData}
       eventMaxStack={2}
       displayEventEnd
-      customButtons={{ addEventButton }}
       eventMouseEnter={(info) => handleMouseEnter(info)}
       eventMouseLeave={(info) => handleMouseLeave(info)}
       select={(info) => handleSelection(info)}

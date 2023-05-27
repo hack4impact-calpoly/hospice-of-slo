@@ -81,54 +81,10 @@ export default function ShiftDetails({ shift, setShowModal, curDate }) {
     };
     const db = firebase.firestore();
 
-    // if (isEditing) {
-    //   // Editing current event
-    //   // Changes the address of the vigil
-    //   await db.collection("vigils").doc(curEvent.id).set(shift);
-    //   // Changes the address of each shift inside of the vigil
-    //   await db
-    //     .collection("vigils")
-    //     .doc(curEvent.id)
-    //     .collection("shifts")
-    //     .get()
-    //     .then((querySnapshot) => {
-    //       querySnapshot.forEach((doc) => {
-    //         doc.ref.update({
-    //           address: shift.address,
-    //         });
-    //       });
-    //     });
-
-    //   dispatch(
-    //     actions.vigils.editVigil(curEvent.id, { ...shift, id: curEvent.id })
-    //   );
-    // } else {
-    //   // Creating new event
-    //   const backRef = await db.collection("shifts").add(shift);
-    //   await db.collection("discussions").add({
-    //     name: shift.firstName,
-    //     dateCreated: firebase.firestore.FieldValue.serverTimestamp(),
-    //     pinned: false,
-    //   });
-    //   dispatch(actions.vigils.addVigil({ ...shift, id: backRef.id }));
-    // }
-
     await db.collection("shifts").add(newShift);
-    await db.collection("discussions").add({
-      name: newShift.firstName,
-      dateCreated: firebase.firestore.FieldValue.serverTimestamp(),
-      pinned: false,
-    });
     dispatch(actions.history.addHistoryShift({ ...newShift }));
 
     history.push("/shifts");
-
-    // Validation Functions
-    /* Current Validation:
-          - date, startTime, and endTime are required
-          - endDate must be the same as or come after startDate
-          - If startDate and endDate are the same, startTime must come before endTime
-      */
   }
 
   async function addShiftPress() {
@@ -141,7 +97,6 @@ export default function ShiftDetails({ shift, setShowModal, curDate }) {
       firstName,
       lastName,
     };
-    console.log(newShift);
 
     await CreateShift(newShift);
   }

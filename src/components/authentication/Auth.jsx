@@ -164,18 +164,14 @@ const retrieveHistoryShifts = async (dbRef) => {
   const shiftsSnapshot = await shiftsRef.get();
 
   shiftsSnapshot.forEach(async (shift) => {
-    console.log(shift);
-    console.dir(shift);
-    console.log(shift.data());
-    console.dir(shift.data());
     const { startTime, endTime, firstName, lastName } = shift.data();
     // const userSnapshot = await userRef.get();
 
     try {
       const thisShift = {
         id: shift.id,
-        startTime,
-        endTime,
+        startTime: startTime.toDate(),
+        endTime: endTime.toDate(),
         firstName,
         lastName,
       };
