@@ -8,10 +8,7 @@ import Signup from "./components/authentication/signup";
 import ForgotPassword from "./components/authentication/forgotPassword";
 import ResetPassword from "./components/authentication/resetPassword";
 import Discussion from "./components/pages/discussion/Discussion";
-import PastShifts from "./components/pages/pastShifts/PastShifts";
 import Contacts from "./components/pages/contacts/Contacts";
-import History from "./components/pages/history/History";
-import HistoryTable from "./components/pages/history/HistoryTable";
 import PrivateRoute from "./components/authentication/PrivateRoute";
 import AuthProvider from "./components/authentication/Auth";
 import DiscussionThread from "./components/pages/discussion/DiscussionThread";
@@ -66,28 +63,19 @@ export default function App() {
           <Route path="/reset-password">
             <ResetPassword />
           </Route>
-          <PrivateRoute path="/schedule">
+          <PrivateRoute validatedOnly path="/schedule">
             <NewCalendar />
           </PrivateRoute>
-          <PrivateRoute path="/discussion/:id">
+          <PrivateRoute validatedOnly path="/discussion/:id">
             <DiscussionThread />
           </PrivateRoute>
-          <PrivateRoute path="/discussion">
+          <PrivateRoute validatedOnly path="/discussion">
             <Discussion />
           </PrivateRoute>
-          <PrivateRoute path="/past-shifts">
-            <PastShifts />
-          </PrivateRoute>
-          <PrivateRoute path="/contacts">
+          <PrivateRoute validatedOnly path="/contacts">
             <Contacts />
           </PrivateRoute>
-          <PrivateRoute adminOnly path="/history/:id">
-            <HistoryTable />
-          </PrivateRoute>
-          <PrivateRoute adminOnly path="/history">
-            <History />
-          </PrivateRoute>
-          <PrivateRoute adminOnly path="/userValid">
+          <PrivateRoute validatedOnly adminOnly path="/userValid">
             <UserValid />
           </PrivateRoute>
           <Route path="/not-validated">

@@ -142,7 +142,7 @@ export default function SignUp() {
             .then(() => {
               logUserData(user.user) // creates a document for user with corresponding ID
                 .then(() => {
-                  history.push("/");
+                  history.push("/not-validated");
                 });
             })
             .catch((error) => {

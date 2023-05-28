@@ -87,7 +87,6 @@ const retrieveUsers = async (dbRef) => {
         phone,
         accountStatus,
         isAdminAccount: isAdmin,
-
         isValidAccount: isValidated,
       });
     } else if (accountStatus !== "denied") {
