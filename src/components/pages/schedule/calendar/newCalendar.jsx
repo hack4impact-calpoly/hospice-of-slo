@@ -1,18 +1,18 @@
-
 import React, { useState, useEffect } from "react";
-import moment from "moment";
 import ReactDOM from "react-dom"; // eslint-disable-line
+import { formatDate } from "@fullcalendar/core";
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import { Modal } from "react-bootstrap";
 import { useSelector } from "react-redux";
+import styled from "styled-components";
 import { getFormattedShifts } from "./sampleData";
-import mouseOverIcon from "../../../../images/mouseovericon.svg";
+// import mouseOverIcon from "../../../../images/mouseovericon.svg";
 import ModalDetails from "./modalDetails";
 import HeaderWithNav from "../../../navigation/nav-header";
-import styled from "styled-components";
-import { eventShiftsFormatted } from "./sampleData";
+
+// import { eventShiftsFormatted } from "./sampleData";
 // import "firebase/firestore";
 import "./newCalendar.css";
 // import mouseOverIcon from "../../../../images/mouseovericon.svg";
@@ -40,7 +40,7 @@ export default function NewCalendar() {
   const [showShiftModal, setShiftModal] = useState(false);
   const [showSelectedItem, setSelectedItem] = useState(null);
   const [isDesktopView, setDesktopView] = useState(window.innerWidth > 900);
-  
+
   const [showModal, setShowModal] = useState(false);
   const [eventData, setEventData] = useState([]);
   const storeShifts = useSelector((state) => state.historyShifts.historyShifts);
@@ -77,61 +77,61 @@ export default function NewCalendar() {
   //   click: () => setShowModal(true),
   // };
 
-//   function handleMouseEnter(info) {
-//     const volunteerName = info.event.title;
-//     // const eventAddress = nameAddressString.slice(at + 3);
-//     const shiftStartTime = moment(info.event.start).format("hh:mm MM/DD/YYYY");
-//     const shiftEndTime = moment(info.event.end).format("hh:mm MM/DD/YYYY");
+  //   function handleMouseEnter(info) {
+  //     const volunteerName = info.event.title;
+  //     // const eventAddress = nameAddressString.slice(at + 3);
+  //     const shiftStartTime = moment(info.event.start).format("hh:mm MM/DD/YYYY");
+  //     const shiftEndTime = moment(info.event.end).format("hh:mm MM/DD/YYYY");
 
-//     const extendedInfoElement = (
-//       <div id="extended-info">
-//         <div className="extended-info-member">
-//           <div className="extended-info-header">
-//             <strong>Volunteer Name:</strong>
-//           </div>
-//           <div className="extended-info-text">{volunteerName}</div>
-//         </div>
-//         <div className="extended-info-member">
-//           <div className="extended-info-header">
-//             <strong>Shift Start:</strong>
-//           </div>
-//           <div className="extended-info-text">{shiftStartTime}</div>
-//         </div>
-//         <div className="extended-info-member">
-//           <div className="extended-info-header">
-//             <strong>Shift End:</strong>
-//           </div>
-//           <div className="extended-info-text">{shiftEndTime}</div>
-//         </div>
-//         {/* <div className="extended-info-member">
-//           <div className="extended-info-header">
-//             <strong>Event Address:</strong>
-//           </div>
-//           <div className="extended-info-text">{eventAddress}</div>
-//         </div> */}
-//       </div>
-//     );
-//     ReactDOM.render(
-//       extendedInfoElement,
-//       document.getElementById("extended-info-container")
-//     );
-//   }
+  //     const extendedInfoElement = (
+  //       <div id="extended-info">
+  //         <div className="extended-info-member">
+  //           <div className="extended-info-header">
+  //             <strong>Volunteer Name:</strong>
+  //           </div>
+  //           <div className="extended-info-text">{volunteerName}</div>
+  //         </div>
+  //         <div className="extended-info-member">
+  //           <div className="extended-info-header">
+  //             <strong>Shift Start:</strong>
+  //           </div>
+  //           <div className="extended-info-text">{shiftStartTime}</div>
+  //         </div>
+  //         <div className="extended-info-member">
+  //           <div className="extended-info-header">
+  //             <strong>Shift End:</strong>
+  //           </div>
+  //           <div className="extended-info-text">{shiftEndTime}</div>
+  //         </div>
+  //         {/* <div className="extended-info-member">
+  //           <div className="extended-info-header">
+  //             <strong>Event Address:</strong>
+  //           </div>
+  //           <div className="extended-info-text">{eventAddress}</div>
+  //         </div> */}
+  //       </div>
+  //     );
+  //     ReactDOM.render(
+  //       extendedInfoElement,
+  //       document.getElementById("extended-info-container")
+  //     );
+  //   }
 
-//   const extendedInfoPlaceholder = (
-//     <div id="extended-info-placeholder">
-//       <img
-//         id="mouse-over-icon"
-//         src={mouseOverIcon}
-//         alt="Mouse over a shift to see details."
-//       />
-//     </div>
-//   );
+  //   const extendedInfoPlaceholder = (
+  //     <div id="extended-info-placeholder">
+  //       <img
+  //         id="mouse-over-icon"
+  //         src={mouseOverIcon}
+  //         alt="Mouse over a shift to see details."
+  //       />
+  //     </div>
+  //   );
 
-//   function handleMouseLeave() {
-//     ReactDOM.render(
-//       extendedInfoPlaceholder,
-//       document.getElementById("extended-info-container")
-//     );
+  //   function handleMouseLeave() {
+  //     ReactDOM.render(
+  //       extendedInfoPlaceholder,
+  //       document.getElementById("extended-info-container")
+  //     );
 
   // function handleMouseEnter(info) {
   //   const nameAddressString = info.event.title;
@@ -309,23 +309,23 @@ export default function NewCalendar() {
         <div id="shift-calendar">
           {isDesktopView ? expandedCalendar : minimizedCalendar}
           <Modal
-              show={showModal}
-              size="md"
-              onEscapeKeyDown={handleCloseClick}
-              onHide={handleCloseClick}
-              centered
-            >
-              <Modal.Header className="font-weight-bold" closeButton>
-                Sign up for a Shift
-              </Modal.Header>
-              <Modal.Body>
-                <ModalDetails
-                  shift={clickedInfo}
-                  setShowModal={setShowModal}
-                  curDate={curDate}
-                />
-              </Modal.Body>
-            </Modal>
+            show={showModal}
+            size="md"
+            onEscapeKeyDown={handleCloseClick}
+            onHide={handleCloseClick}
+            centered
+          >
+            <Modal.Header className="font-weight-bold" closeButton>
+              Sign up for a Shift
+            </Modal.Header>
+            <Modal.Body>
+              <ModalDetails
+                shift={clickedInfo}
+                setShowModal={setShowModal}
+                curDate={curDate}
+              />
+            </Modal.Body>
+          </Modal>
         </div>
         {/* {isDesktopView ? <p>big</p> : <p>small</p>} */}
         {/* <div id="shift-calendar">{expandedCalendar}</div> */}
@@ -337,7 +337,8 @@ export default function NewCalendar() {
           <Modal.Body>
             <div>
               <div>
-                <strong>Volunteer Name:</strong> {showSelectedItem?.volunteerName}
+                <strong>Volunteer Name:</strong>{" "}
+                {showSelectedItem?.volunteerName}
               </div>
               <div>
                 <strong>Event Address:</strong> {showSelectedItem?.eventAddress}
