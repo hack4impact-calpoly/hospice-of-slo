@@ -10,6 +10,7 @@ import { getFormattedShifts } from "./sampleData";
 import "./newCalendar.css";
 import mouseOverIcon from "../../../../images/mouseovericon.svg";
 import ModalDetails from "./modalDetails";
+import HeaderWithNav from "../../../navigation/nav-header";
 
 export default function NewCalendar() {
   const [showModal, setShowModal] = useState(false);
@@ -132,72 +133,75 @@ export default function NewCalendar() {
     />
   );
 
-  // const minimizedCalendar = (
-  //   <FullCalendar
-  //     id="minimized-shift-calendar"
-  //     plugins={[timeGridPlugin, interactionPlugin]}
-  //     headerToolbar={{
-  //       left: "prev,next today",
-  //       center: "title",
-  //       right: "",
-  //     }}
-  //     initialView="timeGridDay"
-  //     selectable
-  //     dayMaxEvents
-  //     weekends
-  //     events={eventShiftsFormatted}
-  //     eventMaxStack={3}
-  //     displayEventEnd
-  //     eventMouseEnter={(info) => handleMouseEnter(info)}
-  //     eventMouseLeave={(info) => handleMouseLeave(info)}
-  //     dateClick={(info) => handleMouseClick(info)}
-  //   />
-  // );
+  const minimizedCalendar = (
+    <FullCalendar
+      id="minimized-shift-calendar"
+      plugins={[timeGridPlugin, interactionPlugin]}
+      headerToolbar={{
+        left: "prev,next today",
+        center: "title",
+        right: "",
+      }}
+      initialView="timeGridDay"
+      selectable
+      dayMaxEvents
+      weekends
+      events={eventData}
+      eventMaxStack={3}
+      displayEventEnd
+      eventMouseEnter={(info) => handleMouseEnter(info)}
+      eventMouseLeave={(info) => handleMouseLeave(info)}
+      select={(info) => handleSelection(info)}
+    />
+  );
 
-  // const updateMedia = () => {
-  //   if (window.innerWidth > 900) {
-  //     ReactDOM.render(
-  //       expandedCalendar,
-  //       document.getElementById("shift-calendar")
-  //     );
-  //   } else {
-  //     ReactDOM.render(
-  //       minimizedCalendar,
-  //       document.getElementById("shift-calendar")
-  //     );
-  //   }
-  // };
+  const updateMedia = () => {
+    if (window.innerWidth > 900) {
+      ReactDOM.render(
+        expandedCalendar,
+        document.getElementById("shift-calendar")
+      );
+    } else {
+      ReactDOM.render(
+        minimizedCalendar,
+        document.getElementById("shift-calendar")
+      );
+    }
+  };
 
-  // useEffect(() => {
-  //   updateMedia();
-  //   window.addEventListener("resize", updateMedia);
-  //   return () => window.removeEventListener("resize", updateMedia);
-  // });
+  useEffect(() => {
+    updateMedia();
+    window.addEventListener("resize", updateMedia);
+    return () => window.removeEventListener("resize", updateMedia);
+  });
 
   return (
-    <div id="shift-calendar-box">
-      <div id="shift-calendar">
-        {expandedCalendar}
-        <Modal
-          show={showModal}
-          size="md"
-          onEscapeKeyDown={handleCloseClick}
-          onHide={handleCloseClick}
-          centered
-        >
-          <Modal.Header className="font-weight-bold" closeButton>
-            Sign up for a Shift
-          </Modal.Header>
-          <Modal.Body>
-            <ModalDetails
-              shift={clickedInfo}
-              setShowModal={setShowModal}
-              curDate={curDate}
-            />
-          </Modal.Body>
-        </Modal>
+    <div>
+      <HeaderWithNav>Calendar</HeaderWithNav>
+      <div id="shift-calendar-box">
+        <div id="shift-calendar">
+          {expandedCalendar}
+          <Modal
+            show={showModal}
+            size="md"
+            onEscapeKeyDown={handleCloseClick}
+            onHide={handleCloseClick}
+            centered
+          >
+            <Modal.Header className="font-weight-bold" closeButton>
+              Sign up for a Shift
+            </Modal.Header>
+            <Modal.Body>
+              <ModalDetails
+                shift={clickedInfo}
+                setShowModal={setShowModal}
+                curDate={curDate}
+              />
+            </Modal.Body>
+          </Modal>
+        </div>
+        <div id="extended-info-container">{extendedInfoPlaceholder}</div>
       </div>
-      <div id="extended-info-container">{extendedInfoPlaceholder}</div>
     </div>
   );
 }

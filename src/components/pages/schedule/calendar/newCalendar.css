@@ -8,6 +8,7 @@
 #shift-calendar-box {
     display: flex;
     flex-direction: column;
+    padding-left:100px;
 }
 
 #extended-event-info {
