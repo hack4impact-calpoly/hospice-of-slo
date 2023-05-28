@@ -84,7 +84,7 @@ export default function ShiftDetails({ shift, setShowModal, curDate }) {
     await db.collection("shifts").add(newShift);
     dispatch(actions.history.addHistoryShift({ ...newShift }));
 
-    history.push("/shifts");
+    history.push("/schedule");
   }
 
   async function addShiftPress() {
