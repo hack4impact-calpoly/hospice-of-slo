@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import ReactDOM from "react-dom"; // eslint-disable-line
 import { formatDate } from "@fullcalendar/core";
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
@@ -8,13 +7,10 @@ import { Modal } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { getFormattedShifts } from "./sampleData";
-// import mouseOverIcon from "../../../../images/mouseovericon.svg";
 import ModalDetails from "./modalDetails";
 import HeaderWithNav from "../../../navigation/nav-header";
-
-// import { eventShiftsFormatted } from "./sampleData";
-// import "firebase/firestore";
 import "./newCalendar.css";
+// import "firebase/firestore";
 // import mouseOverIcon from "../../../../images/mouseovericon.svg";
 
 const StyledModal = styled(Modal)`
@@ -76,62 +72,6 @@ export default function NewCalendar() {
   //   text: "Add Shift",
   //   click: () => setShowModal(true),
   // };
-
-  //   function handleMouseEnter(info) {
-  //     const volunteerName = info.event.title;
-  //     // const eventAddress = nameAddressString.slice(at + 3);
-  //     const shiftStartTime = moment(info.event.start).format("hh:mm MM/DD/YYYY");
-  //     const shiftEndTime = moment(info.event.end).format("hh:mm MM/DD/YYYY");
-
-  //     const extendedInfoElement = (
-  //       <div id="extended-info">
-  //         <div className="extended-info-member">
-  //           <div className="extended-info-header">
-  //             <strong>Volunteer Name:</strong>
-  //           </div>
-  //           <div className="extended-info-text">{volunteerName}</div>
-  //         </div>
-  //         <div className="extended-info-member">
-  //           <div className="extended-info-header">
-  //             <strong>Shift Start:</strong>
-  //           </div>
-  //           <div className="extended-info-text">{shiftStartTime}</div>
-  //         </div>
-  //         <div className="extended-info-member">
-  //           <div className="extended-info-header">
-  //             <strong>Shift End:</strong>
-  //           </div>
-  //           <div className="extended-info-text">{shiftEndTime}</div>
-  //         </div>
-  //         {/* <div className="extended-info-member">
-  //           <div className="extended-info-header">
-  //             <strong>Event Address:</strong>
-  //           </div>
-  //           <div className="extended-info-text">{eventAddress}</div>
-  //         </div> */}
-  //       </div>
-  //     );
-  //     ReactDOM.render(
-  //       extendedInfoElement,
-  //       document.getElementById("extended-info-container")
-  //     );
-  //   }
-
-  //   const extendedInfoPlaceholder = (
-  //     <div id="extended-info-placeholder">
-  //       <img
-  //         id="mouse-over-icon"
-  //         src={mouseOverIcon}
-  //         alt="Mouse over a shift to see details."
-  //       />
-  //     </div>
-  //   );
-
-  //   function handleMouseLeave() {
-  //     ReactDOM.render(
-  //       extendedInfoPlaceholder,
-  //       document.getElementById("extended-info-container")
-  //     );
 
   // function handleMouseEnter(info) {
   //   const nameAddressString = info.event.title;
@@ -200,10 +140,7 @@ export default function NewCalendar() {
   // }
 
   function handleClick(info) {
-    const nameAddressString = info.event.title;
-    const at = nameAddressString.indexOf("at");
-    const volunteerName = nameAddressString.slice(0, at);
-    const eventAddress = nameAddressString.slice(at + 3);
+    const volName = info.event.title;
     const shiftStartTime = formatDate(info.event.start, {
       hour: "numeric",
       minute: "2-digit",
@@ -213,10 +150,9 @@ export default function NewCalendar() {
       minute: "2-digit",
     });
     const extendedInfoElement = {
-      volunteerName,
+      volName,
       shiftStartTime,
       shiftEndTime,
-      eventAddress,
     };
     setSelectedItem(extendedInfoElement);
     setShiftModal(true);
@@ -268,8 +204,6 @@ export default function NewCalendar() {
       displayEventEnd
       select={(info) => handleSelection(info)}
       eventClick={(info) => handleClick(info)}
-      // eventMouseEnter={(info) => handleMouseEnter(info)}
-      // eventMouseLeave={(info) => handleMouseLeave(info)}
     />
   );
 
@@ -337,11 +271,7 @@ export default function NewCalendar() {
           <Modal.Body>
             <div>
               <div>
-                <strong>Volunteer Name:</strong>{" "}
-                {showSelectedItem?.volunteerName}
-              </div>
-              <div>
-                <strong>Event Address:</strong> {showSelectedItem?.eventAddress}
+                <strong>Volunteer Name:</strong> {showSelectedItem?.volName}
               </div>
               <div>
                 <strong>Shift Start:</strong> {showSelectedItem?.shiftStartTime}
