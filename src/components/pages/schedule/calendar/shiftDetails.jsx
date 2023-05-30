@@ -12,8 +12,8 @@ import { useHistory } from "react-router-dom";
 import moment from "moment";
 import actions from "../../../../actions";
 import ShiftCalendar from "./shiftCalendar";
-import { vigilPropType } from "../../../../dataStructures/propTypes";
-import { combineDateAndTime } from "../createVigil/CreateVigilHelper";
+import { shiftPropType } from "../../../../dataStructures/propTypes";
+import { combineDateAndTime } from "../createShift/CreateShiftHelper";
 
 const StyledCard = styled(Card)`
   border: none;
@@ -66,12 +66,12 @@ const LessPadedText = styled(Card.Text)`
 `;
 
 export default function ShiftDetails({
-  vigil,
-  setSelectVigil,
+  shift,
+  setSelectShift,
   setShowModal,
   curDate,
 }) {
-  const { id, address, startTime, endTime, notes } = vigil;
+  const { id, startTime, endTime, notes } = shift;
   const isAdmin = useSelector((state) => state.user.user.isAdmin);
   const isSingleDay = moment(startTime).isSame(endTime, "day");
   const [show, setShow] = useState(false);
@@ -103,14 +103,13 @@ export default function ShiftDetails({
     // creates a new shift and adds it to a specific vigil
     const currentUser = firebase.auth().currentUser.uid;
     const db = firebase.firestore();
-    const vigilRef = await db.collection("vigils").doc(id);
+    const shiftRef = await db.collection("shifts").doc(id);
     const userRef = await db.collection("users").doc(currentUser);
     const user = await userRef.get();
     const { name } = await user.data();
     const start = combineDateAndTime(shiftStartDate, shiftStartTime);
     const end = combineDateAndTime(shiftEndDate, shiftEndTime);
     const newShift = {
-      address: vigil.address,
       shiftStartTime: start,
       shiftEndTime: end,
       userRef: db.doc(`users/${currentUser}`),
@@ -118,8 +117,7 @@ export default function ShiftDetails({
 
     setShowDateFeedback(false);
 
-    vigilRef
-      .collection("shifts")
+    shiftRef
       .add(newShift)
       .then((ref) => {
         const reduxStartTime = firebase.firestore.Timestamp.fromDate(start);
@@ -143,12 +141,8 @@ export default function ShiftDetails({
             name,
             isAdmin,
             userId: currentUser,
-            vigilId: vigilRef.id,
           })
         );
-        userRef.update({
-          prevShifts: firebase.firestore.FieldValue.arrayUnion(ref),
-        });
       })
       .catch((error) => {
         console.error("Error writing document: ", error);
@@ -159,40 +153,24 @@ export default function ShiftDetails({
     moment(curDate).isBetween(startTime, endTime, "day", "()")
   ); // This warning displays when we can't garuntee that curDate matches the date the user clicked
 
-  async function deleteVigilDocument() {
+  async function deleteShiftDocument() {
     const db = firebase.firestore();
-    const vigilRef = await db.collection("vigils").doc(id);
-    const currentUser = firebase.auth().currentUser.uid;
+    const shiftRef = await db.collection("shifts").doc(id);
+    // gets current user id
+    // const currentUser = firebase.auth().currentUser.uid;
 
     // delete the Shifts in a vigil (No need to put in redux)
-    const shifts = await vigilRef.collection("shifts");
-    shifts.get().then((querySnapshot) => {
-      querySnapshot.docs.forEach((doc) => {
-        const userRef = db.collection("users").doc(currentUser);
-        userRef.update({
-          prevShifts: firebase.firestore.FieldValue.arrayRemove(
-            shifts.doc(doc.id)
-          ),
-        });
-        vigilRef.collection("shifts").doc(doc.id).delete();
-      });
-    });
-
-    // Delete Vigil
-    await vigilRef.delete();
-    dispatch(actions.vigils.deleteVigil(id));
-
+    await shiftRef.delete();
+    dispatch(actions.user.deleteShift(id));
     setShow(false);
     setShowModal(false);
   }
 
   const editShift = () => {
-    setSelectVigil({
+    setSelectShift({
       id,
-      address,
       startTime,
       endTime,
-      notes,
     });
     history.push("/schedule/edit-shift");
   };
@@ -203,8 +181,6 @@ export default function ShiftDetails({
   const endDateRef = React.createRef();
   const startDateRef = React.createRef();
   const [datesInverted, setDatesInverted] = useState(false);
-  const [dateAfterVigilEnd, setDatesAfterVigilEnd] = useState(false);
-  const [dateBeforeVigilStarts, setDateBeforeVigilStarts] = useState(false);
 
   // Checks that the end time comes before the start time
   const endTimeRef = React.createRef();
@@ -216,40 +192,15 @@ export default function ShiftDetails({
   const [afterEnd, setAfterEnd] = useState(false);
 
   useEffect(() => {
-    let endDateHasError = false;
     let endTimeHasError = false;
     if (moment(shiftEndDate).isBefore(moment(shiftStartDate))) {
-      endDateHasError = true;
+      endTimeHasError = true;
       setDatesInverted(true);
       endDateRef.current.setCustomValidity(
         "End Date cannot come before Start Date"
       );
     } else {
       setDatesInverted(false);
-    }
-
-    if (endDateRef.current) {
-      if (moment(shiftEndDate).isAfter(moment(endTime))) {
-        endDateHasError = true;
-        setDatesAfterVigilEnd(true);
-        endDateRef.current.setCustomValidity(
-          "End Date cannot come after Vigil Ends"
-        );
-      } else if (endDateHasError) {
-        setDatesAfterVigilEnd(false);
-      } else {
-        setDatesAfterVigilEnd(false);
-        endDateRef.current.setCustomValidity("");
-      }
-      if (moment(shiftStartDate).isBefore(moment(startTime), "day")) {
-        setDateBeforeVigilStarts(true);
-        startDateRef.current.setCustomValidity(
-          "Start date should not come before Vigil Starts"
-        );
-      } else {
-        setDateBeforeVigilStarts(false);
-        startDateRef.current.setCustomValidity("");
-      }
     }
 
     const tFormat = "HH:mm";
@@ -348,7 +299,7 @@ export default function ShiftDetails({
             )}
             <Card.Title className="font-weight-bold">Schedule</Card.Title>
             <ShiftCalendar
-              vigil={vigil}
+              shift={shift}
               isSingleDay={isSingleDay}
               curDate={curDate}
             />
@@ -401,9 +352,6 @@ export default function ShiftDetails({
                         {shiftStartDate === ""
                           ? "Please provide a starting date "
                           : null}
-                        {dateBeforeVigilStarts
-                          ? "Start date cannot come before vigil starts"
-                          : null}
                       </Form.Control.Feedback>
                     </Form.Group>
                   </Col>
@@ -425,9 +373,6 @@ export default function ShiftDetails({
                           : null}
                         {datesInverted
                           ? "End date cannot come before start date "
-                          : null}
-                        {dateAfterVigilEnd
-                          ? "End date cannot come after vigil ends"
                           : null}
                       </Form.Control.Feedback>
                     </Form.Group>
@@ -504,7 +449,7 @@ export default function ShiftDetails({
                 <StyledButton onClick={() => setShow(false)}>
                   Cancel
                 </StyledButton>
-                <StyledButton onClick={() => deleteVigilDocument()}>
+                <StyledButton onClick={() => deleteShiftDocument()}>
                   Ok
                 </StyledButton>
               </Modal.Footer>
@@ -517,8 +462,8 @@ export default function ShiftDetails({
 }
 
 ShiftDetails.propTypes = {
-  vigil: vigilPropType.isRequired,
-  setSelectVigil: PropTypes.func.isRequired,
+  shift: shiftPropType.isRequired,
+  setSelectShift: PropTypes.func.isRequired,
   setShowModal: PropTypes.func.isRequired,
   curDate: PropTypes.instanceOf(Date).isRequired,
 };

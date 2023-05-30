@@ -63,6 +63,9 @@ export default function App() {
           <Route path="/reset-password">
             <ResetPassword />
           </Route>
+          <PrivateRoute validatedOnly path="/schedule">
+            <NewCalendar />
+          </PrivateRoute>
           <PrivateRoute validatedOnly path="/discussion/:id">
             <DiscussionThread />
           </PrivateRoute>
@@ -74,9 +77,6 @@ export default function App() {
           </PrivateRoute>
           <PrivateRoute validatedOnly adminOnly path="/userValid">
             <UserValid />
-          </PrivateRoute>
-          <PrivateRoute validatedOnly path="/schedule">
-            <NewCalendar />
           </PrivateRoute>
           <Route path="/not-validated">
             <NotValidated />

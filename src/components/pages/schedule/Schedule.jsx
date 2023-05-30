@@ -10,41 +10,42 @@ const PaddedDiv = styled.div`
   padding: 0 2%;
 `;
 
-export default function Schedule(props) {
-  const { setSelectVigil } = props;
+export default function Schedule({ setSelectShift }) {
   const [eventData, setEventData] = useState([]);
 
   // Gets Vigil Data from redux store
-  const storeVigils = useSelector((state) => state.vigils.vigils);
-  const getVigilInfo = () => {
-    const vigilsData = [];
-    storeVigils.forEach((v) => {
-      vigilsData.push({
-        title: v.address,
-        start: v.startTime,
-        end: v.endTime,
+  const storeShifts = useSelector((state) => state.historyShifts.historyShifts);
+  console.log(storeShifts);
+
+  const getShiftInfo = () => {
+    const shiftData = [];
+    storeShifts.forEach((s) => {
+      const label = `${s.firstName} ${s.lastName}`;
+      shiftData.push({
+        title: label,
+        start: s.startTime,
+        end: s.endTime,
         backgroundColor: "#8FCBD4",
-        notes: v.notes,
-        id: v.id,
+        id: s.id,
       });
     });
-    setEventData(vigilsData);
+    setEventData(shiftData);
   };
 
   useEffect(() => {
-    getVigilInfo();
-  }, [storeVigils]); // This useEffect block gets whole collection of vigil documents upon redux updates
+    getShiftInfo();
+  }, [storeShifts]); // This useEffect block gets whole collection of vigil documents upon redux updates
 
   return (
     <div>
       <HeaderWithNav>Schedule</HeaderWithNav>
       <PaddedDiv>
-        <Calendar eventData={eventData} setSelectVigil={setSelectVigil} />
+        <Calendar eventData={[...eventData]} setSelectShift={setSelectShift} />
       </PaddedDiv>
     </div>
   );
 }
 
 Schedule.propTypes = {
-  setSelectVigil: PropTypes.func.isRequired,
+  setSelectShift: PropTypes.func.isRequired,
 };

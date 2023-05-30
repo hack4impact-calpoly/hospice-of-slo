@@ -1,11 +1,19 @@
 import PropTypes from "prop-types";
 
-const vigilPropType = PropTypes.shape({
+// const vigilPropType = PropTypes.shape({
+//   id: PropTypes.string,
+//   address: PropTypes.string,
+//   startTime: PropTypes.instanceOf(Date),
+//   endTime: PropTypes.instanceOf(Date),
+//   notes: PropTypes.string,
+// });
+
+const shiftPropType = PropTypes.shape({
   id: PropTypes.string,
-  address: PropTypes.string,
   startTime: PropTypes.instanceOf(Date),
   endTime: PropTypes.instanceOf(Date),
-  notes: PropTypes.string,
+  firstName: PropTypes.string,
+  lastName: PropTypes.string,
 });
 
 const discussionPropType = PropTypes.shape({
@@ -16,4 +24,4 @@ const discussionPropType = PropTypes.shape({
   messages: PropTypes.arrayOf(PropTypes.shape), // this might break it?
 });
 
-export { vigilPropType, discussionPropType };
+export { shiftPropType, discussionPropType };

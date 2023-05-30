@@ -13,7 +13,7 @@ const historyReducer = (state = initialState, action) => {
     case INITIALIZE_HISTORY:
       console.log("Initializing History store");
       return {
-        historyShifts: action.historyShifts,
+        historyShifts: [...action.historyShifts],
       };
     case ADD_HISTORY_SHIFT: {
       const shiftsCopy = [...state.historyShifts];

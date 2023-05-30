@@ -87,6 +87,7 @@ const retrieveUsers = async (dbRef) => {
         phone,
         accountStatus,
         isAdminAccount: isAdmin,
+
         isValidAccount: isValidated,
       });
     } else if (accountStatus !== "denied") {
@@ -106,23 +107,23 @@ const retrieveUsers = async (dbRef) => {
   return pendingUsers.concat(users);
 };
 
-// const retrieveShifts = async (dbRef) => {
-//   const shifts = [];
-//   const shiftsRef = dbRef.collection("shifts");
-//   const shiftsSnapshot = await shiftsRef.get();
+const retrieveVigils = async (dbRef) => {
+  const vigils = [];
+  const vigilsRef = dbRef.collection("vigils");
+  const vigilsSnapshot = await vigilsRef.get();
 
-//   shiftsSnapshot.forEach((doc) => {
-//     const { startTime, endTime, firstName, lastName } = doc.data();
-//     shifts.push({
-//       id: doc.id,
-//       startTime: startTime.toDate(),
-//       endTime: endTime.toDate(),
-//       firstName,
-//       lastName,
-//     });
-//   });
-//   return shifts;
-// };
+  vigilsSnapshot.forEach((doc) => {
+    const { address, startTime, endTime, notes } = doc.data();
+    vigils.push({
+      id: doc.id,
+      address,
+      startTime: startTime.toDate(),
+      endTime: endTime.toDate(),
+      notes,
+    });
+  });
+  return vigils;
+};
 
 const retrieveDiscussions = async (dbRef) => {
   const discussions = [];
@@ -159,28 +160,32 @@ const retrieveDiscussions = async (dbRef) => {
 
 const retrieveHistoryShifts = async (dbRef) => {
   const historyShifts = [];
-  const shiftsRef = dbRef.collection("shifts");
-  const shiftsSnapshot = await shiftsRef.get();
+  const vigilsRef = dbRef.collection("vigils");
+  const vigilsSnapshot = await vigilsRef.get();
 
-  shiftsSnapshot.forEach(async (shift) => {
-    const { startTime, endTime, firstName, lastName } = shift.data();
-    // const userSnapshot = await userRef.get();
+  vigilsSnapshot.forEach(async (doc) => {
+    const historyShiftsRef = vigilsRef.doc(doc.id).collection("shifts");
+    const historyShiftsSnapshot = await historyShiftsRef.get();
 
-    try {
+    historyShiftsSnapshot.forEach(async (shift) => {
+      const { address, shiftEndTime, shiftStartTime, userRef } = shift.data();
+      const userSnapshot = await userRef.get();
+
+      const { name, isAdmin } = userSnapshot.data();
+
       const thisShift = {
         id: shift.id,
-        startTime: startTime.toDate(),
-        endTime: endTime.toDate(),
-        firstName,
-        lastName,
+        address,
+        shiftEndTime,
+        shiftStartTime,
+        name,
+        isAdmin,
+        userId: userSnapshot.id,
+        vigilId: doc.id,
       };
       historyShifts.push(thisShift);
-      console.log(thisShift);
-    } catch (error) {
-      console.log("Error getting document:", error);
-    }
+    });
   });
-
   return historyShifts;
 };
 
@@ -196,13 +201,16 @@ export default function AuthProvider({ children }) {
       const firestoreResponse = await Promise.all([
         retrieveUser(dbRef), // Gets current users prevShifts and isAdmin?
         retrieveUsers(dbRef), // Gets all users contact/account information
+        retrieveVigils(dbRef),
         retrieveDiscussions(dbRef), // Gets discussions
         retrieveHistoryShifts(dbRef),
       ]);
-      const [user, users, discussions, historyShifts] = firestoreResponse;
+      const [user, users, vigils, discussions, historyShifts] =
+        firestoreResponse;
       // Initialize redux store
       await dispatch(actions.user.initializeUser(user));
       await dispatch(actions.users.initializeUsers(users));
+      await dispatch(actions.vigils.initalizeVigils(vigils));
       await dispatch(actions.discussions.initializeDiscussions(discussions));
       await dispatch(actions.history.initializeHistory(historyShifts));
     };

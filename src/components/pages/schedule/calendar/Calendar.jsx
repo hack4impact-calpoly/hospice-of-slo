@@ -9,11 +9,11 @@ import PropTypes from "prop-types";
 import Modal from "react-bootstrap/Modal";
 import moment from "moment";
 import ModalDetails from "./modalDetails";
-import { vigilPropType } from "../../../../dataStructures/propTypes";
+import { shiftPropType } from "../../../../dataStructures/propTypes";
 import "./Calendar.css";
 
 export default function Calendar(props) {
-  const { eventData, setSelectVigil } = props;
+  const { eventData, setSelectShift } = props;
 
   const isAdmin = useSelector((state) => state.user.user.isAdmin);
   const [addEventText, setAddEventText] = useState("Add Event");
@@ -88,10 +88,8 @@ export default function Calendar(props) {
   const handleEventClick = (info) => {
     setClickedInfo({
       id: info.event.id,
-      address: info.event.title,
       endTime: info.event.end,
       startTime: info.event.start,
-      notes: info.event.extendedProps.notes,
     });
     updateCurDate(info);
     setShowModal(true);
@@ -186,7 +184,7 @@ export default function Calendar(props) {
         <Modal.Body>
           <ModalDetails
             vigil={clickedInfo}
-            setSelectVigil={setSelectVigil}
+            setSelectShift={setSelectShift}
             setShowModal={setShowModal}
             curDate={curDate}
           />
@@ -197,6 +195,6 @@ export default function Calendar(props) {
 }
 
 Calendar.propTypes = {
-  eventData: PropTypes.arrayOf(vigilPropType).isRequired,
-  setSelectVigil: PropTypes.func.isRequired,
+  eventData: PropTypes.arrayOf(shiftPropType).isRequired,
+  setSelectShift: PropTypes.func.isRequired,
 };

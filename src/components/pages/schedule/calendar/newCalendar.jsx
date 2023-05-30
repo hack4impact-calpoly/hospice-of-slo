@@ -1,15 +1,16 @@
-import React, { useEffect, useState } from "react";
-import ReactDOM from "react-dom"; // eslint-disable-line
+import React, { useState, useEffect } from "react";
 import { formatDate } from "@fullcalendar/core";
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
-import styled from "styled-components";
 import { Modal } from "react-bootstrap";
-import { eventShiftsFormatted } from "./sampleData";
+import { useSelector } from "react-redux";
+import styled from "styled-components";
+import { getFormattedShifts } from "./sampleData";
+import ModalDetails from "./modalDetails";
 import HeaderWithNav from "../../../navigation/nav-header";
-// import "firebase/firestore";
 import "./newCalendar.css";
+// import "firebase/firestore";
 // import mouseOverIcon from "../../../../images/mouseovericon.svg";
 
 const StyledModal = styled(Modal)`
@@ -40,6 +41,42 @@ export default function NewCalendar() {
   const [showShiftModal, setShiftModal] = useState(false);
   const [showSelectedItem, setSelectedItem] = useState(null);
   const [isDesktopView, setDesktopView] = useState(window.innerWidth > 900);
+
+  const [showModal, setShowModal] = useState(false);
+  const [eventData, setEventData] = useState([]);
+  const storeShifts = useSelector((state) => state.historyShifts.historyShifts);
+  // const thisUser = useSelector((state) => state.user.user.id);
+  // Gets all shifts from the vigil that was clicked on.
+  function getShifts(shifts) {
+    const allShifts = [];
+    shifts.forEach((shift) => allShifts.push(shift));
+    return allShifts;
+  }
+  useEffect(() => {
+    setEventData(getFormattedShifts(getShifts(storeShifts)));
+  }, [storeShifts]); // This useEffect block gets whole collection of shift documents upon redux updates
+
+  const [curDate, setCurDate] = useState(new Date());
+  const [clickedInfo, setClickedInfo] = useState({
+    id: "",
+    endTime: new Date(),
+    startTime: new Date(),
+    firstName: "",
+    lastName: "",
+  });
+  const handleCloseClick = () => setShowModal(false);
+
+  // const history = useHistory();
+
+  // // const addEventButton = {
+  // //   text: "Add Event",
+  // //   click: () => history.push("/schedule/create-shift"),
+  // // };
+
+  // const addShiftButton = {
+  //   text: "Add Shift",
+  //   click: () => setShowModal(true),
+  // };
 
   // function handleMouseEnter(info) {
   //   const nameAddressString = info.event.title;
@@ -108,10 +145,7 @@ export default function NewCalendar() {
   // }
 
   function handleClick(info) {
-    const nameAddressString = info.event.title;
-    const at = nameAddressString.indexOf("at");
-    const volunteerName = nameAddressString.slice(0, at);
-    const eventAddress = nameAddressString.slice(at + 3);
+    const volName = info.event.title;
     const shiftStartTime = formatDate(info.event.start, {
       hour: "numeric",
       minute: "2-digit",
@@ -121,18 +155,22 @@ export default function NewCalendar() {
       minute: "2-digit",
     });
     const extendedInfoElement = {
-      volunteerName,
+      volName,
       shiftStartTime,
       shiftEndTime,
-      eventAddress,
     };
     setSelectedItem(extendedInfoElement);
     setShiftModal(true);
   }
 
+  function handleSelection(info) {
+    setClickedInfo({ endTime: info.end, startTime: info.start });
+    setCurDate(new Date(info.start));
+    setShowModal(true);
+  }
+
   const expandedCalendar = (
     <FullCalendar
-      id="expanded-shift-calendar"
       plugins={[timeGridPlugin, interactionPlugin]}
       headerToolbar={{
         left: "prev,next today",
@@ -143,9 +181,10 @@ export default function NewCalendar() {
       selectable
       dayMaxEvents
       weekends
-      events={eventShiftsFormatted}
+      events={eventData}
       eventMaxStack={2}
       displayEventEnd
+      select={(info) => handleSelection(info)}
       eventClick={(info) => handleClick(info)}
       // eventMouseEnter={(info) => handleMouseEnter(info)}
       // eventMouseLeave={(info) => handleMouseLeave(info)}
@@ -165,11 +204,11 @@ export default function NewCalendar() {
       selectable
       dayMaxEvents
       weekends
-      events={eventShiftsFormatted}
+      events={eventData}
       eventMaxStack={3}
       displayEventEnd
-      // eventMouseEnter={(info) => handleMouseEnter(info)}
-      // eventMouseLeave={(info) => handleMouseLeave(info)}
+      select={(info) => handleSelection(info)}
+      eventClick={(info) => handleClick(info)}
     />
   );
 
@@ -208,6 +247,24 @@ export default function NewCalendar() {
         {/* <div id="shift-calendar">{expandedCalendar}</div> */}
         <div id="shift-calendar">
           {isDesktopView ? expandedCalendar : minimizedCalendar}
+          <Modal
+            show={showModal}
+            size="md"
+            onEscapeKeyDown={handleCloseClick}
+            onHide={handleCloseClick}
+            centered
+          >
+            <Modal.Header className="font-weight-bold" closeButton>
+              Sign up for a Shift
+            </Modal.Header>
+            <Modal.Body>
+              <ModalDetails
+                shift={clickedInfo}
+                setShowModal={setShowModal}
+                curDate={curDate}
+              />
+            </Modal.Body>
+          </Modal>
         </div>
         {/* {isDesktopView ? <p>big</p> : <p>small</p>} */}
         {/* <div id="shift-calendar">{expandedCalendar}</div> */}
@@ -217,13 +274,9 @@ export default function NewCalendar() {
           centered
         >
           <Modal.Body>
-            <StyledDiv>
+            <div>
               <div>
-                <strong>Volunteer Name:</strong>{" "}
-                {showSelectedItem?.volunteerName}
-              </div>
-              <div>
-                <strong>Event Address:</strong> {showSelectedItem?.eventAddress}
+                <strong>Volunteer Name:</strong> {showSelectedItem?.volName}
               </div>
               <div>
                 <strong>Shift Start:</strong> {showSelectedItem?.shiftStartTime}
@@ -231,7 +284,7 @@ export default function NewCalendar() {
               <div>
                 <strong>Shift End:</strong> {showSelectedItem?.shiftEndTime}
               </div>
-            </StyledDiv>
+            </div>
           </Modal.Body>
           <StyledButton onClick={() => setShiftModal(false)}>Ok</StyledButton>
         </StyledModal>
