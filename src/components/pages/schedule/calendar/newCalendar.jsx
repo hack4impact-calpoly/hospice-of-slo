@@ -23,13 +23,18 @@ const StyledButton = styled.button`
   border: 2px solid #84c0c9;
   border-radius: 5px;
   padding: 6px 10px;
-  font-size: 14px;
+  font-size: 18px;
   fontfamily: Roboto;
 
   &:hover {
     color: white;
     background-color: #558e97;
   }
+`;
+
+const StyledDiv = styled.div`
+  padding: 10px;
+  font-size: 18px;
 `;
 
 export default function NewCalendar() {
@@ -236,7 +241,7 @@ export default function NewCalendar() {
 
   return (
     <div>
-      <HeaderWithNav>Calendar</HeaderWithNav>
+      <HeaderWithNav>Schedule</HeaderWithNav>
       <div id="shift-calendar-box">
         {/* <div onClick={handleClick}>{expandedCalendar}</div> */}
         {/* <div id="shift-calendar">{expandedCalendar}</div> */}
