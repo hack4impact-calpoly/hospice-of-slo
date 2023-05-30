@@ -32,10 +32,10 @@ const StyledButton = styled.button`
   }
 `;
 
-const StyledDiv = styled.div`
-  padding: 10px;
-  font-size: 18px;
-`;
+// const StyledDiv = styled.div`
+//   padding: 10px;
+//   font-size: 18px;
+// `;
 
 export default function NewCalendar() {
   const [showShiftModal, setShiftModal] = useState(false);
