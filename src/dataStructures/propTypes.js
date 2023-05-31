@@ -16,6 +16,13 @@ const shiftPropType = PropTypes.shape({
   lastName: PropTypes.string,
 });
 
+const selectedInfoPropType = PropTypes.shape({
+  shiftId: PropTypes.string,
+  volName: PropTypes.string,
+  shiftStartTime: PropTypes.string,
+  shiftEndtime: PropTypes.string,
+});
+
 const discussionPropType = PropTypes.shape({
   id: PropTypes.string,
   dateCreated: PropTypes.string,
@@ -24,4 +31,4 @@ const discussionPropType = PropTypes.shape({
   messages: PropTypes.arrayOf(PropTypes.shape), // this might break it?
 });
 
-export { shiftPropType, discussionPropType };
+export { shiftPropType, discussionPropType, selectedInfoPropType };

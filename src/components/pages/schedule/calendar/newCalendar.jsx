@@ -10,32 +10,18 @@ import { getFormattedShifts } from "./sampleData";
 import ModalDetails from "./modalDetails";
 import HeaderWithNav from "../../../navigation/nav-header";
 import "./newCalendar.css";
+import DeleteShift from "./deleteShift";
 // import "firebase/firestore";
 // import mouseOverIcon from "../../../../images/mouseovericon.svg";
-
-const StyledModal = styled(Modal)`
-  background-color: rgba(0, 0, 0, 0.3);
-`;
-
-const StyledButton = styled.button`
-  color: white;
-  background-color: #84c0c9;
-  border: 2px solid #84c0c9;
-  border-radius: 5px;
-  padding: 6px 10px;
-  font-size: 18px;
-  fontfamily: Roboto;
-
-  &:hover {
-    color: white;
-    background-color: #558e97;
-  }
-`;
 
 // const StyledDiv = styled.div`
 //   padding: 10px;
 //   font-size: 18px;
 // `;
+
+const StyledModal = styled(Modal)`
+  background-color: rgba(0, 0, 0, 0.3);
+`;
 
 export default function NewCalendar() {
   const [showShiftModal, setShiftModal] = useState(false);
@@ -145,6 +131,7 @@ export default function NewCalendar() {
   // }
 
   function handleClick(info) {
+    const shiftId = info.event.id;
     const volName = info.event.title;
     const shiftStartTime = formatDate(info.event.start, {
       hour: "numeric",
@@ -155,6 +142,7 @@ export default function NewCalendar() {
       minute: "2-digit",
     });
     const extendedInfoElement = {
+      shiftId,
       volName,
       shiftStartTime,
       shiftEndTime,
@@ -268,26 +256,18 @@ export default function NewCalendar() {
         </div>
         {/* {isDesktopView ? <p>big</p> : <p>small</p>} */}
         {/* <div id="shift-calendar">{expandedCalendar}</div> */}
+        {/* serves as Delete Shift function */}
         <StyledModal
           show={showShiftModal}
           onHide={() => setShiftModal(false)}
           centered
         >
-          <Modal.Body>
-            <div>
-              <div>
-                <strong>Volunteer Name:</strong> {showSelectedItem?.volName}
-              </div>
-              <div>
-                <strong>Shift Start:</strong> {showSelectedItem?.shiftStartTime}
-              </div>
-              <div>
-                <strong>Shift End:</strong> {showSelectedItem?.shiftEndTime}
-              </div>
-            </div>
-          </Modal.Body>
-          <StyledButton onClick={() => setShiftModal(false)}>Ok</StyledButton>
+          <DeleteShift
+            selectedInfo={showSelectedItem}
+            setShowModal={setShiftModal}
+          />
         </StyledModal>
+
         {/* <div id="extended-info-container">{extendedInfoPlaceholder}</div> */}
       </div>
     </div>
