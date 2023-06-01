@@ -41,7 +41,7 @@ export default function Contacts() {
   // Gets User Data from redux store
   const users = useSelector((state) => state.users.users);
   const isAdmin = useSelector((state) => state.user.user.isAdmin);
-  const isValidated = useSelector((state) => state.user.user.isValidated);
+  // const isValidated = useSelector((state) => state.user.user.isValidated);
   const [searchTerm, setSearchTerm] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [phone, setPhone] = useState("");
@@ -214,7 +214,7 @@ export default function Contacts() {
               isAdminAccount={user.isAdminAccount}
               isAdmin={isAdmin}
               accountStatus={user.accountStatus}
-              isValidated={isValidated}
+              isValidated={user.isValidated}
             />
           ))}
       </ListWrapper>

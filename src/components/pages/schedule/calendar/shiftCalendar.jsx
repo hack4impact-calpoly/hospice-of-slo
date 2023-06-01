@@ -10,7 +10,7 @@ import moment from "moment";
 import firebase from "firebase/app";
 import "firebase/firestore";
 import styled from "styled-components";
-import { vigilPropType } from "../../../../dataStructures/propTypes";
+import { shiftPropType } from "../../../../dataStructures/propTypes";
 import actions from "../../../../actions";
 
 const StyledDrop = styled.button`
@@ -30,48 +30,44 @@ const StyledModal = styled(Modal)`
   background-color: rgba(0, 0, 0, 0.5) !important;
 `;
 
-function ShiftCalendar({ vigil, isSingleDay, curDate }) {
-  const { startTime, endTime } = vigil;
+function ShiftCalendar({ shiftEvent, isSingleDay, curDate }) {
+  const { startTime, endTime } = shiftEvent;
   const [showModal, setShowModal] = useState(false);
   const [eventData, setEventData] = useState([]);
   const db = firebase.firestore();
   // Gets all shift Data from redux store
+  const allShifts = [];
+  db.collection("shifts")
+    .get()
+    .then((docs) => docs.forEach((doc) => allShifts.push(doc)));
   const storeShifts = useSelector((state) => state.historyShifts.historyShifts);
   const thisUser = useSelector((state) => state.user.user.id);
 
   // Gets all shifts from the vigil that was clicked on.
-  const vigilShifts = [];
-  storeShifts.forEach((shift) => {
-    if (shift.address === vigil.address) {
-      vigilShifts.push(shift);
-    }
-  });
+
+  // storeShifts.forEach((shift) => {
+  //   allShifts.push(shift);
+  // });
 
   const getShifts = () => {
-    const vigilsData = [];
-    vigilShifts.forEach((shift) => {
-      let color = "#8FCBD4";
-      let label = shift.name;
-      if (shift.isAdmin) {
-        color = "#C4C4C4";
-        label = "Blocked Off";
-      }
-      vigilsData.push({
+    const shiftData = [];
+    allShifts.forEach((shift) => {
+      const color = "#8FCBD4";
+      const label = `${shift.firstName} ${shift.lastName}`;
+      shiftData.push({
         title: label,
-        start: shift.shiftStartTime.toDate().toISOString(),
-        end: shift.shiftEndTime.toDate().toISOString(),
+        start: shift.startTime.toDate().toISOString(),
+        end: shift.endTime.toDate().toISOString(),
         backgroundColor: color,
         id: shift.id,
-        groupId: shift.vigilId,
-        userId: shift.userId,
       });
     });
-    setEventData(vigilsData);
+    setEventData(shiftData);
   };
 
   useEffect(() => {
     getShifts();
-  }, [storeShifts]); // This useEffect block gets whole collection of vigil documents upon redux updates
+  }, [storeShifts]); // This useEffect block gets whole collection of shift documents upon redux updates
 
   const volunteerCalendarHeader = {
     center: "",
@@ -107,8 +103,6 @@ function ShiftCalendar({ vigil, isSingleDay, curDate }) {
     setClickedInfo({
       title: info.event.title,
       shiftId: info.event.id,
-      userId: info.event.extendedProps.userId,
-      vigilId: info.event.groupId,
     });
     getContact(info.event.extendedProps.userId);
     setShowModal(true);
@@ -119,29 +113,25 @@ function ShiftCalendar({ vigil, isSingleDay, curDate }) {
   const dispatch = useDispatch();
 
   const handleDrop = async () => {
-    const vigilRef = db.collection("vigils").doc(clickedInfo.vigilId);
-    const shiftRef = vigilRef.collection("shifts").doc(clickedInfo.shiftId);
+    // const vigilRef = db.collection("vigils").doc(clickedInfo.vigilId);
+    const shiftRef = db.collection("shifts").doc(clickedInfo.shiftId);
     shiftRef
       .delete()
       .then(() => {
         dispatch(actions.history.deleteHistoryShift(clickedInfo.shiftId));
-        dispatch(actions.user.deleteShift(clickedInfo.shiftId));
       })
       .catch((error) => {
         console.error("Error deleting document: ", error);
       });
-    const currentUser = sessionStorage.getItem("userid");
-    const userRef = db.collection("users").doc(currentUser);
-    userRef
-      .update({
-        prevShifts: firebase.firestore.FieldValue.arrayRemove(shiftRef),
-      })
-      .then(() => {
-        dispatch(actions.user.deleteShift(clickedInfo.shiftId));
-      })
-      .catch((error) => {
-        console.error("Error deleting document: ", error);
-      });
+    // const currentUser = sessionStorage.getItem("userid");
+    // const userRef = db.collection("users").doc(currentUser);
+    // userRef
+    //   .then(() => {
+    //     dispatch(actions.user.deleteShift(clickedInfo.shiftId));
+    //   })
+    //   .catch((error) => {
+    //     console.error("Error deleting document: ", error);
+    //   });
     handleCloseClick();
   };
 
@@ -195,7 +185,7 @@ function ShiftCalendar({ vigil, isSingleDay, curDate }) {
 }
 
 ShiftCalendar.propTypes = {
-  vigil: vigilPropType.isRequired,
+  shiftEvent: shiftPropType.isRequired,
   isSingleDay: PropTypes.bool.isRequired,
   curDate: PropTypes.instanceOf(Date).isRequired,
 };

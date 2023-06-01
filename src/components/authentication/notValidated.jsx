@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { Container, Col, Row } from "react-bootstrap";
 import "firebase/auth";
+import HeaderWithNav from "../navigation/nav-header";
 
 const StyledDiv = styled.div`
   height: 100vh;
@@ -38,6 +39,7 @@ const StyledCol = styled(Col)`
 export default function Discussion() {
   return (
     <StyledDiv>
+      <HeaderWithNav />
       <StyledContainer fluid>
         <StyledRow>
           <StyledCol sm={12} md={8} lg={6} xl={5}>

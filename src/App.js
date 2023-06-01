@@ -8,14 +8,10 @@ import Signup from "./components/authentication/signup";
 import ForgotPassword from "./components/authentication/forgotPassword";
 import ResetPassword from "./components/authentication/resetPassword";
 import Discussion from "./components/pages/discussion/Discussion";
-import PastShifts from "./components/pages/pastShifts/PastShifts";
 import Contacts from "./components/pages/contacts/Contacts";
-import History from "./components/pages/history/History";
-import HistoryTable from "./components/pages/history/HistoryTable";
 import PrivateRoute from "./components/authentication/PrivateRoute";
 import AuthProvider from "./components/authentication/Auth";
 import DiscussionThread from "./components/pages/discussion/DiscussionThread";
-import ScheduleManager from "./components/pages/schedule/ScheduleManager";
 
 import UserValid from "./components/pages/userValid/Valid";
 import NewCalendar from "./components/pages/schedule/calendar/newCalendar";
@@ -68,7 +64,7 @@ export default function App() {
             <ResetPassword />
           </Route>
           <PrivateRoute validatedOnly path="/schedule">
-            <ScheduleManager />
+            <NewCalendar />
           </PrivateRoute>
           <PrivateRoute validatedOnly path="/discussion/:id">
             <DiscussionThread />
@@ -76,23 +72,11 @@ export default function App() {
           <PrivateRoute validatedOnly path="/discussion">
             <Discussion />
           </PrivateRoute>
-          <PrivateRoute validatedOnly path="/past-shifts">
-            <PastShifts />
-          </PrivateRoute>
           <PrivateRoute validatedOnly path="/contacts">
             <Contacts />
           </PrivateRoute>
-          <PrivateRoute validatedOnly adminOnly path="/history/:id">
-            <HistoryTable />
-          </PrivateRoute>
-          <PrivateRoute validatedOnly adminOnly path="/history">
-            <History />
-          </PrivateRoute>
           <PrivateRoute validatedOnly adminOnly path="/userValid">
             <UserValid />
-          </PrivateRoute>
-          <PrivateRoute validatedOnly path="/shifts">
-            <NewCalendar />
           </PrivateRoute>
           <Route path="/not-validated">
             <NotValidated />

@@ -78,7 +78,6 @@ export default function PastShifts() {
           return (
             <PastShiftCard
               key={shift.id}
-              address={shift.address}
               date={date}
               time={time}
               color="#333333"

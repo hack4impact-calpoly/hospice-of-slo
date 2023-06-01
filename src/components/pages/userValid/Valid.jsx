@@ -14,38 +14,48 @@ const ListWrapper = styled.div`
   margin: 0 auto;
 `;
 
+const StyledP = styled.p`
+  display: flex;
+  align-self: center;
+  margin-top: 50px;
+  font-size: 20px;
+`;
+
 export default function Valid() {
-    // Gets user data from redux store
-    const users = useSelector((state) => state.users.users);
-    // const isValidated = useSelector((state) => state.user.user.isValidated);
+  // Gets user data from redux store
+  const users = useSelector((state) => state.users.users);
 
-    // Filtering function to get non validated users for admins to see
-    function checkValid(user) {
-        if (user.isValidAccount === false) { 
-            return true; 
-        }
-        return false; 
+  // Filtering function to get non validated users for admins to see
+  function checkValid(user) {
+    if (user.isValidAccount === false) {
+      return true;
     }
+    return false;
+  }
 
-    return (
-        <div>
-            <HeaderWithNav>User Validation</HeaderWithNav>
-            <ListWrapper>
-               {users
-                .filter((user) => 
-                    checkValid(user)
-                )
-                .map((user) => (
-                  <ValidCard
-                      key={user.id}
-                      userId={user.id}
-                      name={user.name}
-                      email={user.email}
-                      isValidAccount={user.isValidAccount}
-                      isValidated={user.isValidAccount}
-                   />
-                ))}
-            </ListWrapper>
-        </div>
-    );
-}  
+  const notValidUsers = users
+    .filter((user) => checkValid(user))
+    .map((user) => (
+      <ValidCard
+        key={user.id}
+        userId={user.id}
+        name={user.name}
+        email={user.email}
+        isValidAccount={user.isValidAccount}
+        isValidated={user.isValidAccount}
+      />
+    ));
+
+  return (
+    <div>
+      <HeaderWithNav>User Validation</HeaderWithNav>
+      <ListWrapper>
+        {notValidUsers.length === 0 ? (
+          <StyledP>No users pending validation.</StyledP>
+        ) : (
+          notValidUsers
+        )}
+      </ListWrapper>
+    </div>
+  );
+}

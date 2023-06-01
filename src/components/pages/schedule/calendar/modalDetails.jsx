@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import firebase from "firebase";
 import { Col, Container, Card, Form, Alert } from "react-bootstrap";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import moment from "moment";
-import { vigilPropType } from "../../../../dataStructures/propTypes";
-import { combineDateAndTime } from "../createVigil/CreateVigilHelper";
+import { shiftPropType } from "../../../../dataStructures/propTypes";
+import { combineDateAndTime } from "../createShift/CreateShiftHelper";
+import actions from "../../../../actions";
 // import "./modalDetails.css";
 
 const StyledCard = styled(Card)`
@@ -28,37 +32,78 @@ const SignUpButton = styled.button`
   }
 `;
 
-export default function ShiftDetails({ vigil, setShowModal, curDate }) {
-  const { startTime, endTime } = vigil;
+export default function ShiftDetails({ shift, setShowModal, curDate }) {
+  // Redux setup
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const { startTime, endTime } = shift;
   const isSingleDay = moment(startTime).isSame(endTime, "day");
-  const [shiftStartTime, setShiftStartTime] = useState("");
-  const [shiftEndTime, setShiftEndTime] = useState("");
+  const [shiftStartTime, setShiftStartTime] = useState(
+    moment(startTime).format("HH:mm") || ""
+  );
+  const [shiftEndTime, setShiftEndTime] = useState(
+    moment(endTime).format("HH:mm") || ""
+  );
   const formStartDate = moment(curDate).format("YYYY-MM-DD");
   const [shiftStartDate, setShiftStartDate] = useState(
-    isSingleDay ? formStartDate : ""
+    isSingleDay ? formStartDate : moment(startTime).format("YYYY-MM-DD")
   );
   const [shiftEndDate, setShiftEndDate] = useState(
-    isSingleDay ? formStartDate : ""
+    isSingleDay ? formStartDate : moment(endTime).format("YYYY-MM-DD")
   );
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+
+  async function CreateShift(curEvent) {
+    //   // Event Editing info
+    //   const isEditing = Object.keys(curEvent).length !== 0;
+    //   const defaultVals = isEditing ? eventDataToFront(curEvent) : curEvent;
+
+    //   // Form Stuff
+    //   const { register, getValues, handleSubmit, errors } = useForm({
+    //     defaultValues: defaultVals,
+    //   });
+
+    //   const [showDateFeedback, setShowDateFeedback] = React.useState(false);
+
+    // event.preventDefault();
+
+    // if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) {
+    //   setShowDateFeedback(true);
+    //   return;
+    // }
+    // setShowDateFeedback(false);
+    const newShift = {
+      startTime: curEvent.startTime,
+      endTime: curEvent.endTime,
+      firstName: curEvent.firstName,
+      lastName: curEvent.lastName,
+    };
+    const db = firebase.firestore();
+
+    await db.collection("shifts").add(newShift);
+    dispatch(actions.history.addHistoryShift({ ...newShift }));
+
+    history.push("/schedule");
+  }
 
   async function addShiftPress() {
     // creates a new shift and adds it to a specific vigil
     const start = combineDateAndTime(shiftStartDate, shiftStartTime);
     const end = combineDateAndTime(shiftEndDate, shiftEndTime);
     const newShift = {
-      shiftStartTime: start,
-      shiftEndTime: end,
+      startTime: start,
+      endTime: end,
       firstName,
       lastName,
     };
-    console.log(newShift);
+
+    await CreateShift(newShift);
   }
 
   const [showDateWarning, setShowDateWarning] = useState(
     moment(curDate).isBetween(startTime, endTime, "day", "()")
-  ); // This warning displays when we can't garuntee that curDate matches the date the user clicked
+  ); // This warning displays when we can't guarantee that curDate matches the date the user clicked
 
   // Form Stuff
   const [validated, setValidated] = useState(false);
@@ -253,7 +298,7 @@ export default function ShiftDetails({ vigil, setShowModal, curDate }) {
 }
 
 ShiftDetails.propTypes = {
-  vigil: vigilPropType.isRequired,
+  shift: shiftPropType.isRequired,
   setShowModal: PropTypes.func.isRequired,
   curDate: PropTypes.instanceOf(Date).isRequired,
 };
