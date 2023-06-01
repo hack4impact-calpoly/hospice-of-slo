@@ -171,6 +171,8 @@ export default function NewCalendar() {
 
   const expandedCalendar = (
     <FullCalendar
+      id="expanded-shift-calendar"
+      className=".fc-agendaWeek-view"
       plugins={[timeGridPlugin, interactionPlugin]}
       headerToolbar={{
         left: "prev,next today",
@@ -184,6 +186,7 @@ export default function NewCalendar() {
       events={eventData}
       eventMaxStack={2}
       displayEventEnd
+      allDaySlot={false}
       select={(info) => handleSelection(info)}
       eventClick={(info) => handleClick(info)}
       // eventMouseEnter={(info) => handleMouseEnter(info)}
@@ -207,6 +210,7 @@ export default function NewCalendar() {
       events={eventData}
       eventMaxStack={3}
       displayEventEnd
+      allDaySlot={false}
       select={(info) => handleSelection(info)}
       eventClick={(info) => handleClick(info)}
     />
