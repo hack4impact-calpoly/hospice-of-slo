@@ -8,7 +8,7 @@
 #shift-calendar-box {
     display: flex;
     flex-direction: column;
-    align-content: center;
+    /* padding-left: 100px; */
 }
 
 #extended-event-info {
@@ -59,10 +59,10 @@
 }
 
 #shift-calendar {
+    width: 95%;
     font-family: sans-serif;
-    width: 80%;
     padding: 3em 2em 3em 3em;
-    align-content: center;
+    align-self: center;
 }
 
 .fc { /* the calendar root */

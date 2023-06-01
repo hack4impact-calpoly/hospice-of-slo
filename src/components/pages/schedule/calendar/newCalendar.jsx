@@ -210,6 +210,7 @@ export default function NewCalendar() {
       events={eventData}
       eventMaxStack={3}
       displayEventEnd
+      allDaySlot={false}
       select={(info) => handleSelection(info)}
       eventClick={(info) => handleClick(info)}
     />
