@@ -5,7 +5,6 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import { Modal } from "react-bootstrap";
 import { useSelector } from "react-redux";
-import styled from "styled-components";
 import { getFormattedShifts } from "./sampleData";
 import ModalDetails from "./modalDetails";
 import HeaderWithNav from "../../../navigation/nav-header";
@@ -18,10 +17,6 @@ import DeleteShift from "./deleteShift";
 //   padding: 10px;
 //   font-size: 18px;
 // `;
-
-const StyledModal = styled(Modal)`
-  background-color: rgba(0, 0, 0, 0.3);
-`;
 
 export default function NewCalendar() {
   const [showShiftModal, setShiftModal] = useState(false);
@@ -217,8 +212,6 @@ export default function NewCalendar() {
 
   const updateMedia = () => {
     setDesktopView(window.innerWidth > 900);
-    console.log(window.innerWidth);
-    console.log(isDesktopView);
   };
 
   useEffect(() => {
@@ -257,16 +250,13 @@ export default function NewCalendar() {
         {/* {isDesktopView ? <p>big</p> : <p>small</p>} */}
         {/* <div id="shift-calendar">{expandedCalendar}</div> */}
         {/* serves as Delete Shift function */}
-        <StyledModal
-          show={showShiftModal}
-          onHide={() => setShiftModal(false)}
+
+        <DeleteShift
+          showMain={showShiftModal}
+          selectedInfo={showSelectedItem}
+          setShowModal={setShiftModal}
           centered
-        >
-          <DeleteShift
-            selectedInfo={showSelectedItem}
-            setShowModal={setShiftModal}
-          />
-        </StyledModal>
+        />
 
         {/* <div id="extended-info-container">{extendedInfoPlaceholder}</div> */}
       </div>

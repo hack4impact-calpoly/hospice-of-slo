@@ -38,12 +38,10 @@ const StyledButton = styled.button`
   }
 `;
 
-export default function DeleteShift({ selectedInfo, setShowModal }) {
+export default function DeleteShift({ showMain, selectedInfo, setShowModal }) {
   // Redux setup
-  console.log("clicked");
   const dispatch = useDispatch();
   const [showBuffer, setShowBuffer] = useState(false);
-  const [showMain, setShowMain] = useState(true);
   const history = useHistory();
 
   async function handleDelete(id) {
@@ -57,10 +55,11 @@ export default function DeleteShift({ selectedInfo, setShowModal }) {
 
   const handleSubmit = (popup) => {
     if (popup) {
-      setShowMain(false);
+      setShowModal(false);
       setShowBuffer(true);
     } else {
       handleDelete(selectedInfo.shiftId);
+      setShowBuffer(false);
       setShowModal(false);
     }
   };
@@ -108,6 +107,7 @@ export default function DeleteShift({ selectedInfo, setShowModal }) {
 }
 
 DeleteShift.propTypes = {
+  showMain: PropTypes.bool.isRequired,
   selectedInfo: selectedInfoPropType.isRequired,
   setShowModal: PropTypes.func.isRequired,
 };

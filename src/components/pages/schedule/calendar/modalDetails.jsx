@@ -55,34 +55,18 @@ export default function ShiftDetails({ shift, setShowModal, curDate }) {
   const [lastName, setLastName] = useState("");
 
   async function CreateShift(curEvent) {
-    //   // Event Editing info
-    //   const isEditing = Object.keys(curEvent).length !== 0;
-    //   const defaultVals = isEditing ? eventDataToFront(curEvent) : curEvent;
-
-    //   // Form Stuff
-    //   const { register, getValues, handleSubmit, errors } = useForm({
-    //     defaultValues: defaultVals,
-    //   });
-
-    //   const [showDateFeedback, setShowDateFeedback] = React.useState(false);
-
-    // event.preventDefault();
-
-    // if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) {
-    //   setShowDateFeedback(true);
-    //   return;
-    // }
-    // setShowDateFeedback(false);
     const newShift = {
       startTime: curEvent.startTime,
       endTime: curEvent.endTime,
       firstName: curEvent.firstName,
       lastName: curEvent.lastName,
     };
+
     const db = firebase.firestore();
 
-    await db.collection("shifts").add(newShift);
-    dispatch(actions.history.addHistoryShift({ ...newShift }));
+    const doc = await db.collection("shifts").add(newShift);
+
+    dispatch(actions.history.addHistoryShift({ id: doc.id, ...newShift }));
 
     history.push("/schedule");
   }

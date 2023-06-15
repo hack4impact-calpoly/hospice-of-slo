@@ -50,8 +50,6 @@ export default function getFormattedShifts(shifts) {
     eventShifts.push({ ...shift });
   });
 
-  console.log(`shifts: ${shifts.forEach((shift) => console.log(shift))}`);
-
   const eventShiftsFormatted = eventShifts.map((shift) => ({
     id: shift.id,
     start: shift.startTime,
