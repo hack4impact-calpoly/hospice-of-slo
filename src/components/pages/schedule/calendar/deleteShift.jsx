@@ -53,16 +53,20 @@ export default function DeleteShift({ showMain, selectedInfo, setShowModal }) {
     history.push("/schedule");
   }
 
-  const handleSubmit = (popup) => {
+  function closeAllModals() {
+    setShowBuffer(false);
+    setShowModal(false);
+  }
+
+  function handleSubmit(popup) {
     if (popup) {
       setShowModal(false);
       setShowBuffer(true);
     } else {
       handleDelete(selectedInfo.shiftId);
-      setShowBuffer(false);
-      setShowModal(false);
+      closeAllModals();
     }
-  };
+  }
 
   return (
     <div>
@@ -93,7 +97,7 @@ export default function DeleteShift({ showMain, selectedInfo, setShowModal }) {
         <CenteredModalAbsolute>
           <h3>You sure you want to delete {selectedInfo?.volName} shift?</h3>
           <CenteredModal>
-            <StyledButton centered onClick={() => setShowModal(false)}>
+            <StyledButton centered onClick={() => closeAllModals()}>
               No
             </StyledButton>
             <StyledButton centered onClick={() => handleSubmit(false)}>
