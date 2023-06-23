@@ -42,6 +42,7 @@ export default function DeleteShift({ showMain, selectedInfo, setShowModal }) {
   // Redux setup
   const dispatch = useDispatch();
   const [showBuffer, setShowBuffer] = useState(false);
+  const [showEdit, setShowEdit] = useState(false);
   const history = useHistory();
 
   async function handleDelete(id) {
@@ -56,6 +57,7 @@ export default function DeleteShift({ showMain, selectedInfo, setShowModal }) {
   function closeAllModals() {
     setShowBuffer(false);
     setShowModal(false);
+    setShowEdit(false);
   }
 
   function handleSubmit(popup) {
@@ -67,6 +69,17 @@ export default function DeleteShift({ showMain, selectedInfo, setShowModal }) {
       closeAllModals();
     }
   }
+
+  const handleEdit = () => {
+    console.log("Editing");
+    setShowBuffer(false);
+    setShowEdit(true);
+  };
+
+  const handleEditConfirm = () => {
+    console.log("pushing changes");
+    closeAllModals();
+  };
 
   return (
     <div>
@@ -86,10 +99,13 @@ export default function DeleteShift({ showMain, selectedInfo, setShowModal }) {
         </Modal.Body>
         <CenteredModal>
           <StyledButton centered onClick={() => handleSubmit(true)}>
-            Delete
+            Delete Shift
+          </StyledButton>
+          <StyledButton centered onClick={() => handleEdit()}>
+            Edit Shift
           </StyledButton>
           <StyledButton centered onClick={() => setShowModal(false)}>
-            Ok
+            Close
           </StyledButton>
         </CenteredModal>
       </Modal>
@@ -102,6 +118,22 @@ export default function DeleteShift({ showMain, selectedInfo, setShowModal }) {
             </StyledButton>
             <StyledButton centered onClick={() => handleSubmit(false)}>
               Yes
+            </StyledButton>
+          </CenteredModal>
+        </CenteredModalAbsolute>
+      </Modal>
+      <Modal show={showEdit}>
+        <CenteredModalAbsolute>
+          <h3>Editing shift: {selectedInfo?.volName}</h3>
+          <CenteredModal>
+            <p>Form here</p>
+          </CenteredModal>
+          <CenteredModal>
+            <StyledButton centered onClick={() => handleEditConfirm()}>
+              Save Changes
+            </StyledButton>
+            <StyledButton centered onClick={() => closeAllModals()}>
+              Cancel
             </StyledButton>
           </CenteredModal>
         </CenteredModalAbsolute>
