@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import firebase from "firebase";
-import { Col, Container, Card, Form, Alert } from "react-bootstrap";
+import { Col, Row, Container, Card, Form, Alert } from "react-bootstrap";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import moment from "moment";
@@ -55,34 +55,18 @@ export default function ShiftDetails({ shift, setShowModal, curDate }) {
   const [lastName, setLastName] = useState("");
 
   async function CreateShift(curEvent) {
-    //   // Event Editing info
-    //   const isEditing = Object.keys(curEvent).length !== 0;
-    //   const defaultVals = isEditing ? eventDataToFront(curEvent) : curEvent;
-
-    //   // Form Stuff
-    //   const { register, getValues, handleSubmit, errors } = useForm({
-    //     defaultValues: defaultVals,
-    //   });
-
-    //   const [showDateFeedback, setShowDateFeedback] = React.useState(false);
-
-    // event.preventDefault();
-
-    // if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) {
-    //   setShowDateFeedback(true);
-    //   return;
-    // }
-    // setShowDateFeedback(false);
     const newShift = {
       startTime: curEvent.startTime,
       endTime: curEvent.endTime,
       firstName: curEvent.firstName,
       lastName: curEvent.lastName,
     };
+
     const db = firebase.firestore();
 
-    await db.collection("shifts").add(newShift);
-    dispatch(actions.history.addHistoryShift({ ...newShift }));
+    const doc = await db.collection("shifts").add(newShift);
+
+    dispatch(actions.history.addHistoryShift({ id: doc.id, ...newShift }));
 
     history.push("/schedule");
   }
@@ -186,110 +170,124 @@ export default function ShiftDetails({ shift, setShowModal, curDate }) {
       )}
       <StyledCard>
         <Form noValidate validated={validated} onSubmit={handleSubmit}>
-          <Form.Row>
-            <Col>
-              <Form.Group>
-                <Form.Label class="form-label">First Name</Form.Label>
-                <Form.Control
-                  type="text"
-                  name="firstname"
-                  value={firstName}
-                  onChange={(e) => handleInputChange(e, setFirstName)}
-                  required
-                />
-                <Form.Control.Feedback type="invalid">
-                  {firstName === "" ? "Please provide a first name " : null}
-                </Form.Control.Feedback>
-              </Form.Group>
-              <Form.Group>
-                <Form.Label>Start Date</Form.Label>
-                <Form.Control
-                  type="date"
-                  name="startDate"
-                  placeholder="yyyy/mm/dd"
-                  value={shiftStartDate}
-                  onChange={(e) => handleInputChange(e, setShiftStartDate)}
-                  required
-                />
-                <Form.Control.Feedback type="invalid">
-                  {shiftStartDate === ""
-                    ? "Please provide a starting date "
-                    : null}
-                </Form.Control.Feedback>
-              </Form.Group>
-              <Form.Group>
-                <Form.Label>Start Time</Form.Label>
-                <Form.Control
-                  type="time"
-                  name="startTime"
-                  placeholder="24-hour time"
-                  value={shiftStartTime}
-                  onChange={(e) => handleInputChange(e, setShiftStartTime)}
-                  required
-                />
-                <Form.Control.Feedback type="invalid">
-                  {shiftStartTime === ""
-                    ? "Please provide a starting time "
-                    : null}
-                </Form.Control.Feedback>
-              </Form.Group>
-            </Col>
-            <Col>
-              <Form.Group>
-                <Form.Label>Last Name</Form.Label>
-                <Form.Control
-                  type="text"
-                  name="lastname"
-                  value={lastName}
-                  onChange={(e) => handleInputChange(e, setLastName)}
-                  required
-                />
-                <Form.Control.Feedback type="invalid">
-                  {lastName === "" ? "Please provide a last name " : null}
-                </Form.Control.Feedback>
-              </Form.Group>
-              <Form.Group>
-                <Form.Label>End Date</Form.Label>
-                <Form.Control
-                  type="date"
-                  name="endDate"
-                  placeholder="yyyy/mm/dd"
-                  value={shiftEndDate}
-                  onChange={(e) => handleInputChange(e, setShiftEndDate)}
-                  required
-                  ref={endDateRef}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {shiftEndDate === ""
-                    ? "Please provide an ending date "
-                    : null}
-                  {datesInverted
-                    ? "End date cannot come before start date "
-                    : null}
-                </Form.Control.Feedback>
-              </Form.Group>
-              <Form.Group>
-                <Form.Label>End Time</Form.Label>
-                <Form.Control
-                  type="time"
-                  name="endTime"
-                  placeholder="ex. 18:00"
-                  value={shiftEndTime}
-                  onChange={(e) => handleInputChange(e, setShiftEndTime)}
-                  required
-                  ref={endTimeRef}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {shiftEndTime === ""
-                    ? "Please provide an ending time "
-                    : null}
-                  {endsBeforeStarts
-                    ? "End time cannot not come before start time "
-                    : null}
-                </Form.Control.Feedback>
-              </Form.Group>
-            </Col>
-          </Form.Row>
+          <Col className="justify-content-between">
+            <Row className="mb-3">
+              <Col>
+                <Form.Group>
+                  <Form.Label class="form-label">First Name</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="firstname"
+                    value={firstName}
+                    onChange={(e) => handleInputChange(e, setFirstName)}
+                    required
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {firstName === "" ? "Please provide a first name " : null}
+                  </Form.Control.Feedback>
+                </Form.Group>
+              </Col>
+              <Col>
+                <Form.Group>
+                  <Form.Label>Last Name</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="lastname"
+                    value={lastName}
+                    onChange={(e) => handleInputChange(e, setLastName)}
+                    required
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {lastName === "" ? "Please provide a last name " : null}
+                  </Form.Control.Feedback>
+                </Form.Group>
+              </Col>
+            </Row>
+            <Row className="mb-3">
+              <Col>
+                <Form.Group>
+                  <Form.Label>Start Date</Form.Label>
+                  <Form.Control
+                    type="date"
+                    name="startDate"
+                    placeholder="yyyy/mm/dd"
+                    value={shiftStartDate}
+                    onChange={(e) => handleInputChange(e, setShiftStartDate)}
+                    required
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {shiftStartDate === ""
+                      ? "Please provide a starting date "
+                      : null}
+                  </Form.Control.Feedback>
+                </Form.Group>
+              </Col>
+              <Col>
+                <Form.Group>
+                  <Form.Label>End Date</Form.Label>
+                  <Form.Control
+                    type="date"
+                    name="endDate"
+                    placeholder="yyyy/mm/dd"
+                    value={shiftEndDate}
+                    onChange={(e) => handleInputChange(e, setShiftEndDate)}
+                    required
+                    ref={endDateRef}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {shiftEndDate === ""
+                      ? "Please provide an ending date "
+                      : null}
+                    {datesInverted
+                      ? "End date cannot come before start date "
+                      : null}
+                  </Form.Control.Feedback>
+                </Form.Group>
+              </Col>
+            </Row>
+            <Row className="mb-3">
+              <Col>
+                <Form.Group>
+                  <Form.Label>Start Time</Form.Label>
+                  <Form.Control
+                    type="time"
+                    name="startTime"
+                    placeholder="24-hour time"
+                    value={shiftStartTime}
+                    onChange={(e) => handleInputChange(e, setShiftStartTime)}
+                    required
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {shiftStartTime === ""
+                      ? "Please provide a starting time "
+                      : null}
+                  </Form.Control.Feedback>
+                </Form.Group>
+              </Col>
+              <Col>
+                <Form.Group>
+                  <Form.Label>End Time</Form.Label>
+                  <Form.Control
+                    type="time"
+                    name="endTime"
+                    placeholder="ex. 18:00"
+                    value={shiftEndTime}
+                    onChange={(e) => handleInputChange(e, setShiftEndTime)}
+                    required
+                    ref={endTimeRef}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {shiftEndTime === ""
+                      ? "Please provide an ending time "
+                      : null}
+                    {endsBeforeStarts
+                      ? "End time cannot not come before start time "
+                      : null}
+                  </Form.Control.Feedback>
+                </Form.Group>
+              </Col>
+            </Row>
+          </Col>
           <SignUpButton type="submit">Sign Up</SignUpButton>
         </Form>
       </StyledCard>

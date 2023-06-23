@@ -15,7 +15,6 @@ export default function Schedule({ setSelectShift }) {
 
   // Gets Vigil Data from redux store
   const storeShifts = useSelector((state) => state.historyShifts.historyShifts);
-  console.log(storeShifts);
 
   const getShiftInfo = () => {
     const shiftData = [];

@@ -175,7 +175,6 @@ const retrieveHistoryShifts = async (dbRef) => {
         lastName,
       };
       historyShifts.push(thisShift);
-      console.log(thisShift);
     } catch (error) {
       console.log("Error getting document:", error);
     }
