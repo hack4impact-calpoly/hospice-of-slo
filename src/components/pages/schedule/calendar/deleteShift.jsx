@@ -7,6 +7,7 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 import actions from "../../../../actions";
 import { selectedInfoPropType } from "../../../../dataStructures/propTypes";
+import { combineDateAndTime } from "../createShift/CreateShiftHelper";
 
 const SignUpButton = styled.button`
   color: white;
@@ -64,6 +65,10 @@ export default function DeleteShift({ showMain, selectedInfo, setShowModal }) {
 
   const [editFName, setEditFName] = useState("");
   const [editLName, setEditLName] = useState("");
+  const [editStartDay, setEditStartDay] = useState();
+  const [editEndDay, setEditEndDay] = useState();
+  const [editStartTime, setEditStartTime] = useState();
+  const [editEndTime, setEditEndTime] = useState();
 
   async function handleDelete(id) {
     const db = firebase.firestore();
@@ -96,12 +101,33 @@ export default function DeleteShift({ showMain, selectedInfo, setShowModal }) {
     setShowEdit(true);
   };
 
-  const handleEditConfirm = () => {
+  async function handleEditConfirm() {
+    // e.preventDefault();
     console.log("pushing changes");
     console.log(editFName);
     console.log(editLName);
-    closeAllModals();
-  };
+    const newStart = combineDateAndTime(editStartDay, editStartTime);
+    const newEnd = combineDateAndTime(editEndDay, editEndTime);
+
+    const updatedShift = {
+      startTime: newStart,
+      endTime: newEnd,
+      firstName: editFName,
+      lastName: editLName,
+    };
+
+    console.log(updatedShift);
+    console.log("UPDATED SHIFT ABOVE");
+
+    const db = firebase.firestore();
+
+    const doc = await db.collection("shifts").add(updatedShift);
+
+    dispatch(actions.history.addHistoryShift({ id: doc.id, ...updatedShift }));
+
+    history.push("/schedule");
+    // closeAllModals();
+  }
 
   const handleEditChange = (e, setterFunc) => {
     e.preventDefault();
@@ -199,15 +225,15 @@ export default function DeleteShift({ showMain, selectedInfo, setShowModal }) {
                         type="date"
                         name="startDate"
                         placeholder="yyyy/mm/dd"
-                        value="start"
-                        // onChange={(e) => handleInputChange(e, setShiftStartDate)}
+                        value={editStartDay}
+                        onChange={(e) => handleEditChange(e, setEditStartDay)}
                         required
                       />
-                      {/* <Form.Control.Feedback type="invalid">
-                        {shiftStartDate === ""
+                      <Form.Control.Feedback type="invalid">
+                        {editStartDay === ""
                           ? "Please provide a starting date "
                           : null}
-                      </Form.Control.Feedback> */}
+                      </Form.Control.Feedback>
                     </Form.Group>
                   </Col>
                   <Col>
@@ -217,19 +243,19 @@ export default function DeleteShift({ showMain, selectedInfo, setShowModal }) {
                         type="date"
                         name="endDate"
                         placeholder="yyyy/mm/dd"
-                        value="end"
-                        // onChange={(e) => handleInputChange(e, setShiftEndDate)}
+                        value={editEndDay}
+                        onChange={(e) => handleEditChange(e, setEditEndDay)}
                         required
                         // ref={endDateRef}
                       />
-                      {/* <Form.Control.Feedback type="invalid">
-                        {shiftEndDate === ""
+                      <Form.Control.Feedback type="invalid">
+                        {editEndDay === ""
                           ? "Please provide an ending date "
                           : null}
-                        {datesInverted
+                        {/* {datesInverted
                           ? "End date cannot come before start date "
-                          : null}
-                      </Form.Control.Feedback> */}
+                          : null} */}
+                      </Form.Control.Feedback>
                     </Form.Group>
                   </Col>
                 </Row>
@@ -241,15 +267,15 @@ export default function DeleteShift({ showMain, selectedInfo, setShowModal }) {
                         type="time"
                         name="startTime"
                         placeholder="24-hour time"
-                        value="start time"
-                        // onChange={(e) => handleInputChange(e, setShiftStartTime)}
+                        value={editStartTime}
+                        onChange={(e) => handleEditChange(e, setEditStartTime)}
                         required
                       />
-                      {/* <Form.Control.Feedback type="invalid">
-                        {shiftStartTime === ""
+                      <Form.Control.Feedback type="invalid">
+                        {editStartTime === ""
                           ? "Please provide a starting time "
                           : null}
-                      </Form.Control.Feedback> */}
+                      </Form.Control.Feedback>
                     </Form.Group>
                   </Col>
                   <Col>
@@ -259,24 +285,27 @@ export default function DeleteShift({ showMain, selectedInfo, setShowModal }) {
                         type="time"
                         name="endTime"
                         placeholder="ex. 18:00"
-                        value="end time"
-                        // onChange={(e) => handleInputChange(e, setShiftEndTime)}
+                        value={editEndTime}
+                        onChange={(e) => handleEditChange(e, setEditEndTime)}
                         required
                         // ref={endTimeRef}
                       />
-                      {/* <Form.Control.Feedback type="invalid">
-                        {shiftEndTime === ""
+                      <Form.Control.Feedback type="invalid">
+                        {editEndTime === ""
                           ? "Please provide an ending time "
                           : null}
-                        {endsBeforeStarts
+                        {/* {endsBeforeStarts
                           ? "End time cannot not come before start time "
-                          : null}
-                      </Form.Control.Feedback> */}
+                          : null} */}
+                      </Form.Control.Feedback>
                     </Form.Group>
                   </Col>
                 </Row>
               </Col>
-              <SignUpButton onClick={() => handleEditConfirm()}>
+              <SignUpButton
+                type="submit"
+                onClick={async () => handleEditConfirm()}
+              >
                 Save Changes
               </SignUpButton>
               <SignUpButton onClick={() => closeAllModals()}>
