@@ -20,19 +20,19 @@
 The purpose of this application is to improve the volunteer scheduling, communicating, and tracking processes for Hospice of SLO. Hospice of SLO is an incorporated 501(c)3 volunteer hospice serving San Luis Obispo County residents who are facing a life-limiting illness, end of life or grief. 
 
 ### Team
-The Hospice of SLO project team consists of 9 Cal Poly students. Over the course of about 9 months, we worked as a team to deploy this web application. The team members are listed below: 
+The Hospice of SLO project team consists of 9 Cal Poly students. Over the course of about 9 months, we worked as a team to deploy this web application. The team members of 2021-2022 are listed below: 
 
 <p float="left">
  <a href="https://github.com/ctperry0301" target="_blank"><img src="https://avatars3.githubusercontent.com/u/15805074?s=400&u=c2a0e7ef773958b28ce01ae19dcdbb1eefcce015&v=4" width="150" /></a>
-<a href="https://linkedin.com/in/sagemeadows/" target="_blank"><img src="https://avatars.githubusercontent.com/u/25959989?v=4" width="150" /></a>
-<a href="https://github.com/marissadarnell" target="_blank"><img src="https://media-exp1.licdn.com/dms/image/C5603AQFnMGpjuO5ViQ/profile-displayphoto-shrink_200_200/0/1604626459488?e=1623888000&v=beta&t=O2MF1LatQ975EaFMHqS_lrBy37t1KuDpbO00r3-ezig" width="150" /></a>
-<a href="https://github.com/bbmcmann" target="_blank"><img src="https://avatars.githubusercontent.com/u/54374897?v=4" width="150" /></a>
-<a href="https://github.com/vwinstea" target="_blank"><img src="https://media-exp1.licdn.com/dms/image/C5603AQHHkGj_L38Jkg/profile-displayphoto-shrink_200_200/0/1569819189324?e=1623888000&v=beta&t=0i47rRyBqc_dkP5ANbtQHfKNd19kc2yfowGgN4XLIRE" width="150" /></a>
-<a href="https://github.com/jlu51" target="_blank"><img src="https://avatars.githubusercontent.com/u/26192953?v=4" width="150" /></a>
-<a href="https://github.com/skylerdee3" target="_blank"><img src="https://avatars.githubusercontent.com/u/44215060?v=4" width="150" /></a>
-<a href="https://github.com/timkim14" target="_blank"><img src="https://avatars1.githubusercontent.com/u/47136824?s=400&u=30df6b053786b888b9f058e64c07703b01020ea1&v=4" width="150" /></a>
-<a href="https://linkedin.com/in/mandy-ko"><img src="https://media-exp1.licdn.com/dms/image/C5603AQG87k5tpCozhA/profile-displayphoto-shrink_200_200/0/1582659300735?e=1623888000&v=beta&t=d3oqs1A8HL5aD2tmuPP1bup0_aL5NE8K70BiO34wEzo" width="150" /></a>
-
+ <a href="https://linkedin.com/in/sagemeadows/" target="_blank"><img src="https://avatars.githubusercontent.com/u/25959989?v=4" width="150" /></a>
+ <a href="https://github.com/marissadarnell" target="_blank"><img src="https://media-exp1.licdn.com/dms/image/C5603AQFnMGpjuO5ViQ/profile-displayphoto-shrink_200_200/0/1604626459488?e=1623888000&v=beta&t=O2MF1LatQ975EaFMHqS_lrBy37t1KuDpbO00r3-ezig" width="150" /></a>
+ <a href="https://github.com/bbmcmann" target="_blank"><img src="https://avatars.githubusercontent.com/u/54374897?v=4" width="150" /></a>
+ <a href="https://github.com/vwinstea" target="_blank"><img src="https://media-exp1.licdn.com/dms/image/C5603AQHHkGj_L38Jkg/profile-displayphoto-shrink_200_200/0/1569819189324?e=1623888000&v=beta&t=0i47rRyBqc_dkP5ANbtQHfKNd19kc2yfowGgN4XLIRE" width="150" /></a>
+ <a href="https://github.com/jlu51" target="_blank"><img src="https://avatars.githubusercontent.com/u/26192953?v=4" width="150" /></a>
+ <a href="https://github.com/skylerdee3" target="_blank"><img src="https://avatars.githubusercontent.com/u/44215060?v=4" width="150" /></a>
+ <a href="https://github.com/timkim14" target="_blank"><img src="https://avatars1.githubusercontent.com/u/47136824?s=400&u=30df6b053786b888b9f058e64c07703b01020ea1&v=4" width="150" /></a>
+ <a href="https://linkedin.com/in/mandy-ko"><img src="https://media-exp1.licdn.com/dms/image/C5603AQG87k5tpCozhA/profile-displayphoto- 
+shrink_200_200/0/1582659300735?e=1623888000&v=beta&t=d3oqs1A8HL5aD2tmuPP1bup0_aL5NE8K70BiO34wEzo" width="150" /></a>
 </p>
 
 (From left to right)
@@ -46,6 +46,27 @@ The Hospice of SLO project team consists of 9 Cal Poly students. Over the course
 - Tim Kim - Project Manager
 - Mandy Ko - Designer
 
+
+For the 2022-2023 school year, the Hospice of SLO project team consists of 7 Cal Poly students. This team worked on enhancing and fixing any features on the web application to hand off to Hospice of SLO representatives. The team members of 2022-2023 are listed below:
+
+<p float="left">
+ <a href="https://github.com/Ritvik1121" target="_blank"><img src="https://avatars.githubusercontent.com/u/33030519?v=4" width="150" /></a>
+ <a href="https://github.com/bbmcmann" target="_blank"><img src="https://avatars.githubusercontent.com/u/54374897?v=4" width="150" /></a>
+ <a href="https://github.com/javalosr2004" target="_blank"><img src="https://avatars.githubusercontent.com/u/109496618?v=4" width="150" /></a>
+ <a href="https://github.com/aryaramchander1" target="_blank"></a>
+ <a href="https://github.com/hopieyimmie" target="_blank"></a>
+ <a href="https://github.com/ellabuysse" target="_blank"></a>
+ <a href="https://github.com/spagdoon0411" target="_blank"></a>
+</p>
+
+(From left to right)
+- Ritvik Durgempudi - Team Lead/Software Developer
+- Ben McMann - Team Lead/Software Developer
+- Jesus Avalos - Software Developer
+- Arya Ramchander - Software Developer
+- Hope Yim - Software Developer 
+- Ella Buysse - Software Developer
+- Spandan Suthar - Software Developer
 
 
 ## Getting Started for Developers 
