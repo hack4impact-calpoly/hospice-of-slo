@@ -45,9 +45,9 @@ export default function Discussion() {
           <StyledCol sm={12} md={8} lg={6} xl={5}>
             <h3>Not Validated</h3>
             <p className="mt-4">
-              Your account has been created. Please wait a few days for an admin
-              to approve/deny your account. If you need an account urgently,
-              please reach out to Hospice of SLO and ask to be approved sooner!
+              Your account has been created, now an admin needs to approve your
+              account. Please reach out to your Hospice SLO contact to alert
+              them your account needs validation.
             </p>
           </StyledCol>
         </StyledRow>
