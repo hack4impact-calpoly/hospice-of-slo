@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import firebase from "firebase";
@@ -8,6 +8,7 @@ import PropTypes from "prop-types";
 import actions from "../../../../actions";
 import { selectedInfoPropType } from "../../../../dataStructures/propTypes";
 import { combineDateAndTime } from "../createShift/CreateShiftHelper";
+// import { useEffect } from "react";
 
 const SignUpButton = styled.button`
   color: white;
@@ -70,6 +71,13 @@ export default function DeleteShift({ showMain, selectedInfo, setShowModal }) {
   const [editStartTime, setEditStartTime] = useState();
   const [editEndTime, setEditEndTime] = useState();
 
+  const [delId, setDelId] = useState(selectedInfo?.shiftId);
+
+  useEffect(() => {
+    console.log("reloading delete");
+    setDelId(selectedInfo?.shiftId);
+  }, [selectedInfo]);
+
   async function handleDelete(id) {
     const db = firebase.firestore();
 
@@ -97,12 +105,15 @@ export default function DeleteShift({ showMain, selectedInfo, setShowModal }) {
 
   const handleEdit = () => {
     console.log("Editing");
+    console.log(selectedInfo);
+    // setDelId(selectedInfo);
+    console.log(delId);
     setShowBuffer(false);
     setShowEdit(true);
   };
 
-  async function handleEditConfirm() {
-    // e.preventDefault();
+  async function handleEditConfirm(e) {
+    e.preventDefault();
     console.log("pushing changes");
     console.log(editFName);
     console.log(editLName);
@@ -125,8 +136,11 @@ export default function DeleteShift({ showMain, selectedInfo, setShowModal }) {
 
     dispatch(actions.history.addHistoryShift({ id: doc.id, ...updatedShift }));
 
+    await db.collection("shifts").doc(delId).delete();
+    dispatch(actions.history.deleteHistoryShift(delId));
+
     history.push("/schedule");
-    // closeAllModals();
+    closeAllModals();
   }
 
   const handleEditChange = (e, setterFunc) => {
@@ -304,7 +318,7 @@ export default function DeleteShift({ showMain, selectedInfo, setShowModal }) {
               </Col>
               <SignUpButton
                 type="submit"
-                onClick={async () => handleEditConfirm()}
+                onClick={async (e) => handleEditConfirm(e)}
               >
                 Save Changes
               </SignUpButton>
