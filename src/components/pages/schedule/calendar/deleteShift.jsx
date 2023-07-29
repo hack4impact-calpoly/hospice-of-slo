@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import firebase from "firebase";
+import moment from "moment";
 import { Modal, Form, Col, Row } from "react-bootstrap";
 import styled from "styled-components";
 import PropTypes from "prop-types";
@@ -66,16 +67,29 @@ export default function DeleteShift({ showMain, selectedInfo, setShowModal }) {
 
   const [editFName, setEditFName] = useState("");
   const [editLName, setEditLName] = useState("");
-  const [editStartDay, setEditStartDay] = useState();
-  const [editEndDay, setEditEndDay] = useState();
-  const [editStartTime, setEditStartTime] = useState();
-  const [editEndTime, setEditEndTime] = useState();
+  // moment(selectedInfo?.shiftStartDay).format("YYYY-MM-DD");
+  const [editStartDay, setEditStartDay] = useState(
+    moment(selectedInfo?.shiftStartDay).format("YYYY-MM-DD")
+  );
+  const [editEndDay, setEditEndDay] = useState(
+    moment(selectedInfo?.shiftEndDay).format("YYYY-MM-DD")
+  );
+  const [editStartTime, setEditStartTime] = useState(
+    moment(selectedInfo?.shiftStartTime).format("HH:mm")
+  );
+  const [editEndTime, setEditEndTime] = useState(
+    moment(selectedInfo?.shiftEndTime).format("HH:mm")
+  );
 
   const [delId, setDelId] = useState(selectedInfo?.shiftId);
 
   useEffect(() => {
     console.log("reloading delete");
     setDelId(selectedInfo?.shiftId);
+    setEditStartDay(moment(selectedInfo?.shiftStartDay).format("YYYY-MM-DD"));
+    setEditEndDay(moment(selectedInfo?.shiftEndDay).format("YYYY-MM-DD"));
+    setEditStartTime(moment(selectedInfo?.shiftStartTime).format("HH:mm"));
+    setEditEndTime(moment(selectedInfo?.shiftEndTime).format("HH:mm"));
   }, [selectedInfo]);
 
   async function handleDelete(id) {
@@ -108,6 +122,10 @@ export default function DeleteShift({ showMain, selectedInfo, setShowModal }) {
     console.log(selectedInfo);
     // setDelId(selectedInfo);
     console.log(delId);
+    console.log("dates and times");
+    console.log(editEndDay);
+    console.log(editStartDay);
+    console.log(editStartTime);
     setShowBuffer(false);
     setShowEdit(true);
   };

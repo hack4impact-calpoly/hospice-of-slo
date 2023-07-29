@@ -51,6 +51,24 @@ export default function NewCalendar() {
   function handleClick(info) {
     const shiftId = info.event.id;
     const volName = info.event.title;
+    // const shiftStartTime = formatDate(info.event.start, {
+    //   hour: "numeric",
+    //   minute: "2-digit",
+    // });
+    // const shiftEndTime = formatDate(info.event.end, {
+    //   hour: "numeric",
+    //   minute: "2-digit",
+    // });
+    const shiftStartDay = formatDate(info.event.start, {
+      year: "numeric",
+      month: "numeric",
+      day: "numeric",
+    });
+    const shiftEndDay = formatDate(info.event.end, {
+      year: "numeric",
+      month: "numeric",
+      day: "numeric",
+    });
     const shiftStartTime = formatDate(info.event.start, {
       hour: "numeric",
       minute: "2-digit",
@@ -64,6 +82,8 @@ export default function NewCalendar() {
       volName,
       shiftStartTime,
       shiftEndTime,
+      shiftStartDay,
+      shiftEndDay,
     };
     setSelectedItem(extendedInfoElement);
     setShiftModal(true);
@@ -150,8 +170,6 @@ export default function NewCalendar() {
     <div>
       <HeaderWithNav>Schedule</HeaderWithNav>
       <div id="shift-calendar-box">
-        {/* <div onClick={handleClick}>{expandedCalendar}</div> */}
-        {/* <div id="shift-calendar">{expandedCalendar}</div> */}
         <div id="shift-calendar">
           <FullCalendar
             ref={calendarRef}
