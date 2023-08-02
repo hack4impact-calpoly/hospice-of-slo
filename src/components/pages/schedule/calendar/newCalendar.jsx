@@ -69,22 +69,23 @@ export default function NewCalendar() {
       month: "numeric",
       day: "numeric",
     });
-    const shiftStartTime = formatDate(info.event.start, {
-      hour: "numeric",
-      minute: "2-digit",
-    });
-    const shiftEndTime = formatDate(info.event.end, {
-      hour: "numeric",
-      minute: "2-digit",
-    });
+    // const shiftStartTime = formatDate(info.event.start, {
+    //   hour: "2-digit",
+    //   minute: "2-digit",
+    // });
+    // const shiftEndTime = formatDate(info.event.end, {
+    //   hour: "2-digit",
+    //   minute: "2-digit",
+    // });
     const extendedInfoElement = {
       shiftId,
       volName,
-      shiftStartTime,
-      shiftEndTime,
+      shiftStartTime: info.event.start,
+      shiftEndTime: info.event.end,
       shiftStartDay,
       shiftEndDay,
     };
+    console.log(extendedInfoElement);
     setSelectedItem(extendedInfoElement);
     setShiftModal(true);
   }

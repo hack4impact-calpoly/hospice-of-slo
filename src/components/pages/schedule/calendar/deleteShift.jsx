@@ -65,6 +65,8 @@ export default function DeleteShift({ showMain, selectedInfo, setShowModal }) {
   const [showEdit, setShowEdit] = useState(false);
   const history = useHistory();
 
+  const fNameLName = selectedInfo?.volName.split(" ");
+
   const [editFName, setEditFName] = useState("");
   const [editLName, setEditLName] = useState("");
   // moment(selectedInfo?.shiftStartDay).format("YYYY-MM-DD");
@@ -75,22 +77,81 @@ export default function DeleteShift({ showMain, selectedInfo, setShowModal }) {
     moment(selectedInfo?.shiftEndDay).format("YYYY-MM-DD")
   );
   const [editStartTime, setEditStartTime] = useState(
-    moment(selectedInfo?.shiftStartTime).format("HH:mm")
+    moment(selectedInfo?.shiftStartTime).format("hh:mm A")
   );
   const [editEndTime, setEditEndTime] = useState(
-    moment(selectedInfo?.shiftEndTime).format("HH:mm")
+    moment(selectedInfo?.shiftEndTime).format("hh:mm A")
   );
 
   const [delId, setDelId] = useState(selectedInfo?.shiftId);
 
+  // Form Stuff
+  const [validated, setValidated] = useState(false);
+  // Checks that the end date comes before the start date
+  const endDateRef = React.createRef();
+  const [datesInverted, setDatesInverted] = useState(false);
+
+  // Checks that the end time comes before the start time
+  const endTimeRef = React.createRef();
+  const [endsBeforeStarts, setEndsBeforeStarts] = useState(false);
+
   useEffect(() => {
     console.log("reloading delete");
+    if (fNameLName) {
+      setEditFName(fNameLName[0]);
+      setEditLName(fNameLName[1]);
+    }
     setDelId(selectedInfo?.shiftId);
     setEditStartDay(moment(selectedInfo?.shiftStartDay).format("YYYY-MM-DD"));
     setEditEndDay(moment(selectedInfo?.shiftEndDay).format("YYYY-MM-DD"));
-    setEditStartTime(moment(selectedInfo?.shiftStartTime).format("HH:mm"));
-    setEditEndTime(moment(selectedInfo?.shiftEndTime).format("HH:mm"));
-  }, [selectedInfo]);
+    setEditStartTime(moment(selectedInfo?.shiftStartTime).format("HH:mm A"));
+    setEditEndTime(moment(selectedInfo?.shiftEndTime).format("HH:mm A"));
+  }, [selectedInfo, setShowModal]);
+
+  useEffect(() => {
+    console.log("validation use effect");
+    let endTimeHasError = false;
+    if (moment(editEndDay).isBefore(moment(editStartDay))) {
+      setDatesInverted(true);
+      if (endDateRef.current) {
+        console.log(
+          "_____________________________________________________dates"
+        );
+        endDateRef.current.setCustomValidity(
+          "End Date cannot come before Start Date"
+        );
+      }
+    } else {
+      setDatesInverted(false);
+      if (endDateRef.current) {
+        endDateRef.current.setCustomValidity("");
+      }
+    }
+
+    const tFormat = "HH:mm A";
+    if (
+      moment(editStartDay).isSame(moment(editEndDay)) &&
+      moment(editEndTime, tFormat).isBefore(moment(editStartTime, tFormat))
+    ) {
+      endTimeHasError = true;
+      setEndsBeforeStarts(true);
+      if (endTimeRef.current) {
+        console.log(
+          "_____________________________________________________times"
+        );
+        endTimeRef.current.setCustomValidity(
+          "End time cannot come after a vigil has ended."
+        );
+      }
+    } else if (endTimeHasError) {
+      setEndsBeforeStarts(false);
+    } else {
+      setEndsBeforeStarts(false);
+      if (endTimeRef.current) {
+        endTimeRef.current.setCustomValidity("");
+      }
+    }
+  }, [editStartDay, editEndDay, editStartTime, editEndTime]); // editStartDay, editEndDay, editStartTime, editEndTime]
 
   async function handleDelete(id) {
     const db = firebase.firestore();
@@ -117,7 +178,31 @@ export default function DeleteShift({ showMain, selectedInfo, setShowModal }) {
     }
   }
 
+  const validateEdit = (event) => {
+    const start = combineDateAndTime(editStartDay, editStartTime);
+    const end = combineDateAndTime(editEndDay, editEndTime);
+
+    console.log("VALID START END");
+    console.log(start);
+    console.log(end);
+
+    if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) {
+      return false;
+    }
+    const form = event.currentTarget;
+    setValidated(true);
+    if (form.checkValidity() === false) {
+      console.log("NOT VALIDATED");
+      event.stopPropagation();
+      return false;
+    }
+    console.log("VALIDATED");
+    return true;
+  };
+
   const handleEdit = () => {
+    console.log("TESTING");
+    console.log(moment("09:30 PM").format("HH:MM A"));
     console.log("Editing");
     console.log(selectedInfo);
     // setDelId(selectedInfo);
@@ -126,39 +211,48 @@ export default function DeleteShift({ showMain, selectedInfo, setShowModal }) {
     console.log(editEndDay);
     console.log(editStartDay);
     console.log(editStartTime);
+    console.log(editEndTime);
     setShowBuffer(false);
     setShowEdit(true);
   };
 
   async function handleEditConfirm(e) {
     e.preventDefault();
-    console.log("pushing changes");
-    console.log(editFName);
-    console.log(editLName);
-    const newStart = combineDateAndTime(editStartDay, editStartTime);
-    const newEnd = combineDateAndTime(editEndDay, editEndTime);
+    if (validateEdit(e)) {
+      console.log("pushing changes");
+      console.log(editFName);
+      console.log(editLName);
+      const newStart = combineDateAndTime(editStartDay, editStartTime);
+      const newEnd = combineDateAndTime(editEndDay, editEndTime);
 
-    const updatedShift = {
-      startTime: newStart,
-      endTime: newEnd,
-      firstName: editFName,
-      lastName: editLName,
-    };
+      console.log("NEW START AND END");
+      console.log(newStart);
+      console.log(newEnd);
 
-    console.log(updatedShift);
-    console.log("UPDATED SHIFT ABOVE");
+      const updatedShift = {
+        startTime: newStart,
+        endTime: newEnd,
+        firstName: editFName,
+        lastName: editLName,
+      };
 
-    const db = firebase.firestore();
+      console.log(updatedShift);
+      console.log("UPDATED SHIFT ABOVE");
 
-    const doc = await db.collection("shifts").add(updatedShift);
+      const db = firebase.firestore();
 
-    dispatch(actions.history.addHistoryShift({ id: doc.id, ...updatedShift }));
+      const doc = await db.collection("shifts").add(updatedShift);
 
-    await db.collection("shifts").doc(delId).delete();
-    dispatch(actions.history.deleteHistoryShift(delId));
+      dispatch(
+        actions.history.addHistoryShift({ id: doc.id, ...updatedShift })
+      );
 
-    history.push("/schedule");
-    closeAllModals();
+      await db.collection("shifts").doc(delId).delete();
+      dispatch(actions.history.deleteHistoryShift(delId));
+
+      history.push("/schedule");
+      closeAllModals();
+    }
   }
 
   const handleEditChange = (e, setterFunc) => {
@@ -175,10 +269,10 @@ export default function DeleteShift({ showMain, selectedInfo, setShowModal }) {
               <strong>Volunteer Name:</strong> {selectedInfo?.volName}
             </div>
             <div>
-              <strong>Shift Start:</strong> {selectedInfo?.shiftStartTime}
+              <strong>Shift Start:</strong> {editStartTime}
             </div>
             <div>
-              <strong>Shift End:</strong> {selectedInfo?.shiftEndTime}
+              <strong>Shift End:</strong> {editEndTime}
             </div>
           </div>
         </Modal.Body>
@@ -211,12 +305,14 @@ export default function DeleteShift({ showMain, selectedInfo, setShowModal }) {
         <CenteredModalAbsolute>
           <h3>Editing shift: {selectedInfo?.volName}</h3>
           <CenteredModal>
-            <Form>
+            <Form noValidate validated={validated}>
               <Col>
                 <Row>
                   <Col>
                     <Form.Group>
-                      <Form.Label class="form-label">New First Name</Form.Label>
+                      <Form.Label className="form-label">
+                        New First Name
+                      </Form.Label>
                       <Form.Control
                         type="text"
                         name="first name"
@@ -233,7 +329,9 @@ export default function DeleteShift({ showMain, selectedInfo, setShowModal }) {
                   </Col>
                   <Col>
                     <Form.Group>
-                      <Form.Label class="form-label">New Last Name</Form.Label>
+                      <Form.Label className="form-label">
+                        New Last Name
+                      </Form.Label>
                       <Form.Control
                         type="text"
                         name="lastname"
@@ -278,15 +376,15 @@ export default function DeleteShift({ showMain, selectedInfo, setShowModal }) {
                         value={editEndDay}
                         onChange={(e) => handleEditChange(e, setEditEndDay)}
                         required
-                        // ref={endDateRef}
+                        ref={endDateRef}
                       />
                       <Form.Control.Feedback type="invalid">
                         {editEndDay === ""
                           ? "Please provide an ending date "
                           : null}
-                        {/* {datesInverted
+                        {datesInverted
                           ? "End date cannot come before start date "
-                          : null} */}
+                          : null}
                       </Form.Control.Feedback>
                     </Form.Group>
                   </Col>
@@ -320,15 +418,15 @@ export default function DeleteShift({ showMain, selectedInfo, setShowModal }) {
                         value={editEndTime}
                         onChange={(e) => handleEditChange(e, setEditEndTime)}
                         required
-                        // ref={endTimeRef}
+                        ref={endTimeRef}
                       />
                       <Form.Control.Feedback type="invalid">
                         {editEndTime === ""
                           ? "Please provide an ending time "
                           : null}
-                        {/* {endsBeforeStarts
+                        {endsBeforeStarts
                           ? "End time cannot not come before start time "
-                          : null} */}
+                          : null}
                       </Form.Control.Feedback>
                     </Form.Group>
                   </Col>
