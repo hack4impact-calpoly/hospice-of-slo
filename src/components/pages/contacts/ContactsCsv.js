@@ -1,28 +1,26 @@
-import { json2csvAsync } from "json-2-csv";
-import firebase from "firebase/app";
-import "firebase/storage";
+/*eslint-disable*/
+import { ExportToCsv } from "export-to-csv";
 
 async function generateCSV(users) {
   // Create CSV String
-  users.sort((a, b) => a.name.localeCompare(b.name));
+  const filteredUsers = users.map(user => {
+    let obj = Object.assign({}, user);
+    delete obj.id;
+    delete obj.accountStatus;
+    return obj
+  });
+
+  filteredUsers.sort((a, b) => a.name.localeCompare(b.name));
+
   const options = {
-    keys: [
-      { field: "name", title: "Name" },
-      { field: "email", title: "Email" },
-      { field: "phone", title: "Phone" },
-      { field: "validated", title: "Validated" },
-    ],
+    headers: [ "Email", "Name", "Phone Number", "Is Admin", "Is Valid"],
+    showLabels: true,
+    showTitle: true,
+    title: "List Of Contacts",
   };
-  const usersCSV = await json2csvAsync(users, options);
 
-  // Create CSV File
-  const storageRef = firebase.storage().ref();
-  const contactsCsvRef = storageRef.child("contacts.csv");
-  await contactsCsvRef.putString(usersCSV);
-
-  // Download CSV File
-  const ContactsURL = await contactsCsvRef.getDownloadURL();
-  window.open(ContactsURL);
+  const csvExporter = new ExportToCsv(options);
+  csvExporter.generateCsv(filteredUsers);
 }
 
 export default generateCSV;

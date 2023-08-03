@@ -1,13 +1,20 @@
 /* eslint-disable */
-import { json2csvAsync } from "json-2-csv";
-import firebase from "firebase/app";
-import "firebase/storage";
+import { ExportToCsv } from "export-to-csv";
 
 async function generateCSV(posts, title) {
   // Create CSV String
+  const filteredPosts = posts.map(user => {
+    let obj = Object.assign({}, user);
+    obj.username = obj.user.name;
+    delete obj.user;
+    delete obj.userRef;
+    delete obj.messageId;
+    return obj
+  });
+
   const dateOptions = { month: "short", day: "numeric" };
   const timeOptions = { hour: "numeric", minute: "numeric", hour12: true };
-  posts.forEach((post) => {
+  filteredPosts.forEach((post) => {
     const x = post.timeSent.toDate();
     const formattedDate = `${x.toLocaleDateString(
       undefined,
@@ -15,23 +22,20 @@ async function generateCSV(posts, title) {
     )} at ${x.toLocaleTimeString(undefined, timeOptions)}`;
     post.timeSent = formattedDate;
   });
+
   const options = {
-    keys: [
-      { field: "user.name", title: "Name" },
-      { field: "message", title: "Message" },
-      { field: "timeSent", title: "time sent" },
-    ],
+    headers: [ "Message", "Time Sent", "Name"],
+    showLabels: true,
+    showTitle: true,
+    title: "Discussion Log",
   };
-  const postsCSV = await json2csvAsync(posts, options);
 
-  // Create CSV File
-  const storageRef = firebase.storage().ref();
-  const discussionCsvRef = storageRef.child(title + "Discussion.csv");
-  await discussionCsvRef.putString(postsCSV);
+  const csvExporter = new ExportToCsv(options);
 
-  // Download CSV File
-  const discussionURL = await discussionCsvRef.getDownloadURL();
-  window.open(discussionURL);
+  console.log(filteredPosts);
+  if(filteredPosts.length != 0){
+    csvExporter.generateCsv(filteredPosts);
+  }
 }
 
 export default generateCSV;
