@@ -151,7 +151,6 @@ export default function NewCalendar() {
   //     eventClick={(info) => handleClick(info)}
   //   />
   // );
-
   // const updateMedia = () => {
   //   if (window.innerWidth > 900) {
   //     ReactDOM.render(
