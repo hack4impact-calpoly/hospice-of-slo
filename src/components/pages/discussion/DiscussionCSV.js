@@ -31,8 +31,11 @@ async function generateCSV(posts, title) {
   };
 
   const csvExporter = new ExportToCsv(options);
-  csvExporter.generateCsv(filteredPosts);
 
+  console.log(filteredPosts);
+  if(filteredPosts.length != 0){
+    csvExporter.generateCsv(filteredPosts);
+  }
 }
 
 export default generateCSV;
