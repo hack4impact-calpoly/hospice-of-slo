@@ -1,3 +1,4 @@
+/*eslint-disable*/
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -200,6 +201,8 @@ export default function DeleteShift({ showMain, selectedInfo, setShowModal }) {
     return true;
   };
 
+
+
   const handleEdit = () => {
     console.log("TESTING");
     console.log(moment("09:30 PM").format("HH:MM A"));
@@ -216,9 +219,7 @@ export default function DeleteShift({ showMain, selectedInfo, setShowModal }) {
     setShowEdit(true);
   };
 
-  async function handleEditConfirm(e) {
-    e.preventDefault();
-    if (validateEdit(e)) {
+  async function handleEditConfirm() {
       console.log("pushing changes");
       console.log(editFName);
       console.log(editLName);
@@ -251,13 +252,24 @@ export default function DeleteShift({ showMain, selectedInfo, setShowModal }) {
       dispatch(actions.history.deleteHistoryShift(delId));
 
       history.push("/schedule");
-      closeAllModals();
-    }
+     // closeAllModals();
+    
   }
+
 
   const handleEditChange = (e, setterFunc) => {
     e.preventDefault();
     setterFunc(e.target.value);
+  };
+
+  const handleEditSubmit = (event) => {
+    console.log("testing");
+    event.preventDefault();
+    if (validateEdit(event)) {
+      handleEditConfirm();
+      closeAllModals();
+      // setShowModal(false);
+    }
   };
 
   return (
@@ -305,7 +317,7 @@ export default function DeleteShift({ showMain, selectedInfo, setShowModal }) {
         <CenteredModalAbsolute>
           <h3>Editing shift: {selectedInfo?.volName}</h3>
           <CenteredModal>
-            <Form noValidate validated={validated}>
+            <Form noValidate validated={validated} onSubmit={handleEditSubmit}>
               <Col>
                 <Row>
                   <Col>
@@ -434,7 +446,7 @@ export default function DeleteShift({ showMain, selectedInfo, setShowModal }) {
               </Col>
               <SignUpButton
                 type="submit"
-                onClick={async (e) => handleEditConfirm(e)}
+                // onClick={async (e) => handleEditConfirm(e)}
               >
                 Save Changes
               </SignUpButton>
