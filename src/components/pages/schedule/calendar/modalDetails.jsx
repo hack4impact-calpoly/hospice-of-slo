@@ -34,6 +34,8 @@ const SignUpButton = styled.button`
 
 export default function ShiftDetails({ shift, setShowModal, curDate }) {
   // Redux setup
+  console.log("SHIFT");
+  console.log(shift);
   const dispatch = useDispatch();
   const history = useHistory();
   const { startTime, endTime } = shift;
