@@ -30,7 +30,7 @@ import NotValidated from "./components/authentication/notValidated";
 //   measurementId: "G-GGLJ2GTL46",
 // };
 
-const firebaseConfig = {
+/* const firebaseConfig = {
   apiKey: "AIzaSyBa_8hdahjwEa5kwUgrmpXnbHeOwT2_7JE",
   authDomain: "hospiceslotestspace.firebaseapp.com",
   projectId: "hospiceslotestspace",
@@ -38,6 +38,17 @@ const firebaseConfig = {
   messagingSenderId: "639582598022",
   appId: "1:639582598022:web:76d43bd18275e1a22e7207",
   measurementId: "G-8ZV7CCDGER",
+};
+ */
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCWhIDmm4AahY-ps6A--6bbJTr2Kgu1g08",
+  authDomain: "hospiceslo.firebaseapp.com",
+  projectId: "hospiceslo",
+  storageBucket: "hospiceslo.appspot.com",
+  messagingSenderId: "328233334123",
+  appId: "1:328233334123:web:e8dcdfc566d996d82ec82e",
+  measurementId: "G-GTSL007CDL",
 };
 
 // Initialize Firebase
