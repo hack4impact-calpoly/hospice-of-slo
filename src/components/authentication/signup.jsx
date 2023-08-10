@@ -208,13 +208,13 @@ export default function SignUp() {
                     />
                     <Form.Text className="text-muted">
                       Note: This email can be seen to by other Hospice of San
-                      Luis Obispo doulas
+                      Luis Obispo vigil volunteers
                     </Form.Text>
                   </Form.Group>
                 </Col>
                 <Col xs={12} md={6}>
                   <Form.Group className="mt-2">
-                    <Form.Label>Phone</Form.Label>
+                    <Form.Label>Mobile Phone</Form.Label>
                     <Form.Control
                       type="text"
                       placeholder="phone"
@@ -225,7 +225,7 @@ export default function SignUp() {
                     />
                     <Form.Text className="text-muted">
                       Note: This phone number can be seen by other Hospice of
-                      San Luis Obispo doulas
+                      San Luis Obispo vigil volunteers
                     </Form.Text>
                   </Form.Group>
                 </Col>
