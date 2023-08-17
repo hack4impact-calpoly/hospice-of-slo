@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Modal, Form, Button } from "react-bootstrap";
+import { Modal, Form } from "react-bootstrap";
 import styled from "styled-components";
 
 const StyledPost = styled.button`
@@ -16,7 +16,7 @@ const StyledPost = styled.button`
   }
 `;
 
-const StyledButton = styled(Button)`
+/* const StyledButton = styled(Button)`
   color: white;
   margin-bottom: 12px;
   background-color: #558e97;
@@ -39,7 +39,7 @@ const StyledButton = styled(Button)`
     background-color: #558e97;
   }
 `;
-
+ */
 const StyledCancel = styled.button`
   color: #6c6b6b;
   background: none;
@@ -65,7 +65,7 @@ export default function CreateMessage(props) {
       </Modal.Header>
       <Modal.Body>
         <Form>
-          <StyledButton
+          {/* <StyledButton
             style={{ float: "left" }}
             onClick={() => setMessage("Vigil Under Care")}
           >
@@ -84,7 +84,7 @@ export default function CreateMessage(props) {
           >
             {" "}
             Vigil Complete
-          </StyledButton>
+          </StyledButton> */}
           <Form.Group controlId="exampleForm.ControlTextarea1">
             <Form.Control
               as="textarea"
